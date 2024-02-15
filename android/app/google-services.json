@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892419921668",
+    "project_id": "calma-eda26",
+    "storage_bucket": "calma-eda26.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892419921668:android:737b2c6f5e1a61bae52251",
+        "android_client_info": {
+          "package_name": "om.calma.calma"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB16F2NB5X8n6Caqo5YfOsTe3aEfS9aCGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
