@@ -16,8 +16,10 @@
         android:icon="@mipmap/ic_launcher">
 
         <!--This tag is used for implementing the API key for Google Map-->
+        <!--Since google - api key is confidential to me, So i can't provide it here-->
+        <!--You can create your own Google Map Api key on google services-->
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDp3BbyiluHMmyDqmlrnUXRTCy4b4JhAQI"/>
+            android:value=""/>
 
         <activity
             android:name=".MainActivity"
