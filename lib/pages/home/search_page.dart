@@ -128,7 +128,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage("asset/images/hairCut.jpg"),
+                              image: AssetImage("asset/images/haircut.jpg"),
                             ),
                           ),
                         ),

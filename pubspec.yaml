@@ -43,7 +43,7 @@ dependencies:
   speech_to_text: ^6.5.1
 
   #Location Dependencies
-  google_maps_flutter: ^2.5.1
+  google_maps_flutter: ^2.5.3
   location: ^5.0.0
   flutter_polyline_points: ^2.0.0
 

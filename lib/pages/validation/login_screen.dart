@@ -10,7 +10,6 @@ import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/button.dart';
 import 'package:calma/widgets/small_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -100,9 +100,9 @@ class _ProfileManagerState extends State<ProfileManager> {
                 AppointmentPageButtonAll(onPress: (){Navigator.pop(context);}, text: "Cancel"),
                 AppointmentPageButtonAll(onPress: () async{
                   SharedPreferences sp = await SharedPreferences.getInstance();
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
                   debugPrint(sp.getBool('isLogin').toString());
-                  sp.remove('isLogin');
+                  sp.setBool('isLogin', false);
                   debugPrint(sp.getBool('isLogin').toString());
                 }, text: "Logout"),
               ],),

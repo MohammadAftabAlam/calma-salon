@@ -14,6 +14,21 @@ class HomePageBody extends StatefulWidget {
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
+  List images = ["asset/images/haircut.jpg",
+    "asset/images/facial.jpg",
+    "asset/images/bridal_makeup.jpg",
+    "asset/images/threadingEyebrow.jpg",
+    "asset/images/beardTreaming.jpg",
+    "asset/images/shaving.jpg",
+  ];
+  List imageServiceName = [
+    "Haircut",
+    "Facial",
+    "Bridal Makeup",
+    "Threading",
+    "Trim & Style",
+    "Shaving"
+  ];
   @override
   Widget build(BuildContext context) {
 
@@ -88,7 +103,7 @@ class _HomePageBodyState extends State<HomePageBody> {
             width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: 7,
+              itemCount: images.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
 
@@ -110,15 +125,15 @@ class _HomePageBodyState extends State<HomePageBody> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular( screenHeight* 0.007/*6*/),
                         color: AppColor.imageBgColor,
-                        image: const DecorationImage(
+                        image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: AssetImage("asset/images/hairCut.jpg"),
+                          image: AssetImage(images[index].toString()),
                         ),
                       ),
                     ),
-                    const SmallText(
-                      text: "Hair Cut",
-                      color: Colors.black,
+                    SmallText(
+                      text: imageServiceName[index].toString(),
+                      color: AppColor.quoteColor
                     )
                   ],
                 );
