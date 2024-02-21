@@ -1,3 +1,5 @@
+import 'package:calma/pages/Appointments/Appointment%20Process/salon_search_show_pg.dart';
+import 'package:calma/pages/Appointments/main_appointment_pg.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
 import 'package:calma/widgets/button.dart';
@@ -54,6 +56,8 @@ class _BookDetailsUserState extends State<BookDetailsUser> {
             leftPad: 24,
             topPad: 41,
           ),
+          
+          
           DropdownButtonFormField(
             focusColor: Colors.white,
             padding: EdgeInsets.only(
@@ -261,7 +265,7 @@ class _BookDetailsUserState extends State<BookDetailsUser> {
               alignment: Alignment.center,
               child: Button(
                 onPress: (){
-                  Navigator.pop(context);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const Appointments()));
                 },
                 width: 245,
                 fontSize: 18,
@@ -274,7 +278,7 @@ class _BookDetailsUserState extends State<BookDetailsUser> {
               alignment: Alignment.center,
               child: TextButton(
                 onPressed: (){
-                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const MainSalonShowPage()));
                 },
                 child: const SmallText(text: "Edit your Appointment", fontFamilyName: "Inter", color: Color(0xff6B7280), fontWeightName: FontWeight.w700,),
               ),

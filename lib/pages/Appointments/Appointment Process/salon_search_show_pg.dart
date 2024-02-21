@@ -7,8 +7,6 @@ import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/favourites.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:iconsax/iconsax.dart';
 
 
 class MainSalonShowPage extends StatefulWidget {
@@ -137,7 +135,7 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                 ),
                                 MainSalonShowPageIcon(
                                   iconData: Icons.star,
-                                  iconColor: Colors.yellow,
+                                  iconColor: Colors.teal,
                                   smallText: "Rating",
                                   bigText: "4",
                                 ),

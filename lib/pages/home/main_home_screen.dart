@@ -7,6 +7,7 @@ import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,10 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
           /* ***************** Starts Location and Notification ************ */
           Container(
             margin: EdgeInsets.only(
-                top: screenHeight * 0.045 /*40*/, bottom: screenHeight * 0.011,/*10*/),
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.036, //15
-              ),
-
+              top: screenHeight * 0.04 /*35.6*/,
+              bottom: screenHeight * 0.005, /*5*/
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.036, //15
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -59,40 +62,54 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     /* ********************* Starts User Location Accessing ***************** */
                     Container(
-                      height: screenHeight * 0.053, //40
-                      width: screenHeight * 0.053, //40
+                      // height: screenHeight * 0.053, //40
+                      // width: screenHeight * 0.053, //40
+                      height: 35,
+                      width: 35,
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColor.iconColor,
                       ),
                       child: IconButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=> MapPage()));    // There is another page which is dedicated for map
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const MapPage())); // There is another page which is dedicated for map
                         },
-                        icon: const Icon(Icons.location_on_outlined,color: Colors.black,),
+                        icon: SvgPicture.asset(
+                          "asset/icons/location.svg",
+                          color: Colors.black,
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                     ),
                     /* ********************* Ends User Location Accessing ***************** */
 
                     Padding(
-                      padding: EdgeInsets.only(left: screenWidth * 0.036 /*15*/),
+                      padding:
+                          EdgeInsets.only(left: screenWidth * 0.036 /*15*/),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              BigText(
-                                text: "Home",
-                                fontSize: screenHeight * 0.027,//24
+                              const BigText(
+                                text: "HOME",
+                                // fontSize: screenHeight * 0.027, //24
                                 fontWeightName: FontWeight.w900,
                               ),
-                              const Icon(Icons.arrow_drop_down)
+
+                              SvgPicture.asset("asset/icons/arrow_downward.svg"),
                             ],
                           ),
-                          SmallText(
+                          const SmallText(
                             text: "Batla House, New Delhi",
-                            fontSize: screenHeight * 0.0178, //16,
+                            // fontSize: screenHeight * 0.0178, //16,
+                            fontWeightName: FontWeight.w500,
                             color: AppColor.mainBlackColor,
                           ),
                         ],
@@ -101,11 +118,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 IconButton(
+                  alignment: Alignment.bottomCenter,
                   onPressed: () {},
-                  icon: Icon(Icons.notifications,
-                      size: screenHeight * 0.043,  //38,
-                      color: const Color(0xff648684),
-                  ),
+                  // icon: Icon(Icons.notifications,
+                  //     size: screenHeight * 0.043,  //38,
+                  //     color: const Color(0xff648684),
+                  // ),
+                  icon: SvgPicture.asset("asset/icons/bell.svg",height: 26,),
                 ),
               ],
             ),
@@ -114,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           /* *********** Starts Body of Home Page ****************** */
           const Expanded(child: SingleChildScrollView(child: HomePageBody())),
+
           // Expanded(child: SingleChildScrollView(child: _currentWidget.elementAt(_selectedIndex))),
           /* *********** Ends Body of Home Page ******************* */
         ],
@@ -121,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       /* *********** Starts  BottomNavigation Bar****************** */
       bottomNavigationBar: Container(
-        height: screenHeight * 0.079,//70,
+        height: screenHeight * 0.079, //70,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(screenHeight * 0.05 /*45*/),
@@ -134,37 +154,37 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             BottomNavigationIcon(
-                onPress: () {}, iconData: Icons.home, text: "Home",
+              onPress: () {},
+              pic: SvgPicture.asset("asset/icons/home-icon.svg"),
+              text: "Home",
+            ),
+            BottomNavigationIcon(
+              onPress: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SearchPage()));
+              },
+              pic: SvgPicture.asset("asset/icons/search-icon.svg"),
+              text: "Search",
             ),
             BottomNavigationIcon(
               onPress: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  SearchPage()));
+                        builder: (context) => const Appointments()));
               },
-              iconData: Icons.search_outlined,
-              text: "Search",
+              pic: SvgPicture.asset("asset/icons/appointment-icon.svg"),
+              text: "Appointments",
             ),
             BottomNavigationIcon(
-                onPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const Appointments()));
-                },
-                iconData: Icons.calendar_month,
-                text: "Appointments",
-            ),
-            BottomNavigationIcon(
-                onPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProfileManager()));
-                },
-                iconData: Icons.person,
-                text: "Profile",
+              onPress: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfileManager()));
+              },
+              pic: SvgPicture.asset("asset/icons/userAvatar.svg",height: 30, width: 24,),
+              text: "Profile",
             ),
           ],
         ),
@@ -175,16 +195,17 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 /* ****************************Starts BottomNavigationIcon Widget Creation ************************************ */
-class BottomNavigationIcon extends StatelessWidget{
-  final IconData iconData;
+class BottomNavigationIcon extends StatelessWidget {
+  // final IconData iconData;
+  final SvgPicture pic;
   final VoidCallback onPress;
   final String text;
-  const BottomNavigationIcon(
-      {super.key,
-        required this.onPress,
-        required this.iconData,
-        required this.text,
-      });
+  const BottomNavigationIcon({
+    super.key,
+    required this.onPress,
+    required this.pic,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +214,8 @@ class BottomNavigationIcon extends StatelessWidget{
         IconButton(
           onPressed: onPress,
           iconSize: 30, //30,
-          icon: Icon(iconData),
+          // icon: Icon(iconData),
+          icon: pic,
           hoverColor: Colors.teal,
         ),
         SmallText(text: text)

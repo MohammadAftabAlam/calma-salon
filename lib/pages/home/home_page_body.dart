@@ -18,7 +18,7 @@ class _HomePageBodyState extends State<HomePageBody> {
     "asset/images/facial.jpg",
     "asset/images/bridal_makeup.jpg",
     "asset/images/threadingEyebrow.jpg",
-    "asset/images/beardTreaming.jpg",
+    "asset/images/beardTrimming.jpg",
     "asset/images/shaving.jpg",
   ];
   List imageServiceName = [
@@ -86,7 +86,7 @@ class _HomePageBodyState extends State<HomePageBody> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  SearchPage()));
+                          builder: (context) =>  const SearchPage()));
                 },
                 child: const SmallText(
                   text: "View All",
@@ -142,8 +142,8 @@ class _HomePageBodyState extends State<HomePageBody> {
           ),
           /* ************* Ends Cherished services with horizontal scroll ************* */
 
-          const SizedBox(
-            height: 4,
+          SizedBox(
+            height: screenHeight * 0.0112, //10
           ),
 
           /* ********************** Starts top salon & Popular Button ************** */
@@ -196,6 +196,7 @@ class _HomePageBodyState extends State<HomePageBody> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: 5,
+            padding: EdgeInsets.only(top: screenHeight * 0.0168 /*15*/,bottom: 0),
             itemBuilder: (context, index) => Container(
               margin: EdgeInsets.only(bottom: screenHeight *0.017 /*15*/),
               child: const ImageContWithStack(

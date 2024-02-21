@@ -1,3 +1,4 @@
+import 'package:calma/pages/Appointments/Appointment%20Process/salon_search_show_pg.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/button.dart';
@@ -156,7 +157,9 @@ class _CancelServicesState extends State<CancelServices> {
 
                   divider(),
                   Button(
-                    onPress: () {},
+                    onPress: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainSalonShowPage()));
+                    },
                     text: "Rebook",
                     radius: 50,
                     fontSize: 18,

@@ -3,6 +3,7 @@ import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -94,8 +95,12 @@ class _SearchPageState extends State<SearchPage> {
 
 
                     // onPressed: speechToText.isNotListening? _startListening() : _stopListening(),
-                      icon: Icon( speechToText.isNotListening ?
-                      Icons.mic : Icons.mic_off,),
+                    //   icon: Icon( speechToText.isNotListening ?
+                    //   Icons.mic : Icons.mic_off,
+                    //   ),
+
+                    icon: speechToText.isNotListening ? SvgPicture.asset("asset/icons/microphone.svg", height: 32,) : SvgPicture.asset("asset/icons/microphone.svg"),
+
                   ),
                 ),
               ],

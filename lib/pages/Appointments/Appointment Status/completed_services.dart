@@ -1,3 +1,4 @@
+import 'package:calma/pages/Appointments/Appointment%20Process/salon_search_show_pg.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/Icon_and_text_button.dart';
 import 'package:calma/widgets/big_text.dart';
@@ -174,11 +175,11 @@ class _CompletedServicesState extends State<CompletedServices> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      CancelButtonPage()));
+                                      const MainSalonShowPage()));
                         },
                         text: "Rebook",
-                        textColor: Color(0xff1C2A3A),
-                        buttonColor: Color(0xffE5E7EB),
+                        textColor: const Color(0xff1C2A3A),
+                        buttonColor: const Color(0xffE5E7EB),
                       ),
                       const SizedBox(
                         width: 20,

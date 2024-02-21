@@ -51,7 +51,7 @@ class ImageContWithStack extends StatelessWidget {
                   left: screenWidth * 0.036 /*15*/,
                   top: screenHeight * 0.006 /*5*/,
               ),
-              child: const IconColumn(),
+              child: IconColumn(screenWidth: screenWidth, screenHeight: screenHeight,),
             ),
           ),
         ),
@@ -67,13 +67,11 @@ class ImageContWithStack extends StatelessWidget {
 }
 
 class IconColumn extends StatelessWidget {
-  const IconColumn({super.key});
+  final double screenHeight, screenWidth;
+  const IconColumn({super.key, required this.screenHeight, required this.screenWidth});
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.sizeOf(context).height;
-    double screenWidth = MediaQuery.sizeOf(context).width;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -115,15 +113,21 @@ class IconColumn extends StatelessWidget {
         SizedBox(
           width: screenWidth * 0.049, //20,
         ),
-        const Row(
+        Row(
           children: [
             IconColumnButton(
+              screenHeight: screenHeight,
+              screenWidth: screenWidth,
               text: "4.0",
               iconData: Icons.star,
-              color: Color(0xffFFC107),
+              color: const Color(0xffFFC107),
             ),
             IconColumnButton(
-                text: "1.3km", iconData: Icons.location_on_outlined),
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+                text: "1.3km", iconData: Icons.location_on_outlined,
+            ),
+            Padding(padding: EdgeInsets.only(left: screenWidth * 0.0122 /*5*/)),
           ],
         )
       ],
@@ -135,17 +139,19 @@ class IconColumnButton extends StatelessWidget {
   final IconData iconData;
   final String text;
   final Color color;
+  final double screenHeight,screenWidth;
   const IconColumnButton(
       {super.key,
+        required this.screenHeight,
+        required this.screenWidth,
       required this.text,
       required this.iconData,
-      this.color = AppColor.mainBlackColor});
+      this.color = AppColor.mainBlackColor
+
+      });
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.sizeOf(context).height;
-    double screenWidth = MediaQuery.sizeOf(context).width;
-
     return Container(
       height: screenHeight * 0.039 /*35*/,
       width: screenWidth * 0.207 /*85*/,
