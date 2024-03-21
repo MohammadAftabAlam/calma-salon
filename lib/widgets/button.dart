@@ -25,14 +25,17 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+
     return InkWell(
       onTap: onPress,
       child: Container(
-        height:  height,
-        width: width,
+        height:  height == 50 ? screenHeight * 0.0561 : screenHeight * height/screenHeight,
+        width: width == 345 ? screenWidth * 0.8385 : screenWidth * width /screenWidth,
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(radius),
+          borderRadius: BorderRadius.circular(radius == 8 ? screenHeight * 0.009: screenHeight*radius/screenHeight),
         ),
         child: Center(
           child: BigText(
@@ -40,7 +43,7 @@ class Button extends StatelessWidget {
             text: text,
             color: textColor,
             fontWeightName: FontWeight.bold,
-            fontSize: fontSize,
+            fontSize: fontSize == 32 ? screenHeight * 0.0359: screenHeight * fontSize /screenHeight,
             fontFamilyName: fontFamily,
           ),
         ),

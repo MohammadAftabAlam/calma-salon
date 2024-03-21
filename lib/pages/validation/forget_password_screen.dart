@@ -33,14 +33,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 50, left: 20),
+                  padding:  EdgeInsets.only( top: screenHeight*0.0562 /*50*/, left: screenWidth * 0.0486/*20*/),
+
                   child: BackArrowButton(onPress: () {
                     Navigator.pop(context);
                   }),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 70),
+                padding: EdgeInsets.only(top: screenHeight * 0.0786 /*70*/),
                 child: Container(
                   height: 100,
                   width: 167,

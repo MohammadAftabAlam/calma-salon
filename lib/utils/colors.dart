@@ -6,6 +6,8 @@ class AppColor{
   static const Color quoteColor = Color(0xff906906);
   static const Color textColor2 =  Color(0xff177888);
   static const Color appointmentTextColor =  Color(0xff101010);
+  static const Color cardBackgroundColor =  Color(0xffF9F3F2);
+  static const Color cardBackgroundColor1 =  Color(0xffe6e1e1);
   static const Color arrowIconColor =  Color(0xff231F20);
   static const Color dividerColor =  Color(0xffD3CECD);
   static const Color iconColor = Color(0xff177888);

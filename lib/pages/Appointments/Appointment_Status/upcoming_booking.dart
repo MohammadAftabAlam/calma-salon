@@ -17,6 +17,246 @@ class _BookedServicesState extends State<BookedServices> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return ListView.builder(
+      // shrinkWrap: true,
+      itemCount: 5,
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.0413,
+        vertical: screenHeight * 0.0269,
+      ),
+      itemBuilder: (context, index) {
+        return Card(
+          color: const Color(0xffF5EDEC),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth *0.0295,vertical: screenHeight * 0.0135),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "June 14, 2023 - 15.00pm",
+                      style: TextStyle(
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.w700,
+                        fontSize: screenHeight * 0.0202,  //18
+                      ),
+                    ),
+                    /* *************************** Favourite Heart Button STARTS here************************ */
+                    Container(
+                      height: screenHeight * 0.0382, //34
+                      width: screenWidth * 0.08263,  //34
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isFavourite = !isFavourite;
+                          });
+                        },
+                        child: Icon(
+                          isFavourite ? Iconsax.heart5 : Iconsax.heart,
+                          color: isFavourite ? Colors.red : Colors.black,
+                          size: screenHeight * 0.0269, //24
+                        ),
+                      ),
+                    ),
+                    /* *************************** Favourite Heart Button ENDS here************************ */
+
+                  ],
+                ),
+                divider(),
+                /* ****************************** Container for showing salon image name and booking id STARTS here  ************************************* */
+                Row(
+                  children: [
+                    Container(
+                      height: screenHeight * 0.1481,
+                      width: screenWidth * 0.3107,  //128
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(screenHeight * 0.0148),
+                        image: const DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage("asset/images/salonRoom.jpg"),
+                        ),
+                      ),
+                    ),
+
+                    /* ************** This widget denotes the Salon Name and their booking status i.e..(Booked,Pending,Cancelled)************** */
+                    //Expanded Widget is used here for acquiring the rest width of the Row in Container
+                    Expanded(
+                      child: SizedBox(
+                        height: screenHeight * 0.1481,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BigText(
+                                fontWeightName: FontWeight.w500,
+                                color: AppColor.mainBlackColor,
+                                text: "Varsha Saloon",
+                                fontSize: screenHeight * 0.018,
+                              ),
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Icon(
+                                    Iconsax.location5,
+                                    color: AppColor.iconColor,
+                                    size: screenHeight * 0.0202,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * 0.0244,
+                                  ),
+                                  SmallText(
+                                    text: "Jogabai Extension",
+                                    fontSize: screenHeight * 0.018, //16
+                                    fontWeightName: FontWeight.w400,
+                                    fontFamilyName: 'Inter',
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Iconsax.check5,
+                                    color: AppColor.iconColor,
+                                    size: screenHeight * 0.0202,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * 0.0244,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: "Booking Id  ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: screenHeight * 0.018, //16
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "#AFAY63259",
+                                        style: TextStyle(
+                                          color: AppColor.textColor,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: screenHeight * 0.018, //16
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                /* ****************************** Container for showing salon image name and booking id ENDS here  ************************************* */
+
+                divider(),
+                /* ****************************** Button for Cancel and Reschedule STARTS here  ************************************* */
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    AppointmentPageButtonAll(
+                      onPress: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CancelButtonPage(),
+                          ),
+                        );
+                      },
+                      text: "Cancel",
+                      textColor: const Color(0xff1C2A3A),
+                      buttonColor: const Color(0xffE5E7EB),
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.0486,
+                    ),
+                    AppointmentPageButtonAll(
+                      onPress: () {},
+                      text: "Reschedule",
+                    ),
+                  ],
+                ),
+                /* ****************************** Button for Cancel and Reschedule ENDS here  ************************************* */
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  divider() {
+    return const Divider(
+      thickness: 1,
+      color: Color(0xffD3CECD),
+    );
+  }
+}
+
+
+
+class AppointmentPageButtonAll extends StatelessWidget {
+  final VoidCallback onPress;
+  final String text;
+  final Color textColor, buttonColor;
+  const AppointmentPageButtonAll(
+      {super.key,
+      required this.onPress,
+      required this.text,
+      this.textColor = Colors.white,
+      this.buttonColor = AppColor.buttonBackgroundColor});
+
+  @override
+  Widget build(BuildContext context) {
+
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: InkWell(
+        onTap: onPress,
+        child: Container(
+          height: screenHeight * 0.0494,//44,
+          width: screenWidth * 0.3573, //147,
+          decoration: BoxDecoration(
+            color: buttonColor,
+            borderRadius: BorderRadius.circular(screenHeight * 0.0561/*50*/),
+          ),
+          child: Center(
+              child: SmallText(
+            text: text,
+            color: textColor,
+            fontWeightName: FontWeight.w700,
+            fontFamilyName: "Inter",
+          )),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+/*Widget build(BuildContext context) {
     return ListView.builder(
         // shrinkWrap: true,
         itemCount: 5,
@@ -60,12 +300,8 @@ class _BookedServicesState extends State<BookedServices> {
                   ),
                   divider(),
                   Container(
-                    // height: 120,
-                    // width: 350,
                     margin: const EdgeInsets.only(
-                      // left: 20,
                       right: 20,
-                      // top: 10,
                     ),
                     child: Row(
                       children: [
@@ -86,15 +322,7 @@ class _BookedServicesState extends State<BookedServices> {
                         //Expanded Widget is used here for acquiring the rest width of the Row in Container
                         Expanded(
                           child: SizedBox(
-                            // width: ,
                             height: 130,
-                            // decoration: const BoxDecoration(
-                            //     // color: AppColor.statusBookServiceColor,
-                            //     // borderRadius: BorderRadius.only(
-                            //     //   topRight: Radius.circular(12),
-                            //     //   bottomRight: Radius.circular(12),
-                            //     // ),
-                            // ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Column(
@@ -191,57 +419,9 @@ class _BookedServicesState extends State<BookedServices> {
               ),
             ),
           );
-        });
-  }
-
-  divider() {
-    return const Divider(
-      thickness: 1,
-      color: Color(0xffD3CECD),
+        },
     );
-  }
-}
-
-
-
-class AppointmentPageButtonAll extends StatelessWidget {
-  final VoidCallback onPress;
-  final String text;
-  final Color textColor, buttonColor;
-  const AppointmentPageButtonAll(
-      {super.key,
-      required this.onPress,
-      required this.text,
-      this.textColor = Colors.white,
-      this.buttonColor = AppColor.buttonBackgroundColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: InkWell(
-        onTap: onPress,
-        child: Container(
-          height: 44,
-          width: 147,
-          decoration: BoxDecoration(
-            color: buttonColor,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: Center(
-              child: SmallText(
-            text: text,
-            color: textColor,
-            fontWeightName: FontWeight.w700,
-            fontFamilyName: "Inter",
-          )),
-        ),
-      ),
-    );
-  }
-}
-
-
+  }*/
 
 
 /*import 'package:calma/pages/Appointments/ButtonFunctions/cancel_button_pg.dart';

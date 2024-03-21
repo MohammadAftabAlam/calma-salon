@@ -1,10 +1,10 @@
-import 'package:calma/pages/Appointments/Appointment%20Process/salon_search_show_pg.dart';
+import 'package:calma/pages/Appointments/Appointment_Process/salon_search_show_pg.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/Icon_and_text_button.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:calma/widgets/stack_img_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SalonSearchPage extends StatefulWidget {
   const SalonSearchPage({super.key});
@@ -15,8 +15,17 @@ class SalonSearchPage extends StatefulWidget {
 
 class _SalonSearchPageState extends State<SalonSearchPage> {
   TextEditingController searchController = TextEditingController();
+
+  // bool isNearestSelected = false;
+  // bool isPopularSelected = false;
+  bool isSelected = false;
+  bool isSortSelected = false;
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
@@ -56,23 +65,37 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const ButtonSalonSearch(text: "Nearest"),
-                      const ButtonSalonSearch(text: "Popular"),
+                      ButtonSalonSearch(text: "Nearest", isSelected: isSelected,),
+                      ButtonSalonSearch(text: "Popular", isSelected : isSelected),
                       Container(
                         height: 42,
                         width: 100,
                         decoration: BoxDecoration(
+                          color: isSortSelected? AppColor.buttonBackgroundColor : Colors.transparent,
                             borderRadius: BorderRadius.circular(9),
                             border: Border.all(
-                                color: AppColor.buttonBackgroundColor)),
+                                color: AppColor.buttonBackgroundColor),
+                        ),
                         child: Padding(
                           padding: EdgeInsets.only(left: /*Dimensions.width5*/5),
                           child: TextButton(
-                            onPressed: () {},
-                            child: const IconAndTextButton(
-                              text: "Sort",
-                              iconData: Icons.sort,
-                              fontWeight: FontWeight.w600,
+                            onPressed: () {
+                              setState(() {
+                                isSortSelected = !isSortSelected;
+                              });
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset("asset/icons/sortIcon.svg",height: 15,
+                                color:  isSortSelected? Colors.white : Colors.black,
+                                ),
+                                const SizedBox(width: 5,),
+                                SmallText(
+                                  text: "Sort",
+                                  fontWeightName: FontWeight.w600,
+                                  color: isSortSelected? Colors.white : Colors.black,
+                                )
+                              ],
                             ),
                           ),
                         ),
@@ -86,6 +109,7 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: 5,
+                    padding: EdgeInsets.only(top: screenHeight * 0.0224 /*20*/),
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: (){
@@ -110,25 +134,39 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
   }
 }
 
-class ButtonSalonSearch extends StatelessWidget {
+class ButtonSalonSearch extends StatefulWidget {
   final String text;
-  const ButtonSalonSearch({super.key, required this.text});
+  bool isSelected;
+  ButtonSalonSearch({super.key, required this.text, required this.isSelected});
 
   @override
+  State<ButtonSalonSearch> createState() => _ButtonSalonSearchState();
+}
+
+class _ButtonSalonSearchState extends State<ButtonSalonSearch> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    return  Container(
       height: 42,
       width: 100,
       decoration: BoxDecoration(
+          color: widget.isSelected? AppColor.buttonBackgroundColor : Colors.transparent,
           borderRadius: BorderRadius.circular(9),
-          border: Border.all(color: AppColor.buttonBackgroundColor)),
+          border: Border.all(color: AppColor.buttonBackgroundColor),),
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            widget.isSelected = ! widget.isSelected;
+          });
+        },
         child: SmallText(
-          text: text,
+          text: widget.text,
           fontWeightName: FontWeight.w600,
+          color: widget.isSelected? Colors.white : Colors.black,
         ),
       ),
     );
   }
 }
+
+

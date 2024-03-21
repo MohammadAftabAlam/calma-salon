@@ -22,6 +22,7 @@ class _MapPageState extends State<MapPage> {
 
   static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
   static const LatLng _pRewariLoc = LatLng(37.3346, -122.0090);
+  static const LatLng jamiaMillia = LatLng(28.561657, 77.281258);
 
   Map<PolylineId, Polyline> polyLines = {};
 
@@ -46,32 +47,32 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: _currentPos == null
           ? const Center(
-        child: Text(
-          "Loading...",
-          style: TextStyle(fontSize: 20),
-        ),
-      )
+              child: Text(
+                "Loading...",
+                style: TextStyle(fontSize: 20),
+              ),
+            )
           : GoogleMap(
-        onMapCreated: ((GoogleMapController controller) =>
-            _mapController.complete(controller)),
-        initialCameraPosition:
-        const CameraPosition(target: _pGooglePlex, zoom: 13),
-        markers: {
-          Marker(
-            markerId: const MarkerId("_currentLocation"),
-            position: _currentPos!,
-          ),
-          const Marker(
-            markerId: MarkerId("sourceLocation"),
-            position: _pGooglePlex,
-          ),
-          // const Marker(
-          //   markerId: MarkerId("destinationLocation"),
-          //   position: _pRewariLoc,
-          // ),
-        },
-        polylines: Set<Polyline>.of(polyLines.values),
-      ),
+              onMapCreated: ((GoogleMapController controller) =>
+                  _mapController.complete(controller)),
+              initialCameraPosition:
+                  CameraPosition(target: jamiaMillia!, zoom: 13),
+              markers: {
+                Marker(
+                  markerId: const MarkerId("_currentLocation"),
+                  position: _currentPos!,
+                ),
+                // const Marker(
+                //   markerId: MarkerId("sourceLocation"),
+                //   position: _pGooglePlex,
+                // ),
+                // const Marker(
+                //   markerId: MarkerId("destinationLocation"),
+                //   position: _pRewariLoc,
+                // ),
+              },
+              polylines: Set<Polyline>.of(polyLines.values),
+            ),
     );
   }
 
@@ -102,9 +103,8 @@ class _MapPageState extends State<MapPage> {
       permissionGranted = await locationController.requestPermission();
 
       if (permissionGranted != PermissionStatus.granted) {
-
         debugPrint("Permission Not Granted Aftab Bro");
-        return ;
+        return;
       }
     }
 

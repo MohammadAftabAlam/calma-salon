@@ -18,20 +18,21 @@ class BackArrowButtonWithPositioned extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.sizeOf(context).height;
     return Positioned(
-      left: positionedLeft,
-      top: positionedTop,
+      left: positionedLeft ==10 ? screenHeight *0.0112: screenHeight * positionedLeft /screenHeight,
+      top: positionedTop  ==50 ? screenHeight *0.0561: screenHeight * positionedTop /screenHeight,
       child: Container(
-        height: 41,
+        height: screenHeight * 0.046, //41
         // width: 5,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColor.mainBackgroundColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black54,
-              offset: Offset(0,4),
-              blurRadius: 2
+              offset: Offset(0,screenHeight* 0.0045),
+              blurRadius: screenHeight * 0.0022,
             )
           ]
         ),
@@ -39,7 +40,7 @@ class BackArrowButtonWithPositioned extends StatelessWidget {
           onPressed: onPress,
           icon: Icon(
             iconData,
-            size: iconSize,
+            size: iconSize == 30 ? screenHeight *0.0334: screenHeight * iconSize /screenHeight ,
           ),
         ),
       ),

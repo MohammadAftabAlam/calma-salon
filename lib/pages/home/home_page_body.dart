@@ -14,7 +14,8 @@ class HomePageBody extends StatefulWidget {
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
-  List images = ["asset/images/haircut.jpg",
+  List images = [
+    "asset/images/haircut.jpg",
     "asset/images/facial.jpg",
     "asset/images/bridal_makeup.jpg",
     "asset/images/threadingEyebrow.jpg",
@@ -69,73 +70,76 @@ class _HomePageBodyState extends State<HomePageBody> {
           /* ************************** Ends Home page main Banner ************************** */
 
           /* ************ Select Cherished Text Starts ***************** */
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: screenWidth * 0.024 /*10*/),
-                child: BigText(
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BigText(
                   text: "Select Cherished Services",
                   fontSize: screenHeight * 0.02 /*18*/,
                   fontWeightName: FontWeight.bold,
                   color: AppColor.mainBlackColor,
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  const SearchPage()));
-                },
-                child: const SmallText(
-                  text: "View All",
-                  color: AppColor.quoteColor,
-                ),
-              ),
-            ],
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  const SearchPage()));
+                  },
+                  child: const SmallText(
+                    text: "View All",
+                    color: AppColor.quoteColor,
+                  ),
+                )
+              ],
+            ),
           ),
           /* ************ Select Cherished Text Ends ***************** */
 
           /* ************* Starts Cherished services with horizontal scroll ************* */
           SizedBox(
             height: screenHeight * 0.17, //151
-            width: double.maxFinite,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: images.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-
                 /// Column is used here for showing the images along with services name
-                return Column(
-                  children: [
-                    Container(
-                      height: screenHeight * 0.123,//110,
-                      width: screenWidth * 0.275,//113,
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchPage()));
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: screenHeight * 0.123,//110,
+                        width: screenWidth * 0.275,//113,
 
-                      // margin: EdgeInsets.only(
-                      //     left: Dimensions.width5,
-                      //     right: Dimensions.width5,
-                      //     top: Dimensions.height10,
-                      //     bottom: Dimensions.height10),
+                        // margin: EdgeInsets.only(
+                        //     left: Dimensions.width5,
+                        //     right: Dimensions.width5,
+                        //     top: Dimensions.height10,
+                        //     bottom: Dimensions.height10),
 
-                      margin: EdgeInsets.symmetric(horizontal: screenWidth *0.012 /*5*/,vertical: screenHeight *0.011/*10*/),
+                        margin: EdgeInsets.symmetric(horizontal: screenWidth *0.012 /*5*/,vertical: screenHeight *0.011/*10*/),
 
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular( screenHeight* 0.007/*6*/),
-                        color: AppColor.imageBgColor,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(images[index].toString()),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular( screenHeight* 0.007/*6*/),
+                          color: AppColor.imageBgColor,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(images[index].toString()),
+                          ),
                         ),
                       ),
-                    ),
-                    SmallText(
-                      text: imageServiceName[index].toString(),
-                      color: AppColor.quoteColor
-                    )
-                  ],
+                      SmallText(
+                        text: imageServiceName[index].toString(),
+                        color: AppColor.quoteColor
+                      )
+                    ],
+                  ),
                 );
               },
             ),

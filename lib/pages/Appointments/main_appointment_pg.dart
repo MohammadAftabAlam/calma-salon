@@ -1,6 +1,6 @@
-import 'package:calma/pages/Appointments/Appointment%20Status/booked_services.dart';
-import 'package:calma/pages/Appointments/Appointment%20Status/cancel_services.dart';
-import 'package:calma/pages/Appointments/Appointment%20Status/completed_services.dart';
+import 'package:calma/pages/Appointments/Appointment_Status/upcoming_booking.dart';
+import 'package:calma/pages/Appointments/Appointment_Status/cancel_services.dart';
+import 'package:calma/pages/Appointments/Appointment_Status/completed_services.dart';
 import 'package:calma/pages/Profile/account_info.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
@@ -16,6 +16,7 @@ class Appointments extends StatefulWidget {
 
 /* (with SingleTickerProviderStateMixin) is required for (vsync: this)
     which is used in TabController Otherwise it will throw error */
+
 class _AppointmentsState extends State<Appointments>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -40,6 +41,8 @@ class _AppointmentsState extends State<Appointments>
       statusBarColor: Colors.transparent,
     ));
     /* ******************Ends Removing shadow above the AppBar****************** */
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final screenWidth = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
@@ -51,10 +54,10 @@ class _AppointmentsState extends State<Appointments>
               Navigator.pop(context);
             },
           ),
-          const Positioned(
-            top: 62,
-            left: 123,
-            child: TitleText(text: "My Bookings"),
+          Positioned(
+            top: screenHeight * 0.0696, //62,
+            left: screenWidth * 0.3403, //140,
+            child: const TitleText(text: "My Bookings"),
           ),
 
           /* **************Ends Back Arrow Button************** */
@@ -62,28 +65,24 @@ class _AppointmentsState extends State<Appointments>
             children: [
               /* ************************Starts White Container with TextButton **************** */
               Container(
-                margin: const EdgeInsets.only(
-                  top: 110,
+                margin: EdgeInsets.only(
+                  top: screenHeight * 0.1235, //110,
                 ),
-                height: 46,
-                width: 380,
-                // decoration: BoxDecoration(
-                //   color: Colors.white,
-                //   borderRadius: BorderRadius.circular(12),
-                // ),
+                height: screenHeight * 0.0516, //46,
+                width: screenWidth * 0.9236, //380,
                 child: TabBar(
                   controller: _tabController,
                   labelColor: AppColor.textColor,
                   unselectedLabelColor: const Color(0xff000000),
-                  tabs: const [
+                  tabs: [
                     Tab(
-                      child: TabControllerText(text: "Booked"),
+                      child: tabControllerText("Upcoming", screenHeight),
                     ),
                     Tab(
-                      child: TabControllerText(text: "Completed"),
+                      child: tabControllerText("Completed", screenHeight),
                     ),
                     Tab(
-                      child: TabControllerText(text: "Cancelled"),
+                      child: tabControllerText("Cancelled", screenHeight),
                     ),
                   ],
                 ),
@@ -106,22 +105,32 @@ class _AppointmentsState extends State<Appointments>
       ),
     );
   }
-}
 
-class TabControllerText extends StatelessWidget {
-  final String text;
-  const TabControllerText({super.key, required this.text});
-
-  @override
-  Widget build(BuildContext context) {
+  tabControllerText(String text, double screenHeight) {
     return Text(
       text,
-      style: const TextStyle(
-        fontFamily: "Inter",
-        fontSize: 18,
-        fontWeight: FontWeight.w600
-      ),
+      style: TextStyle(
+          fontFamily: "Inter",
+          fontSize: screenHeight * 0.0202, //18
+          fontWeight: FontWeight.w600),
     );
   }
 }
 
+/* Created for tab controller text but not used */
+// class TabControllerText extends StatelessWidget {
+//   final String text;
+//   const TabControllerText({super.key, required this.text});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text(
+//       text,
+//       style: const TextStyle(
+//         fontFamily: "Inter",
+//         fontSize: 18,
+//         fontWeight: FontWeight.w600
+//       ),
+//     );
+//   }
+// }

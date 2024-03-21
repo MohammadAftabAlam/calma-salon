@@ -4,8 +4,7 @@ import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -15,213 +14,216 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  String searchedValue = "";
   TextEditingController searchController = TextEditingController();
 
-  SpeechToText speechToText = SpeechToText();
-  String _lastWords ='';
-  bool _serviceEnabled = false;
+  final stt.SpeechToText _speechToText =  stt.SpeechToText();
+  String _recognizedText = "";
+  bool isListening = false;
+
+  get screenHeight => MediaQuery.of(context).size.height;
+  get screenWidth => MediaQuery.of(context).size.width;
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    _initSpeech();
+    _initStateSpeech();
   }
 
-  /// initSpeech() is used to ask permission to record audio
-  void _initSpeech() async{
-    _serviceEnabled = await speechToText.initialize();
-    setState(() {});
-  }
+  void _initStateSpeech()async{
+    bool available = await _speechToText.initialize();
+    if(!mounted) return;
 
-
-  /// _startListening() is used to record the audio of the user
-   _startListening() async{
-    await speechToText.listen(onResult: _onResult);
-    setState(() {});
-  }
-
-  /// _stopListening is used to stop the recording of the user's audio
-   _stopListening() async{
-    await speechToText.stop();
-    setState(() {});
-  }
-
-   _onResult(SpeechRecognitionResult result){
     setState(() {
-      _lastWords = result.recognizedWords;
+      isListening = available;
     });
   }
-  /*Speech Recognition page */
+/* ******************** Start Listen Open the mic for Listening the voice STARTS HERE ************************* */
+  void _startListening(){
+    _speechToText.listen(onResult: (result){
+      setState(() {
+        _recognizedText = result.recognizedWords;
+      });
+    });
+    setState(() {
+      isListening = true;
+    });
+  }
+/* ******************** Start Listen Open the mic for Listening the voice ENDS HERE ************************* */
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    /// Changing the search bar value with the text [_recognizedText] that is recognized while Listening
+    searchController.text = _recognizedText;
+
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
       body: Padding(
-        padding: const EdgeInsets.only(top: 60, left: 10, right: 10),
+        padding: EdgeInsets.only(top: screenHeight * 0.0674/*60*/, left: screenWidth * 0.024 /*10*/, right: screenWidth * 0.024 /*10*/),
         child: Column(
           children: [
+            /* ******************************** Search Bar STARTS here ************************************* */
             SearchBar(
               controller: searchController,
-              hintText: "Search for salon, services &more",
+              hintText: "Search for services",
               leading: Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding:  EdgeInsets.only(left: screenWidth * 0.024 /*10*/),
                 child: IconButton(
                     onPressed: () {}, icon: const Icon(Icons.search_outlined)),
               ),
               trailing: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(right: screenWidth * 0.024 /*10*/),
 
-                  /******************** Currently we are working here ***************************/
                   child: IconButton(
-                      onPressed: () {
-                        // If not yet listening for speech start, otherwise stop
-                        // speechToText.isNotListening ? _stopListening : _startListening;
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => SpeechRecognitionPage()));4
-
-
-                         if(_serviceEnabled){
-                           _showDialog();
-                           speechToText.isNotListening? _startListening() : _stopListening();
-                         }
-                        // setState(() {});
+                      onPressed: (){
+                        _startListening();
+                        _showDialog(_recognizedText);
                       },
-                        tooltip: 'Listen',
 
+                    icon: isListening? SvgPicture.asset("asset/icons/microphone.svg", height: screenHeight * 0.036 /*32*/,): Icon(Icons.mic_off),
 
-                    // onPressed: speechToText.isNotListening? _startListening() : _stopListening(),
-                    //   icon: Icon( speechToText.isNotListening ?
-                    //   Icons.mic : Icons.mic_off,
-                    //   ),
-
-                    icon: speechToText.isNotListening ? SvgPicture.asset("asset/icons/microphone.svg", height: 32,) : SvgPicture.asset("asset/icons/microphone.svg"),
-
-                  ),
+                    tooltip: 'Speech Recognition',
+                ),
                 ),
               ],
-              onChanged: (String value) {
-                debugPrint(value);
-                setState(() {
-                  searchedValue = value;
-                });
-              },
             ),
+            /* ******************************** Search Bar ENDS here ************************************* */
 
-
+            /* **************************** showing the list of services STARTS here ********************* */
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: 10,
+                padding: EdgeInsets.only(top: screenHeight * 0.0224 /*20*/),
                 itemBuilder: (context, index) {
+
+                  /* ************************************ Card which is showing the services name and images STARTS here ***************************** */
                   return Card(
-                    margin: const EdgeInsets.only(
-                        bottom: /*Dimensions.height15*/ 15),
+                    margin: EdgeInsets.only(
+                        bottom: screenHeight * 0.0168 /*15*/),
                     child: Row(
                       children: [
+                        /* ************************* Image container STARTS here ******************** */
                         Container(
                           height: 130,
                           width: 100,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(11),
-                              topRight: Radius.circular(11),
+                              bottomRight: Radius.circular(screenHeight * 0.0123/*11*/),
+                              topRight: Radius.circular(screenHeight * 0.0123/*11*/),
                             ),
-                            image: DecorationImage(
+                            image: const DecorationImage(
                               fit: BoxFit.cover,
                               image: AssetImage("asset/images/haircut.jpg"),
                             ),
                           ),
                         ),
+                        /* ************************* Image container ENDS here ******************** */
 
-                        /* ************** This widget denotes the Salon Name and their booking status i.e..(Booked,Pending,Cancelled)************** */
                         //Expanded Widget is used here for acquiring the rest width of the Row in Container
                         Expanded(
                             child: Stack(
                           children: [
                             Container(
                               height: 130,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                   color: AppColor.statusBookServiceColor,
                                   borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(11),
-                                    bottomRight: Radius.circular(11),
-                                  )),
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 10, top: 5),
+                                    topRight: Radius.circular(screenHeight * 0.0123/*11*/),
+                                    bottomRight: Radius.circular(screenHeight * 0.0123/*11*/),
+                                  )
+                              ),
+                              /* ************************* Service Detail and Name STARTS here ******************** */
+                              child: Padding(
+                                padding: EdgeInsets.only(left: screenWidth * 0.024 /*10*/, top: screenHeight * 0.006 /*5*/),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    /* ************************* Service Name STARTS here ******************** */
                                     BigText(
                                       fontWeightName: FontWeight.w600,
                                       color: AppColor.quoteColor,
                                       text: 'Bride Makeup',
-                                      fontSize: 18,
+                                      fontSize: screenHeight * 0.020, //18
                                     ),
+                                    /* ************************* Service name ENDS here ******************** */
+
+                                    /* ************************* Service Detail STARTS here ******************** */
                                     Padding(
-                                      padding: EdgeInsets.only(right: 10),
+                                      padding: EdgeInsets.only(right: screenWidth * 0.024 /*10*/),
                                       child: SmallText(
                                           textAlignName: TextAlign.justify,
-                                          fontSize: 12,
+                                          fontSize: screenHeight * 0.0135,//12
                                           fontFamilyName: "Inter",
                                           text:
                                               "From messy manes to chic frames, our scissors tell the tale of stylish transformations. Because every haircut deserves a sprinkle of laughter !"),
                                     ),
+                                    /* ************************* Service Detail ENDS here ******************** */
+
                                   ],
                                 ),
                               ),
+                              /* ************************* Service Detail and Name ENDS here ******************** */
+
                             ),
-                            const Positioned(
-                                top: 83, left: 225, child: ForwardArrowButton(),
+                            Positioned(
+                              top: screenHeight * 0.0954 /*85*/, left: screenWidth * 0.547/*225*/,
+                              child: ForwardArrowButton(screenHeight: screenHeight,screenWidth: screenWidth,),
                             ),
                           ],
                         )),
                       ],
                     ),
                   );
+                  /* ************************************ Card which is showing the services name and images STARTS here ***************************** */
+
                 },
               ),
             ),
+            /* **************************** showing the list of services STARTS here ********************* */
+
           ],
         ),
       ),
     );
   }
 
-  void _showDialog() {
+  /* **************************** Dialog box to show recognized word STARTS here ********************* */
+  void _showDialog(String text) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           actionsAlignment: MainAxisAlignment.center,
           backgroundColor: AppColor.mainBackgroundColor,
-          icon: IconButton(
-            onPressed: () {
-              _stopListening();
-              Navigator.pop(context);
-            },
-            icon: Icon( speechToText.isNotListening ?
-              Icons.mic : Icons.mic_off,
-              size: 50,
+          title: const Text("Speech Recognition"),
+          titleTextStyle: TextStyle(fontSize: screenHeight * 0.020 /*18*/, color: Colors.black54),
+          titlePadding: EdgeInsets.only(top: 20,right: screenWidth *0.1215/*50*/,left: screenWidth *0.1215/*50*/,bottom: screenHeight * 0.006 /*5*/),
+          content: Container(
+            height: screenHeight * 0.0674/*60*/,
+            width: screenWidth * 0.243,//100,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black45),
+              borderRadius: BorderRadius.circular(screenHeight *0.0112/*10*/),
             ),
+            child: Text(_recognizedText.isEmpty ? "Result here...": text, textAlign: TextAlign.center,style: TextStyle(color: Colors.teal,fontSize: screenHeight * 0.016/*14*/,fontWeight: FontWeight.w400,fontFamily: "Inter"),),
           ),
-          title: Text( speechToText.isNotListening ? "Tap the mic to stop Listening": '$_lastWords'),
           actions: [
             InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
               child: Container(
-                height: 50,
-                width: 50,
+                height: screenHeight * 0.056,//50,
+                width: screenWidth * 0.1215, //50,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.red)),
+                    border: Border.all(color: Colors.black38)),
                 child: const Center(child: Text("X")),
               ),
             ),
@@ -230,114 +232,23 @@ class _SearchPageState extends State<SearchPage> {
       },
     );
   }
+/* **************************** Dialog box to show recognized word ENDS here ********************* */
+
 }
 
-class SpeechRecognitionPage extends StatefulWidget {
-  const SpeechRecognitionPage({super.key});
-
-  @override
-  State<SpeechRecognitionPage> createState() => _SpeechRecognitionPageState();
-}
-
-class _SpeechRecognitionPageState extends State<SpeechRecognitionPage> {
-  SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
-  String _lastWords = '';
-  @override
-  void initState() {
-    super.initState();
-    _initSpeech();
-  }
-
-  /// This has to happen only once per app
-  void _initSpeech() async {
-    // _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  /// Each time to start a speech recognition session
-  void _startListening() async {
-    // await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
-
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
-  void _stopListening() async {
-    // await _speechToText.stop();
-    setState(() {});
-  }
-
-  /// This is the callback that the SpeechToText plugin calls when
-  /// the platform returns recognized words.
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Speech Demo'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.all(16),
-              child: const Text(
-                'Recognized words:',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  // If listening is active show the recognized words
-                  _speechToText.isListening
-                      ? '$_lastWords'
-                      // If listening isn't active but could be tell the user
-                      // how to start it, otherwise indicate that speech
-                      // recognition is not yet ready or not supported on
-                      // the target device
-                      : _speechEnabled
-                          ? 'Tap the microphone to start listening...'
-                          : 'Speech not available',
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            // If not yet listening for speech start, otherwise stop
-            _speechToText.isNotListening ? _startListening : _stopListening,
-        tooltip: 'Listen',
-        child: Icon(_speechToText.isNotListening ? Icons.mic_off : Icons.mic),
-      ),
-    );
-  }
-}
-
-                                  ///Not Working here
+/* ********************************** Black button on card STARTS from here****************************** */
 class ForwardArrowButton extends StatelessWidget {
-  const ForwardArrowButton({super.key});
+  final double screenHeight, screenWidth;
+  const ForwardArrowButton({super.key, required this.screenHeight,required this.screenWidth });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      width: 40,
+      height: screenHeight * 0.045, //40
+      width: screenWidth * 0.0972,//40,
       decoration: BoxDecoration(
           color: const Color(0xff1E1F2E),
-          borderRadius: BorderRadius.circular(7)),
+          borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/)),
       child: Center(
         child: IconButton(
           onPressed: () {
@@ -345,37 +256,17 @@ class ForwardArrowButton extends StatelessWidget {
           },
           icon: const Icon(Icons.arrow_forward),
           color: Colors.white,
-          iconSize: 27,
+          iconSize: screenHeight *0.030,//27,
         ),
       ),
     );
   }
 }
+/* ********************************** Black button on card ENDS here****************************** */
 
-/*SearchBar(
-            // padding: ,
-            controller: searchController,
-            hintText: "Search for salon, services &more",
-            trailing: const <Widget> [
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(Icons.mic),
-              )
-            ],
-            leading: const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Icon(Icons.search_outlined),
-            ),
-            onChanged: (String value){
-              debugPrint(value);
-              setState(() {
-                searchedValue = value;
-              });
-            },
-          ),
- */
 
-//Facebook search option
+
+/*Facebook search option */
 // Expanded(
 //   child: ListView.builder(
 //       itemCount: 5000,

@@ -1,5 +1,6 @@
-import 'package:calma/pages/Appointments/Appointment%20Status/booked_services.dart';
+import 'package:calma/pages/Appointments/Appointment_Status/upcoming_booking.dart';
 import 'package:calma/pages/Profile/account_info.dart';
+import 'package:calma/pages/Profile/location_screen.dart';
 import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/validation/login_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
@@ -17,9 +18,13 @@ class ProfileManager extends StatefulWidget {
   State<ProfileManager> createState() => _ProfileManagerState();
 }
 
+
 class _ProfileManagerState extends State<ProfileManager> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
@@ -44,7 +49,13 @@ class _ProfileManagerState extends State<ProfileManager> {
                 text: " Account Info",
               ),
               ProfileButtons(
-                onPress: () {},
+                onPress: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ShowLocationPage()),
+                  );
+                },
                 text: "Location ",
               ),
               ProfileButtons(
@@ -57,20 +68,24 @@ class _ProfileManagerState extends State<ProfileManager> {
               ),
               ProfileButtons(
                 onPress: () {
-                  _showBottomLogoutButton();
+                  _showBottomLogoutButton(screenHeight, screenWidth);
                 },
                 text: "Logout",
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 60, left: 20, right: 20),
+              Padding(
+                padding: EdgeInsets.only(
+                  top: screenHeight * 0.0674, //60,
+                  left: screenWidth * 0.0486, //20,
+                  right: screenWidth * 0.0486, //20,
+                ),
                 child: SmallText(
                     textAlignName: TextAlign.center,
                     fontFamilyName: "Rale way",
                     fontStyleName: FontStyle.italic,
-                    fontSize: 28,
+                    fontSize: screenHeight * 0.0314, //28
                     color: AppColor.quoteColor,
                     text:
-                    '“The only constant in life is change." - Heraclitus'),
+                        '“The only constant in life is \nchange." - Heraclitus'),
               ),
             ],
           ),
@@ -79,40 +94,80 @@ class _ProfileManagerState extends State<ProfileManager> {
     );
   }
 
-///******** Function to show the BottomSheet For logout Purpose STARTS here*********************/
-  void _showBottomLogoutButton(){
-    showModalBottomSheet(context: context, builder: (context)=>Container(
-      padding: const EdgeInsets.all(20),
-      width: double.maxFinite,
-      height: 250,
-      child: Column(
-            children: [
-              const Icon(Iconsax.info_circle, color: Colors.grey,size: 80,),
-              const SizedBox(height: 5,),
-              const BigText(text: "Logout",fontSize: 24,fontFamilyName: "Inter",color: Color(0xff374151),),
-              const SizedBox(height: 5,),
+  ///******** Function to show the BottomSheet For logout Purpose STARTS here*********************/
+  void _showBottomLogoutButton(double screenHeight, double screenWidth) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.0486,
+                  vertical: screenHeight * 0.0224), //20
+              width: double.maxFinite,
+              height: screenHeight * 0.2806, //250
 
-              const SmallText(text:"Are you sure, you want to logout ?",color: Color(0xff374151),),
-              const SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(
                 children: [
-                AppointmentPageButtonAll(onPress: (){Navigator.pop(context);}, text: "Cancel"),
-                AppointmentPageButtonAll(onPress: () async{
-                  SharedPreferences sp = await SharedPreferences.getInstance();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
-                  debugPrint(sp.getBool('isLogin').toString());
-                  sp.setBool('isLogin', false);
-                  debugPrint(sp.getBool('isLogin').toString());
-                }, text: "Logout"),
-              ],),
-              
-            ],
-          ),
-    ));
-  }
-///******** Function to show the BottomSheet For logout Purpose ENDS here*********************/
+                  /* ************* Big Exclamation Mark in Circle Starts here **************** */
+                  Icon(
+                    Iconsax.info_circle,
+                    color: Colors.grey,
+                    size: screenHeight * 0.0898 /*80*/,
+                  ),
+                  /* ************* Big Exclamation Mark in Circle Ends here **************** */
 
+                  SizedBox(
+                    height: screenHeight * 0.0056 /*5*/,
+                  ),
+
+                  BigText(
+                    text: "Logout",
+                    fontSize: screenHeight * 0.0269 /*24*/,
+                    fontFamilyName: "Inter",
+                    color: const Color(0xff374151),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.0056 /*5*/,
+                  ),
+
+                  const SmallText(
+                    text: "Are you sure, you want to logout ?",
+                    color: Color(0xff374151),
+                  ),
+
+                  SizedBox(
+                    height: screenHeight * 0.0112 /*10*/,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AppointmentPageButtonAll(
+                          onPress: () {
+                            Navigator.pop(context);
+                          },
+                          text: "No"),
+                      AppointmentPageButtonAll(
+                          onPress: () async {
+                            SharedPreferences sp =
+                                await SharedPreferences.getInstance();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginScreen()));
+                            debugPrint(sp.getBool('isLogin').toString());
+                            sp.setBool('isLogin', false);
+                            debugPrint(sp.getBool('isLogin').toString());
+                          },
+                          text: "Yes"),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+  }
+
+  ///******** Function to show the BottomSheet For logout Purpose ENDS here*********************/
 }
 
 /* *********************************** Starts Profile Button *********************************** */
@@ -138,28 +193,43 @@ class ProfileButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
       padding: EdgeInsets.only(
-        left: paddingLeft,
-        right: paddingRight,
-        top: paddingTop,
+        left: paddingLeft == 20
+            ? screenWidth * 0.0486
+            : screenWidth * paddingLeft / screenWidth,
+        right: paddingRight == 20
+            ? screenWidth * 0.0486
+            : screenWidth * paddingRight / screenWidth,
+        top: paddingTop == 32
+            ? screenHeight * 0.0359
+            : screenHeight * paddingTop / screenHeight,
       ),
       child: InkWell(
         onTap: onPress,
         child: Container(
-          height: height,
+          height: height == 70
+              ? screenHeight * 0.0785
+              : screenHeight * height / screenHeight,
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: color,
-              borderRadius: BorderRadius.circular(radius)),
+              borderRadius: BorderRadius.circular(radius == 15
+                  ? screenHeight * 0.0168
+                  : screenHeight * radius / screenHeight)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding:
+                EdgeInsets.symmetric(horizontal: screenWidth * 0.0729 /*30*/),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BigText(
                   text: text,
-                  fontSize: fontSize,
+                  fontSize: fontSize == 22
+                      ? screenHeight * 0.0247
+                      : screenHeight * fontSize / screenHeight,
                   fontWeightName: FontWeight.w300,
                 ),
                 Icon(
