@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   /*Asking user current location STARTS here*/
 
-  final apiKey = 'AIzaSyDp3BbyiluHMmyDqmlrnUXRTCy4b4JhAQI';
+  final apiKey = 'PLACE_YOUR_GOOGLE_MAP_API_KEY_HERE';
   loc.Location location = loc.Location();
   bool _serviceEnabled = false;
   loc.LocationData? _currentLocation;
