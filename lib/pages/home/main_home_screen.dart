@@ -24,12 +24,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
     ProfileManager(),
   ];
 
-<<<<<<< HEAD
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-=======
+
   // void _onItemTapped(int index) {
   //   setState(() {
   //     _selectedIndex = index;
@@ -40,46 +40,11 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   // NavigationDestinationLabelBehavior labelBehavior =
   //     NavigationDestinationLabelBehavior.alwaysShow;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _checkLocationPermission();
-  }
-  /*Asking user current location STARTS here*/
 
-  final apiKey = 'PLACE_YOUR_GOOGLE_MAP_API_KEY_HERE';
-  loc.Location location = loc.Location();
-  bool _serviceEnabled = false;
-  loc.LocationData? _currentLocation;
-  loc.PermissionStatus _permissionGranted = loc.PermissionStatus.denied;
-  String? _areaName = "";
 
-  Future<void> _checkLocationPermission() async {
-    //if user denied to give their location permission then this line of code continuously ask
-    //to enable the location services for this application
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-    } else {
-      return;
-    }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == loc.PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != loc.PermissionStatus.granted) {
-        // _permissionGranted = await location.requestPermission();
-        return;
-      }
-      // if(_permissionGranted == PermissionStatus.granted){
-      //   return;
-      // }
-    }
-    _getLocation();
->>>>>>> c803d174a20bd5e749d34694e2fd3d39e0f09f82
-  }
+}
 
   int currentPageIndex = 0;
   NavigationDestinationLabelBehavior labelBehavior =
@@ -174,12 +139,12 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
                 icon: SvgPicture.asset("asset/icons/appointment-icon.svg"),
                 label: "Appointments"),
             BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "asset/icons/userAvatar.svg",
-                  height: 30,
-                  width: 24,
-                ),
-                label: "Profile",
+              icon: SvgPicture.asset(
+                "asset/icons/userAvatar.svg",
+                height: 30,
+                width: 24,
+              ),
+              label: "Profile",
             ),
           ],
         ),
