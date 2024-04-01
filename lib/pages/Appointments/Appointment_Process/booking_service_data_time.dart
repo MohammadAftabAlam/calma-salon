@@ -8,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'booking_user_details.dart';
-import 'salon_search_show_pg.dart';
+import 'main_salon_show_pg.dart';
 
 String selectedText = "";
 

@@ -27,7 +27,7 @@ class SmallText extends StatelessWidget {
       textAlign: textAlignName,
       style: TextStyle(
         color: color,
-        fontSize: screenHeight * fontSize/890.286,  // == 14 ? screenHeight * 0.016: fontSize,
+        fontSize: fontSize == 14 ? screenHeight * 0.016 :fontSize,  // == 14 ? screenHeight * 0.016: fontSize,
         fontFamily: fontFamilyName,
         fontStyle: fontStyleName,
         fontWeight: fontWeightName,

@@ -1,12 +1,18 @@
+import 'dart:convert';
+
+import 'package:calma/pages/home/main_home_screen.dart';
+import 'package:calma/pages/validation/login_screen.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
-import 'package:calma/widgets/button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:calma/widgets/big_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -15,8 +21,8 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-List<String> genderList = <String>[ "Male", "Female"];
-List<String> userTypeList = <String>[ "Customer","Salon Owner"];
+List<String> genderList = <String>["Male", "Female"];
+List<String> userTypeList = <String>["Customer", "Salon Owner"];
 
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController phoneNumberController = TextEditingController();
@@ -26,17 +32,91 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController ageController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+
+  bool? isLoggedIn;
+  sharedPreference() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setBool('isLogin', true);
+  }
 
   final _formKey = GlobalKey<FormState>();
   DateTime? datePicked;
 
   String genderDropdownValue = genderList.first;
   String userTypeDropdownValue = userTypeList.first;
+  bool isVisible = true;
+  bool isLoading = false;
+  bool isOtpVerificationLoading = false;
 
- // final FirebaseAuth _auth = FirebaseAuth.instance;
- // bool loading = false;
- // late String phoneNumber1 = '+91 ${phoneNumberController.text.substring(0,4)} ${phoneNumberController.text.substring(4,7)} ${phoneNumberController.text.substring(7)}';
 
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  // bool loading = false;
+  // late String phoneNumber1 = '+91 ${phoneNumberController.text.substring(0,4)} ${phoneNumberController.text.substring(4,7)} ${phoneNumberController.text.substring(7)}';
+
+  /* ************************ HTTP Request to register user STARTS here ********************* */
+  Future<dynamic> createUser() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      String url = "https://calmarepo-production.up.railway.app/api/register";
+      Map<String, String> userDetails = {
+        "phoneNumber": '+91${phoneNumberController.text}',
+        "userType": userTypeDropdownValue.toUpperCase(),
+        "name": nameController.text,
+        "password": confirmPasswordController.text,
+        "age": ageController.text,
+        "email": emailController.text,
+        "location": "Delhi",
+        "gender": genderDropdownValue
+      };
+
+      var body = jsonEncode(userDetails);
+      Map<String, String> header = {
+        "Content-Type": "application/json",
+      };
+      http.Response response = await http.post(
+        Uri.parse(url),
+        body: body,
+        headers: header,
+      );
+      // String data = jsonDecode(response.body.toString());
+      if (response.statusCode == 200) {
+      }
+      /* *********** Bad Request code 400 *********** */
+      else if (response.statusCode == 400) {
+        snackBar(
+            "Oops! This email or phone number is already registered. Please try another");
+      }
+      setState(() {
+        isLoading = false;
+    });
+      return response.statusCode;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+  /* ************************ HTTP Request to register user ENDS here ********************* */
+
+  Future<dynamic> otpVerification() async {
+    setState(() {
+      isOtpVerificationLoading = true;
+    });
+    http.Response response = await http.post(
+      Uri.parse(
+          "https://calmarepo-production.up.railway.app/verify-otp?email=${emailController.text}&enteredOTP=${otpController.text}"),
+    );
+    // if(response.statusCode == 400){
+    //   snackBar("Oops! Invalid OTP,Try again");
+    // }
+    setState(() {
+      isOtpVerificationLoading = false;
+    });
+    debugPrint(response.statusCode.toString());
+    return response.statusCode;
+  }
 
   @override
   void dispose() {
@@ -48,6 +128,7 @@ class _SignUpPageState extends State<SignUpPage> {
     ageController.dispose();
     genderController.dispose();
     emailController.dispose();
+    otpController.dispose();
   }
 
   @override
@@ -72,7 +153,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     }),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: screenWidth * 0.1215/*50*/, top: screenHeight*0.0562 /*50*/ ),
+                    padding: EdgeInsets.only(
+                        left: screenWidth * 0.1215 /*50*/,
+                        top: screenHeight * 0.0562 /*50*/),
                     child: Container(
                       height: 100,
                       width: 167,
@@ -110,62 +193,60 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: TextFormField(
                   controller: nameController,
                   cursorColor: AppColor.imageBgColor,
-                  validator: (value){
-                    if(nameController.text.toString().isEmpty){
-                      return "Name can't be Null";
+                  validator: (value) {
+                    if (nameController.text.toString().isEmpty) {
+                      return "Enter your full name";
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                      hintText: "Name",
-                      isDense: true,
-                      suffixIcon: Padding(
-                        padding: EdgeInsets.all(screenWidth * 0.0243 /*10*/),
-                        child: SvgPicture.asset(
-                          'asset/icons/userIcon.svg',
-                          height: 10,
-                          width: 10,
+                    hintText: "Name",
+                    isDense: true,
+                    suffixIcon: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.0343 /*10*/),
+                      child: SvgPicture.asset(
+                        'asset/icons/userIcon.svg',
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.005, //5,
+                        horizontal: screenWidth * 0.0243 /*10*/
                         ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.circular(screenWidth * 0.0243 /*10*/),
-                        borderSide: BorderSide(
-                          color: AppColor.buttonBackgroundColor,
-                          width: screenWidth * 0.00486,
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
-                        borderSide: BorderSide(
-                          color: AppColor.buttonBackgroundColor,
-                          width: screenWidth * 0.00486,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
-                        borderSide: BorderSide(
-                          color: Colors.red,
-                          width: screenWidth * 0.00486,
-                        ),
-                      ),
-
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.circular(screenWidth * 0.0243 /*10*/),
-                        borderSide: BorderSide(
-                          color:Colors.red,
-                          width: screenWidth * 0.00486,
-                        ),
-                      ),
-
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.005, //5,
-                           horizontal: screenWidth * 0.0243 /*10*/
-                      ),
                   ),
                 ),
               ),
+
               /// Name TextFields ENDS HERE
 
               /* ************************ AGE TextFields STARTS HERE********************* */
@@ -180,10 +261,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   controller: ageController,
                   cursorColor: AppColor.imageBgColor,
                   keyboardType: TextInputType.number,
-                  validator: (val){
-                    if(ageController.text.isEmpty){
-                      return "age can't be empty";
+                  validator: (val) {
+                    if (ageController.text.isEmpty) {
+                      return "Enter your Age";
                     }
+                    return null;
                   },
                   decoration: InputDecoration(
                       hintText: "Age",
@@ -198,15 +280,16 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                        borderRadius:
+                            BorderRadius.circular(screenWidth * 0.0243),
                         borderSide: BorderSide(
                           color: AppColor.buttonBackgroundColor,
                           width: screenWidth * 0.00486,
                         ),
                       ),
-
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                        borderRadius:
+                            BorderRadius.circular(screenWidth * 0.0243),
                         borderSide: BorderSide(
                           color: Colors.red,
                           width: screenWidth * 0.00486,
@@ -214,15 +297,15 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderRadius:
-                        BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                            BorderRadius.circular(screenWidth * 0.0243 /*10*/),
                         borderSide: BorderSide(
-                          color:Colors.red,
+                          color: Colors.red,
                           width: screenWidth * 0.00486,
                         ),
                       ),
-
-                      contentPadding:  EdgeInsets.symmetric(
-                          vertical: 5, horizontal: screenWidth * 0.0243 /*10*/,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: screenWidth * 0.0243 /*10*/,
                       )),
                 ),
               ),
@@ -241,7 +324,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     top: screenHeight * 0.005, //5
                   ),
                   value: genderDropdownValue,
-                  items: genderList.map<DropdownMenuItem<String>>((String value) {
+                  items:
+                      genderList.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem(
                       value: value,
                       child: Text(value),
@@ -267,7 +351,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                        borderRadius:
+                            BorderRadius.circular(screenWidth * 0.0243),
                         borderSide: BorderSide(
                           color: AppColor.buttonBackgroundColor,
                           width: screenWidth * 0.00486,
@@ -277,6 +362,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           vertical: 2, horizontal: 10)),
                 ),
               ),
+
               ///Gender [SelectionTextField] ENDS here
 
               /// User Type [SelectionTextField] STARTS here
@@ -295,8 +381,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   //   }
                   // },
                   value: userTypeList.first,
-                  items:
-                      userTypeList.map<DropdownMenuItem<String>>((String value) {
+                  items: userTypeList
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem(
                       value: value,
                       child: Text(value),
@@ -322,7 +408,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                        borderRadius:
+                            BorderRadius.circular(screenWidth * 0.0243),
                         borderSide: BorderSide(
                           color: AppColor.buttonBackgroundColor,
                           width: screenWidth * 0.00486,
@@ -335,6 +422,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           horizontal: 10, vertical: 2)),
                 ),
               ),
+
               /// User [SelectionTextField] ENDS here
 
               /// Phone Number fields STARTS HERE
@@ -355,10 +443,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontSize: screenWidth * 0.0387,
                     ),
                     invalidNumberMessage: "Invalid Phone Number",
-                    validator: (val){
-                      if(phoneNumberController.text.isEmpty){
-                        return "Phone number can't be empty";
+                    validator: (val) {
+                      if (phoneNumberController.text.isEmpty) {
+                        return "Enter valid phone number";
                       }
+                      return null;
                     },
                     dropdownIcon: Icon(
                       Icons.arrow_drop_down,
@@ -387,18 +476,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                          borderRadius:
+                              BorderRadius.circular(screenWidth * 0.0243),
                           borderSide: BorderSide(
                             color: Colors.red,
                             width: screenWidth * 0.00486,
                           ),
                         ),
-
                         focusedErrorBorder: OutlineInputBorder(
-                          borderRadius:
-                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                          borderRadius: BorderRadius.circular(
+                              screenWidth * 0.0243 /*10*/),
                           borderSide: BorderSide(
-                            color:Colors.red,
+                            color: Colors.red,
                             width: screenWidth * 0.00486,
                           ),
                         ),
@@ -411,6 +500,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
+
               /// Phone Number fields ENDS HERE
 
               /* ********************* Email TextField Starts Here************************* */
@@ -424,36 +514,41 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: TextFormField(
                   controller: emailController,
                   cursorColor: AppColor.imageBgColor,
-                  validator: (String? value){
+                  validator: (String? value) {
                     String email = emailController.text.toString();
-                    if(!email.contains('@') || !email.endsWith("gmail.com")){
-                      return "please enter valid email";
+                    if (!email.contains('@') || !email.endsWith("gmail.com")) {
+                      return "Enter a valid email address";
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                      hintText: "Email",
-                      isDense: true,
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(left: 8,bottom: 5,top: 3, right: 8),
-                        child: SvgPicture.asset("asset/icons/email-1.svg", height: 2,width: 5,),
+                    hintText: "Email",
+                    isDense: true,
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, bottom: 5, top: 3, right: 8),
+                      child: SvgPicture.asset(
+                        "asset/icons/email-1.svg",
+                        height: 2,
+                        width: 5,
+                        color: AppColor.iconColor,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                        BorderRadius.circular(screenWidth * 0.0243 /*10*/),
-                        borderSide: BorderSide(
-                          color: AppColor.buttonBackgroundColor,
-                          width: screenWidth * 0.00486,
-                        ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.0243),
-                        borderSide: BorderSide(
-                          color: AppColor.buttonBackgroundColor,
-                          width: screenWidth * 0.00486,
-                        ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
                       ),
-
+                    ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(screenWidth * 0.0243),
                       borderSide: BorderSide(
@@ -463,44 +558,112 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius:
-                      BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
                       borderSide: BorderSide(
-                        color:Colors.red,
+                        color: Colors.red,
                         width: screenWidth * 0.00486,
                       ),
                     ),
-
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 12, horizontal: screenWidth * 0.0243 /*10*/,
-                      ),
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: screenWidth * 0.0243 /*10*/,
+                    ),
                   ),
                 ),
               ),
               /* ********************* Email TextField Ends Here************************* */
 
               /// Password Fields STARTS HERE
-              PasswordTextField(
-                text: 'Password',
-                controller: passwordController,
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
+              ///
+              ///
+              Padding(
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.0368, //15
+                  right: screenWidth * 0.0368, //15
+                  bottom: screenHeight * 0.0225, //20
+                  top: screenHeight * 0.005, //5
+                ),
+                child: TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: "Password",
+                    prefixIcon: const Icon(Iconsax.lock),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
+                ),
               ),
+
               /// Password Fields ENDS HERE
 
               /// Confirm Password Fields STARTS HERE
-              PasswordTextField(
-                text: 'Confirm Password',
-                controller: confirmPasswordController,
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
+              Padding(
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.0368, //15
+                  right: screenWidth * 0.0368, //15
+                  bottom: screenHeight * 0.0225, //20
+                  top: screenHeight * 0.005, //5
+                ),
+                child: TextFormField(
+                  controller: confirmPasswordController,
+                  obscureText: isVisible,
+                  decoration: InputDecoration(
+                    hintText: "Confirm Password",
+                    prefixIcon: const Icon(Iconsax.lock),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isVisible = !isVisible;
+                        });
+                      },
+                      child: Icon(
+                        isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+                      borderSide: BorderSide(
+                        color: AppColor.buttonBackgroundColor,
+                        width: screenWidth * 0.00486,
+                      ),
+                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  ),
+                ),
               ),
+
               /// Confirm Password Fields ENDS HERE
 
               SizedBox(
                 height: screenHeight * 0.0112,
               ),
-              Button(
-                onPress: () {
+              LoginAndSignupButton(
+                onPress: () async {
                   // debugPrint(nameController.text.toString());
                   // debugPrint(ageController.text.toString());
                   // debugPrint(genderDropdownValue.toString());
@@ -509,9 +672,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   // debugPrint(passwordController.text.toString());
                   // debugPrint(confirmPasswordController.text.toString());
 
-
-                  if (_formKey.currentState!.validate()) {
-                    snackBar("Name can't be empty");
+                  if (!_formKey.currentState!.validate()) {
+                    snackBar("Missing required field");
                   }
                   // if (nameController.text.toString().isEmpty) {
                   //   snackBar("Name can't be empty");
@@ -534,17 +696,38 @@ class _SignUpPageState extends State<SignUpPage> {
                   else if (!(passwordController.text.toString() ==
                       confirmPasswordController.text.toString())) {
                     snackBar("Password doesn't match");
-                  }
-                  else {
-                    if(_formKey.currentState!.validate()){
-                      _showModalBottomSheet(context);
+                  } else {
+                    if (_formKey.currentState!.validate()) {
+                      var statusCode = await createUser();
+
+                      if (statusCode == 200) {
+                        _showModalBottomSheet(screenHeight);
+                      } else {
+                        // snackBar( " Status code: " + statusCode.toString() + "Something went wrong");
+                      }
                     }
                   }
                 },
+                widget: isLoading
+                    ? const CircularProgressIndicator(
+                        strokeWidth: 4,
+                        color: AppColor.mainBackgroundColor,
+                      )
+                    : BigText(
+                        text: "SignUp",
+                        textAlignName: TextAlign.center,
+                        color: Colors.white,
+                        fontWeightName: FontWeight.bold,
+                        fontSize: screenHeight * 18 / screenHeight,
+                        fontFamilyName: "Inter",
+                      ),
                 width: 200,
-                text: "Sign Up",
-                fontFamily: "Inter",
-                fontSize: 18,
+                // text: "Sign Up",
+                // fontFamily: "Inter",
+                // fontSize: 18,
+              ),
+              SizedBox(
+                height: screenHeight * 0.0224,
               ),
             ],
           ),
@@ -559,16 +742,27 @@ class _SignUpPageState extends State<SignUpPage> {
       backgroundColor: Colors.red,
       duration: const Duration(seconds: 2),
       dismissDirection: DismissDirection.up,
+      behavior: SnackBarBehavior.floating,
+      showCloseIcon: true,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height - 100,
+        left: 10,
+        right: 10,
+      ),
     ));
   }
 
   /* ***************************** Date Picker for Age STARTS here ***************************** */
-  _pickYourAge(context){
+  _pickYourAge(context) {
     return InkWell(
-      onTap: () async{
+      onTap: () async {
         var currentDate = DateTime.now();
-        datePicked = await showDatePicker(context: context, firstDate: DateTime(1970), lastDate: currentDate,initialDate: currentDate);
-        if(datePicked != null){
+        datePicked = await showDatePicker(
+            context: context,
+            firstDate: DateTime(1970),
+            lastDate: currentDate,
+            initialDate: currentDate);
+        if (datePicked != null) {
           var age = currentDate.year - datePicked!.year;
           setState(() {
             ageController.text = age.toString();
@@ -584,7 +778,7 @@ class _SignUpPageState extends State<SignUpPage> {
   /* ***************************** Date Picker for Age ENDS here ***************************** */
 
   /* ***************************** OTP verification BottomSheet STARTS here ***************************** */
-  _showModalBottomSheet(context) {
+  _showModalBottomSheet(double screenHeight,) {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -609,36 +803,64 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 68),
-                    child: PinCodeTextField(appContext: context, length: 4),
+                    child: PinCodeTextField(
+                      appContext: context,
+                      controller: otpController,
+                      length: 6,
+                      keyboardType: TextInputType.number,
+                    ),
                   ),
-
-                  Button(
+                  LoginAndSignupButton(
                     onPress: () async {
-                      //
-                      // final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: phoneNumberController.text.toString());
-                      // try{
-                      //   await _auth.signInWithCredential(credential);
-                      //   Navigator.pushReplacement(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => const HomeScreen(),
-                      //     ),
-                      //   );
-                      //   // setState(() {
-                      //   //   loading = true;
-                      //   // });
-                      // }catch(e){
-                      //   snackBar(e.toString());
-                      //   setState(() {
-                      //     loading = false;
-                      //   });
-                      // }
-
+                      dynamic statusCode = await otpVerification();
+                      // setState(() {
+                      //   isOtpVerificationLoading = !isOtpVerificationLoading;
+                      //   debugPrint(isOtpVerificationLoading.toString());
+                      // });
+                      if (statusCode == 200) {
+                        sharedPreference();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MainHomeScreen()));
+                      } else if (statusCode == 400) {
+                        snackBar("Oops! Invalid OTP, try again");
+                      }
                     },
+                    widget: isOtpVerificationLoading
+                        ? const CircularProgressIndicator(
+                      strokeWidth: 4,
+                      color: AppColor.mainBackgroundColor,
+                    )
+                        :  BigText(
+                      text: "SignUp",
+                      textAlignName: TextAlign.center,
+                      color: Colors.white,
+                      fontWeightName: FontWeight.bold,
+                      fontSize: screenHeight * 18 / screenHeight,
+                      fontFamilyName: "Inter",
+                    ),
                     width: 200,
-                    text: "Verify OTP",
-                    fontFamily: "Inter",
-                    fontSize: 18,
+
+                    //
+                    // final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: phoneNumberController.text.toString());
+                    // try{
+                    //   await _auth.signInWithCredential(credential);
+                    //   Navigator.pushReplacement(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => const HomeScreen(),
+                    //     ),
+                    //   );
+                    //   // setState(() {
+                    //   //   loading = true;
+                    //   // });
+                    // }catch(e){
+                    //   snackBar(e.toString());
+                    //   setState(() {
+                    //     loading = false;
+                    //   });
+                    // }
                   ),
                 ],
               ),
@@ -654,16 +876,21 @@ class PasswordTextField extends StatelessWidget {
   final double screenHeight, screenWidth, verticalPad;
   final TextEditingController controller;
   final String text;
-  const PasswordTextField(
-      {super.key,
-      required this.text,
-      required this.controller,
-      required this.screenWidth,
-      required this.screenHeight,
-      this.verticalPad = 5});
+  final bool isVisible;
+
+  const PasswordTextField({
+    super.key,
+    required this.text,
+    required this.controller,
+    required this.screenWidth,
+    required this.screenHeight,
+    this.verticalPad = 5,
+    this.isVisible = true,
+  });
 
   @override
   Widget build(BuildContext context) {
+    // bool isnew = widget.isVisible;
     return Padding(
       padding: EdgeInsets.only(
         left: screenWidth * 0.0368, //15
@@ -736,7 +963,7 @@ class PasswordTextField extends StatelessWidget {
 */
 
 /// OTP Verification Page
-// import 'package:calma/pages/home/main_home_screen.dart';
+// import 'package:calma/pages/home/home_screen.dart';
 // import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 // import 'package:calma/utils/colors.dart';
 // import 'package:calma/widgets/big_text.dart';
@@ -915,12 +1142,11 @@ class _OtpVerificationState extends State<OtpVerification> {
     );
   }
 */
-  /* *************** Login ******************* */
-  // void login(bool loginState) async{
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   sp.setBool('isLogin', false);
-  //
-  //   sp.setBool('isLogin', loginState);
-  // }
+/* *************** Login ******************* */
+// void login(bool loginState) async{
+//   SharedPreferences sp = await SharedPreferences.getInstance();
+//   sp.setBool('isLogin', false);
+//
+//   sp.setBool('isLogin', loginState);
+// }
 //}
-

@@ -1,5 +1,5 @@
 import 'package:calma/pages/Profile/account_info.dart';
-import 'package:calma/pages/home/main_home_screen.dart';
+import 'package:calma/pages/home/home_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'salon_search_show_pg.dart';
+import 'main_salon_show_pg.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String? date, time, bookingFor;

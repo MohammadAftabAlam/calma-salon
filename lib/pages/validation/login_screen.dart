@@ -1,15 +1,20 @@
+import 'dart:convert';
+
 import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/validation/forget_password_screen.dart';
+import 'package:calma/utils/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:http/http.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:calma/pages/validation/sign_up_screen.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/button.dart';
 import 'package:calma/widgets/small_text.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,6 +24,50 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  sharedPreference() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setBool('isLogin', true);
+  }
+
+  bool isLoading = false;
+
+  /* ********************** STARTS Fetching data from the server to validating the user ********************** */
+  loginToYourAccountUsingCredentials() async {
+    try {
+      // This all i have to because api only accepts data in body raw format instead of form-data,
+      //If api accepted data in form of form-data then only pass body in Responses
+     setState(() {
+       isLoading = true;
+     });
+      Map<String, String> credentials = {
+        'phoneNumber': '+91${phoneNumberController.text}',
+        'password': passwordController.text
+      };
+
+      Map<String, String> header = {"Content-Type": "application/json"};
+      var body = jsonEncode(credentials);
+      Response response = await http.post(
+          Uri.parse("https://calmarepo-production.up.railway.app/api/login"),
+          // body: {
+          //   "phoneNumber" : phoneNumber,
+          //   "password" : password
+          // },
+          body: body,
+          headers: header,
+      );
+      if(response.statusCode == 200){
+        // var data = jsonDecode(response.body.toString());
+        // debugPrint(data['JWT Token']);
+        return response.statusCode;
+      }
+    } catch (e) {
+      // debugPrint("Md Aftab Alam Calma Application Exception " + e.toString());
+    }
+  }
+  /* ********************** ENDS Fetching data from the server to validating the user ********************** */
+
+
   TapGestureRecognizer? _gestureRecognizer;
   bool isVisible = true;
   TextEditingController passwordController = TextEditingController();
@@ -30,11 +79,17 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _gestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const SignUpPage()));
       };
   }
-
+@override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    phoneNumberController.dispose();
+    passwordController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -50,11 +105,12 @@ class _LoginScreenState extends State<LoginScreen> {
             right: 0,
             child: Container(
               width: double.maxFinite,
-              height: screenHeight * 0.404, // 360
+              // height: 470, // 360
+              height: screenHeight * 0.5276, // 470
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("asset/images/calmaBackGroundWomen.png"),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
@@ -64,11 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
           /// Calma Text STARTS here
           Positioned(
-            left: screenWidth * 0.157,
+            left: screenWidth * 0.257, //106
             top: screenHeight * 0.034,
             child: BigText(
               text: "CALMA",
-              fontSize: screenWidth * 0.156,
+              fontSize: screenWidth * 0.1222 ,//109
               color: const Color(0xff418F9C),
             ),
           ),
@@ -78,20 +134,23 @@ class _LoginScreenState extends State<LoginScreen> {
             left: 0,
             bottom: 0,
             right: 0,
-            top: screenHeight * 0.382,
+            // top: 440,
+            top: screenHeight *0.4939, //440
 
             /// Curved container that is on the images STARTS here
             child: Container(
               padding: EdgeInsets.only(
                 left: screenWidth * 0.0487,
                 right: screenWidth * 0.0487,
-                top: screenHeight * 0.0225,
+                // top: 5
+                top: screenHeight * 0.0185,
               ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(screenWidth * 0.0487),
                   topLeft: Radius.circular(screenWidth * 0.0487),
                 ),
+                // color: Colors.black,
                 color: AppColor.mainBackgroundColor,
               ),
 
@@ -104,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Animation Text STARTS Here
                     Row(
                       children: [
-                        SmallText(
+                        BigText(
                           text: "Schedule",
                           fontSize: screenWidth * 0.0878,
                           color: AppColor.mainBlackColor,
@@ -117,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         /// Animation Text STARTS Here
                         AnimatedTextKit(
                           animatedTexts: [
-                            typeWriterText("HairCut", screenWidth),
+                            typeWriterText("Haircut", screenWidth),
                             typeWriterText("facial", screenWidth),
                             typeWriterText("Make Up", screenWidth),
                             typeWriterText("& more", screenWidth),
@@ -129,9 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+
                     /// Animation Text ENDS Here
 
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Divider(
@@ -161,13 +222,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     // debugPrint(phoneNumberController.toString()),
                     Padding(
                       padding: EdgeInsets.only(
-                        left: screenWidth * 0.0368,  //15
+                        left: screenWidth * 0.0368, //15
                         right: screenWidth * 0.0368, //15
                         top: screenHeight * 0.0225, //15
                         // bottom: screenHeight * 0.0225,  //15
                       ),
                       child: SizedBox(
-                        height: screenHeight * 0.0988,  //88
+                        height: screenHeight * 0.0988, //88
                         width: double.maxFinite,
                         child: IntlPhoneField(
                           controller: phoneNumberController,
@@ -203,6 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: screenWidth * 0.00486,
                               ),
                             ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0119/*5*/,vertical: screenHeight *0.01684 /*15*/)
                           ),
                           initialCountryCode: 'IN',
                           // onChanged: (phone) {
@@ -215,10 +277,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     /// Password TextFields STARTS here
                     Padding(
                       padding: EdgeInsets.only(
-                          left: screenWidth * 0.0368,  //15
-                          right: screenWidth * 0.0368, //15
-                          // bottom: screenHeight *0.0225,  //20
-                          top: screenHeight * 0.005,  //5
+                        left: screenWidth * 0.0368, //15
+                        right: screenWidth * 0.0368, //15
+                        // top: screenHeight * 0.005, //5
+                        // bottom: screenHeight *0.0225,  //20
                       ),
                       child: TextFormField(
                         controller: passwordController,
@@ -227,17 +289,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Password",
                           prefixIcon: const Icon(Iconsax.lock),
                           suffixIcon: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               setState(() {
                                 isVisible = !isVisible;
                               });
                             },
                             child: Icon(
-                              isVisible? Iconsax.eye_slash5: Iconsax.eye,
+                              isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+                            borderRadius: BorderRadius.circular(
+                                screenWidth * 0.0243 /*10*/),
                             borderSide: BorderSide(
                               color: AppColor.buttonBackgroundColor,
                               width: screenWidth * 0.00486,
@@ -251,53 +314,87 @@ class _LoginScreenState extends State<LoginScreen> {
                               width: screenWidth * 0.00486,
                             ),
                           ),
+                          contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0119/*5*/,vertical: screenHeight *0.01684 /*15*/)
                         ),
                       ),
                     ),
+
                     /// Password TextFields ENDS here
 
                     Align(
-                      alignment: Alignment.centerRight,
-                      child: GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ForgetPasswordScreen()));
-                        },
-                        child:  const Padding(
-                          padding: EdgeInsets.only(right: 20,top: 5,bottom: 15),
-                          child: SmallText(text: "Forget Password",),
-                        ),
-                      )
-                    ),
-
-
-                    Button(
-                      onPress: () {
-                        debugPrint(passwordController.text.toString());
-                        if(phoneNumberController.text.toString().length !=10){
-                          snackBar("Please Enter your phone number");
-                        }
-                        else if(passwordController.text.toString().isEmpty){
-                          snackBar("Password field can't be empty");
-                        }
-                        else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgetPasswordScreen()));
+                          },
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.only(right: 20, top: 5, bottom: 15),
+                            child: SmallText(
+                              text: "Forget Password",
                             ),
-                          );
+                          ),
+                        )),
+
+                    LoginAndSignupButton(
+
+                      widget: isLoading ? const CircularProgressIndicator(
+                        strokeWidth: 4,
+                        color: AppColor.mainBackgroundColor,
+                      ):BigText(text: "Login",  textAlignName: TextAlign.center,
+
+                        color: Colors.white,
+                        fontWeightName: FontWeight.bold,
+                        fontSize: screenHeight * 24 /screenHeight,
+                        fontFamilyName: "Inter",
+                      ),
+                      onPress: () async {
+                        debugPrint(passwordController.text.toString());
+                        if (phoneNumberController.text.toString().length !=
+                            10) {
+                          snackBar("Please Enter your phone number");
+                        } else if (passwordController.text.toString().isEmpty) {
+                          snackBar("Password field can't be empty");
+                        } else {
+                         // debugPrint(phoneNumberController.text.toString());
+                          var code = await loginToYourAccountUsingCredentials();
+                          setState(() {
+                            isLoading = !isLoading;
+                          });
+                          //debugPrint("Status Code: " + code.toString());
+                          if (code == 200) {
+
+
+                            ///This [sharedPreferencesDateStoring] is a class created by me and here for storing ['phoneNumber'] value locally
+                           const SharedPreferencesDataStoring().sharedPreferences('+91${phoneNumberController.text}');
+
+                            ///This [sharedPreferences()] is here for changing and storing ['isLogin'] value locally
+                            sharedPreference();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainHomeScreen(),
+                              ),
+                            );
+                          } else {
+                            snackBar("Invalid Phone Number or password");
+                          }
                         }
                       },
-                      text: "Login",
-                      fontFamily: "Inter",
-                      fontSize: 24,
+                      // fontFamily: "Inter",
+                      // fontSize: 24,
                     ),
                     SizedBox(
-                      height: screenHeight * 0.005,  // 5,
+                      height: screenHeight * 0.005, // 5,
                     ),
                     SizedBox(
                       height: screenHeight * 0.0225,
                     ),
+
                     /// Don't have Account Sign Up text STARTS here
                     Row(
                       children: [
@@ -313,7 +410,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             TextSpan(
                               text: "Don't have an account? ",
                               style: TextStyle(
-                                fontSize: screenHeight * 0.016,  //14
+                                fontSize: screenHeight * 0.016, //14
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black,
@@ -323,7 +420,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               text: "Sign Up     ",
                               recognizer: _gestureRecognizer,
                               style: TextStyle(
-                                fontSize: screenHeight * 0.016,  //14
+                                fontSize: screenHeight * 0.016, //14
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w700,
                                 color: AppColor.textColor2,
@@ -340,6 +437,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
+
                     /// Don't have Account Sign Up text ENDS here
                     SizedBox(
                       height: screenHeight * 0.0225,
@@ -384,6 +482,44 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+class LoginAndSignupButton extends StatelessWidget {
+  final VoidCallback onPress;
+  final Widget widget;
+  final double height ,width,radius;
+  final Color color;
+
+  const LoginAndSignupButton({super.key,
+    required this.onPress,
+    required this.widget,
+    this.height = 50,
+    this.width = 345,
+    this.color = AppColor.buttonBackgroundColor,
+    this.radius = 8
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+
+    return InkWell(
+      onTap: onPress,
+      child: Container(
+          height:  height == 50 ? screenHeight * 0.0561 : screenHeight * height/screenHeight,
+          width: width == 345 ? screenWidth * 0.8385 : screenWidth * width /screenWidth,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(radius == 8 ? screenHeight * 0.009: screenHeight*radius/screenHeight),
+          ),
+        child: Center(
+          child: widget,
+        )
+      ),
+    );
+  }
+}
+
 
 /// Option for Login with G-mail or Facebook
 /*  Padding(

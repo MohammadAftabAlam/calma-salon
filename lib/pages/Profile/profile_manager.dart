@@ -5,6 +5,7 @@ import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/validation/login_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
+// import 'package:calma/utils/shared_preferences.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,13 @@ class ProfileManager extends StatefulWidget {
 
 
 class _ProfileManagerState extends State<ProfileManager> {
+
+  // SharedPreferencesDataStoring sharedPreferencesDataStoring = new SharedPreferencesDataStoring();
+
+  sharedPreference() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setBool('isLogin', false);
+  }
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -32,7 +40,7 @@ class _ProfileManagerState extends State<ProfileManager> {
           BackArrowButtonWithPositioned(
             onPress: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+                  MaterialPageRoute(builder: (context) => const MainHomeScreen()));
             },
           ),
           Column(
@@ -91,6 +99,7 @@ class _ProfileManagerState extends State<ProfileManager> {
           ),
         ],
       ),
+     // bottomNavigationBar: BottomNavigationBarContent(screenHeight: screenHeight,),
     );
   }
 
@@ -149,15 +158,11 @@ class _ProfileManagerState extends State<ProfileManager> {
                           text: "No"),
                       AppointmentPageButtonAll(
                           onPress: () async {
-                            SharedPreferences sp =
-                                await SharedPreferences.getInstance();
+                            sharedPreference();
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginScreen()));
-                            debugPrint(sp.getBool('isLogin').toString());
-                            sp.setBool('isLogin', false);
-                            debugPrint(sp.getBool('isLogin').toString());
+                                    builder: (context) => const LoginScreen()));
                           },
                           text: "Yes"),
                     ],

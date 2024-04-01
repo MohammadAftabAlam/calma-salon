@@ -27,10 +27,7 @@ class _AccountInfoState extends State<AccountInfo> {
           BackArrowButtonWithPositioned(
             positionedTop: screenHeight * 0.0444,
             onPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileManager()));
+              Navigator.pop(context);
             },
           ),
           /* *************************** Back Arrow Button Ends Here *************************** */

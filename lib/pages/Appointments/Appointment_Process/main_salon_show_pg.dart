@@ -51,7 +51,7 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
               children: [
                 BackArrowButton(
                   onPress: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen()));
                   },
                 ),
                 Favourites(
@@ -176,9 +176,9 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                 children: [
                                   ListTile(
                                     leading: const CircleAvatar(
-                                      backgroundImage: AssetImage("asset/images/fbLogo.png"),
+                                      backgroundImage: AssetImage("asset/images/aftab.jpg"),
                                     ),
-                                    title: const SmallText(text: "Facebook Logo",),
+                                    title: const SmallText(text: "Md Aftab Alam",),
                                     subtitle: Wrap(
                                       children: List.generate(5, (index) => Icon(Icons.star, size: screenHeight * 0.013,color: Colors.yellowAccent,)),
                                     ),
@@ -294,7 +294,7 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {

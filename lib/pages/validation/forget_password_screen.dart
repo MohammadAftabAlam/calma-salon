@@ -1,5 +1,4 @@
 import 'package:calma/pages/validation/login_screen.dart';
-import 'package:calma/pages/validation/sign_up_screen.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
 import 'package:calma/widgets/button.dart';
@@ -204,5 +203,58 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       duration: const Duration(seconds: 2),
       dismissDirection: DismissDirection.up,
     ));
+  }
+}
+
+class PasswordTextField extends StatelessWidget {
+  final double screenHeight, screenWidth, verticalPad;
+  final TextEditingController controller;
+  final String text;
+  final bool isVisible;
+
+  const PasswordTextField({super.key,
+    required this.text,
+    required this.controller,
+    required this.screenWidth,
+    required this.screenHeight,
+    this.verticalPad = 5,
+    this.isVisible = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // bool isnew = widget.isVisible;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: screenWidth * 0.0368, //15
+        right: screenWidth * 0.0368, //15
+        bottom: screenHeight * 0.0225, //20
+        top: screenHeight * 0.005, //5
+      ),
+      child: TextFormField(
+        controller: controller,
+        obscureText: true,
+        cursorColor: AppColor.imageBgColor,
+        decoration: InputDecoration(
+            hintText: text,
+            prefixIcon: const Icon(Iconsax.lock),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(screenWidth * 0.0243 /*10*/),
+              borderSide: BorderSide(
+                color: AppColor.buttonBackgroundColor,
+                width: screenWidth * 0.00486,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(screenWidth * 0.0243),
+              borderSide: BorderSide(
+                color: AppColor.buttonBackgroundColor,
+                width: screenWidth * 0.00486,
+              ),
+            ),
+            contentPadding:
+            EdgeInsets.symmetric(vertical: verticalPad, horizontal: 10)),
+      ),
+    );
   }
 }
