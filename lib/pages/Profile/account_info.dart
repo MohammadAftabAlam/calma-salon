@@ -1,7 +1,9 @@
-import 'package:calma/pages/Profile/profile_manager.dart';
+import 'package:calma/pages/home/Experts/expert_detail_screen.dart';
+import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/button.dart';
+import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 
 class AccountInfo extends StatefulWidget {
@@ -43,7 +45,8 @@ class _AccountInfoState extends State<AccountInfo> {
           /* *************************** Personal Info Text Starts Here *************************** */
           Positioned(
             left: screenWidth * 0.0776,
-            top: screenHeight * 0.1297,
+            top: screenHeight * 0.1097,
+
             child: TitleText(
               text: "Personal Information",
               fSize: screenHeight * 0.0224,
@@ -53,13 +56,14 @@ class _AccountInfoState extends State<AccountInfo> {
 
           /* *************************** Personal Info Container Starts Here *************************** */
           Positioned(
-            top: screenHeight * 0.1735,
+            top: screenHeight * 0.1535,
             left: screenWidth * 0.0608,
             right:  screenWidth * 0.0608,
             child: Container(
               // width: screenWidth * 0.8743,
               // height: screenHeight * 0.5282,
-              height: screenHeight * 0.4524,
+              // height: screenHeight * 0.4524,
+              height: screenHeight * 0.5524,
               decoration: BoxDecoration(
                 color: const Color(0xffFFFBFB),
                 borderRadius: BorderRadius.circular(screenHeight * 0.0135),
@@ -76,6 +80,9 @@ class _AccountInfoState extends State<AccountInfo> {
                   /// Phone Number and their TextField Starts here
                   PersonalInfoContainerText(text: "Phone"),
                   AccTextFormField(value: "8092846469"),
+
+                  PersonalInfoContainerText(text: "Email"),
+                  AccTextFormField(value: "mdaftab7862m@gmail.com"),
 
                   /// Age and their TextField Starts here
                   PersonalInfoContainerText(text: "Age"),
@@ -97,7 +104,7 @@ class _AccountInfoState extends State<AccountInfo> {
           /* *************************** Password Manager Text Starts Here *************************** */
           Positioned(
             left: screenWidth * 0.0776,
-            top: screenHeight * 0.6361,
+            top: screenHeight * 0.7151,
             child: TitleText(
               text: "Password Manager",
               fSize: screenHeight * 0.0224,
@@ -108,10 +115,11 @@ class _AccountInfoState extends State<AccountInfo> {
           /* *************************** Password Manager Container Starts Here *************************** */
           Positioned(
             left: screenWidth * 0.0608,
-            top: screenHeight * 0.6854,
+            top: screenHeight * 0.7554,
             child: Container(
               width: screenWidth * 0.8743,
-              height: screenHeight * 0.1604,
+              height: screenHeight * 0.1394,
+              // height: screenHeight * 0.1604,
               decoration: BoxDecoration(
                 color: const Color(0xffFFFBFB),
                 borderRadius: BorderRadius.circular(screenHeight * 0.0135),
@@ -169,6 +177,14 @@ class _AccountInfoState extends State<AccountInfo> {
                       ),
                     ),
                   ),
+                  Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth*0.0292 /*12*/),
+                        child: GestureDetector(
+                            onTap: (){Navigator.pushNamed(context, 'salon-expert-detail-page');},
+                            child: const SmallText(text: "Change Password",color: AppColor.textColor2,))
+                      ))
                 ],
               ),
             ),
@@ -176,21 +192,32 @@ class _AccountInfoState extends State<AccountInfo> {
           /* *************************** Password Manager Container Ends Here *************************** */
 
           /* *************************** Update Button Starts Here *************************** */
-          Positioned(
-            top: screenHeight * 0.896,
-            left: screenWidth * 0.0731,
-            child: Button(
-              onPress: () {},
-              text: "Update Account",
-              height: screenHeight * 0.0716,
-              width: screenWidth * 0.8743,
-              fontFamily: "Inter",
-              fontSize: screenWidth * 0.0366,
-              radius: screenHeight * 0.0283,
-            ),
-          ),
+          // Positioned(
+          //   top: screenHeight * 0.896,
+          //   left: screenWidth * 0.0731,
+          //   child: Button(
+          //     onPress: () {},
+          //     text: "Update Account",
+          //     height: screenHeight * 0.0716,
+          //     width: screenWidth * 0.8743,
+          //     fontFamily: "Inter",
+          //     fontSize: screenWidth * 0.0366,
+          //     radius: screenHeight * 0.0283,
+          //   ),
+          // ),
           /* *************************** Update Button Ends Here *************************** */
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(left: screenWidth * 0.061,right: screenWidth * 0.061,bottom: screenHeight * 0.0112 /*10*/),
+        child: Button(
+          onPress: () {},
+          text: "Update Information",
+          height: screenHeight * 0.0716,
+          fontFamily: "Inter",
+          fontSize: screenWidth * 0.0366,
+          radius: screenHeight * 0.0283,
+        ),
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:calma/pages/Appointments/Appointment_Process/main_salon_show_pg.dart';
+import 'package:calma/pages/Appointments/Appointment_Process/salon_detail_pg.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
@@ -25,7 +25,7 @@ class _CompletedServicesState extends State<CompletedServices> {
         // shrinkWrap: true,
         itemCount: 1,
         padding:  EdgeInsets.symmetric( horizontal: screenWidth * 0.0413, //17
-          vertical: screenHeight * 0.0269, //24
+          vertical: screenHeight * 0.0169, //24
         ),
         itemBuilder: (context, index) {
           return Card(
@@ -170,12 +170,7 @@ class _CompletedServicesState extends State<CompletedServices> {
                     children: [
                       AppointmentPageButtonAll(
                         onPress: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainSalonShowPage(),
-                            ),
-                          );
+                          Navigator.pushNamed(context, '/salon-search-page');
                         },
                         text: "Rebook",
                         textColor: const Color(0xff1C2A3A),

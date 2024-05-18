@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'home_screen.dart';
 
 class MainHomeScreen extends StatefulWidget {
+  static String route = "/main-home-screen";
   const MainHomeScreen({super.key});
 
   @override
@@ -39,11 +40,6 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   // int currentPageIndex = 0;
   // NavigationDestinationLabelBehavior labelBehavior =
   //     NavigationDestinationLabelBehavior.alwaysShow;
-
-
-
-
-
 }
 
   int currentPageIndex = 0;
@@ -53,7 +49,7 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: true,
       //   onWillPop: () async{
       //      bool? value =  await showDialog<bool>(context: context, builder: (context){
       //        return AlertDialog(
@@ -100,7 +96,8 @@ class _MainHomeScreenState extends State<MainHomeScreen> {
       height: 60,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+            topRight: Radius.circular(30), topLeft: Radius.circular(30),
+        ),
         boxShadow: [
           BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
         ],

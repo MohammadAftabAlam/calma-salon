@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/validation/login_screen.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
@@ -55,7 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
   // late String phoneNumber1 = '+91 ${phoneNumberController.text.substring(0,4)} ${phoneNumberController.text.substring(4,7)} ${phoneNumberController.text.substring(7)}';
 
   /* ************************ HTTP Request to register user STARTS here ********************* */
-  Future<dynamic> createUser() async {
+  Future<dynamic> registerUser(String phoneNumber) async {
     try {
       setState(() {
         isLoading = true;
@@ -63,7 +62,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
       String url = "https://calmarepo-production.up.railway.app/api/register";
       Map<String, String> userDetails = {
-        "phoneNumber": '+91${phoneNumberController.text}',
+        "phoneNumber": '+91$phoneNumber',
         "userType": userTypeDropdownValue.toUpperCase(),
         "name": nameController.text,
         "password": confirmPasswordController.text,
@@ -83,13 +82,7 @@ class _SignUpPageState extends State<SignUpPage> {
         headers: header,
       );
       // String data = jsonDecode(response.body.toString());
-      if (response.statusCode == 200) {
-      }
-      /* *********** Bad Request code 400 *********** */
-      else if (response.statusCode == 400) {
-        snackBar(
-            "Oops! This email or phone number is already registered. Please try another");
-      }
+
       setState(() {
         isLoading = false;
     });
@@ -100,13 +93,13 @@ class _SignUpPageState extends State<SignUpPage> {
   }
   /* ************************ HTTP Request to register user ENDS here ********************* */
 
-  Future<dynamic> otpVerification() async {
+  Future<dynamic> otpVerification(String email, String otp) async {
     setState(() {
       isOtpVerificationLoading = true;
     });
     http.Response response = await http.post(
       Uri.parse(
-          "https://calmarepo-production.up.railway.app/verify-otp?email=${emailController.text}&enteredOTP=${otpController.text}"),
+          "https://calmarepo-production.up.railway.app/verify-otp?email=$email&enteredOTP=$otp"),
     );
     // if(response.statusCode == 400){
     //   snackBar("Oops! Invalid OTP,Try again");
@@ -118,36 +111,35 @@ class _SignUpPageState extends State<SignUpPage> {
     return response.statusCode;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    phoneNumberController.dispose();
-    confirmPasswordController.dispose();
-    passwordController.dispose();
-    nameController.dispose();
-    ageController.dispose();
-    genderController.dispose();
-    emailController.dispose();
-    otpController.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   phoneNumberController.dispose();
+  //   confirmPasswordController.dispose();
+  //   passwordController.dispose();
+  //   nameController.dispose();
+  //   ageController.dispose();
+  //   genderController.dispose();
+  //   emailController.dispose();
+  //   otpController.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.sizeOf(context).height;
     final screenWidth = MediaQuery.sizeOf(context).width;
     return Scaffold(
+      backgroundColor: AppColor.mainBackgroundColor,
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /*******************Back Arrow Button and Logo Of the application STARTS here ******************/
               Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 0, left: 20),
+                    padding: EdgeInsets.only(top: 0, left: screenWidth * 0.0486/*20*/),
                     child: BackArrowButton(onPress: () {
                       Navigator.pop(context);
                     }),
@@ -155,10 +147,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   Padding(
                     padding: EdgeInsets.only(
                         left: screenWidth * 0.1215 /*50*/,
-                        top: screenHeight * 0.0562 /*50*/),
+                        top: screenHeight * 0.0224 /*20*/,
+                    ),
                     child: Container(
-                      height: 100,
-                      width: 167,
+                      height: screenHeight * 0.1123,  //100,
+                      width: screenWidth * 0.4059,  //167,
                       decoration: const BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage("asset/images/calmaLogo.png"))),
@@ -167,17 +160,18 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ),
               /*******************Back Arrow Button Logo of the application ENDS here ******************/
-              const Align(
+              Align(
                 alignment: Alignment.topLeft,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 18.0, bottom: 10),
+                  padding: EdgeInsets.only(left: screenWidth * 0.0438/*18*/, bottom: screenHeight * 0.0112 /*10*/),
                   child: Text(
                     "Create your profile to get started",
                     style: TextStyle(
                         fontFamily: "Inter",
                         fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Color(0xff414141)),
+                        fontSize: screenHeight * 0.0225,
+                        color: const Color(0xff414141),
+                    ),
                   ),
                 ),
               ),
@@ -314,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ///Gender [SelectionTextField] STARTS here
               SizedBox(
                 // width: 300,
-                height: 80,
+                height: screenHeight * 0.0898, //80
                 child: DropdownButtonFormField(
                   isDense: true,
                   padding: EdgeInsets.only(
@@ -358,8 +352,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: screenWidth * 0.00486,
                         ),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 10)),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 2, horizontal: screenWidth * 0.0243/*10*/),
+                  ),
                 ),
               ),
 
@@ -367,7 +362,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               /// User Type [SelectionTextField] STARTS here
               SizedBox(
-                height: 80,
+                height: screenHeight * 0.0898, //80
                 child: DropdownButtonFormField(
                   padding: EdgeInsets.only(
                     left: screenWidth * 0.0368, //15
@@ -375,11 +370,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     bottom: screenHeight * 0.0225, //20
                     top: screenHeight * 0.005, //5
                   ),
-                  // onSaved: (String? value){
-                  //   if(value == userTypeList.last.toString()){
-                  //     debugPrint(value);
-                  //   }
-                  // },
+
                   value: userTypeList.first,
                   items: userTypeList
                       .map<DropdownMenuItem<String>>((String value) {
@@ -418,8 +409,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       errorBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.red),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2)),
+                      contentPadding:  EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.0243/*10*/, vertical: 2),
+                  ),
                 ),
               ),
 
@@ -432,8 +424,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   right: screenWidth * 0.0368, //15
                 ),
                 child: SizedBox(
-                  // height: screenHeight * 0.0898,  //88
-                  height: 70,
+                  height: screenHeight * 0.0786,  //70
                   width: double.maxFinite,
                   child: IntlPhoneField(
                     controller: phoneNumberController,
@@ -491,8 +482,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             width: screenWidth * 0.00486,
                           ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 2, horizontal: 12)),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 2, horizontal: screenWidth *0.0292 /*12*/),
+                    ),
                     initialCountryCode: 'IN',
                     // onChanged: (phone) {
                     //   userPhoneNumber = phone.completeNumber;
@@ -525,8 +517,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     hintText: "Email",
                     isDense: true,
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, bottom: 5, top: 3, right: 8),
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.0194 /*8*/, bottom: screenHeight * 0.005/*5*/, top: screenHeight* 0.003 /*3*/, right: screenWidth * 0.0194 /*8*/),
                       child: SvgPicture.asset(
                         "asset/icons/email-1.svg",
                         height: 2,
@@ -585,10 +577,21 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child: TextFormField(
                   controller: passwordController,
-                  obscureText: true,
+                  obscureText: isVisible,
                   decoration: InputDecoration(
                     hintText: "Password",
                     prefixIcon: const Icon(Iconsax.lock),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isVisible = !isVisible;
+                        });
+                      },
+                      child: Icon(
+                        isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
+                        color: AppColor.iconColor,
+                      ),
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius:
                           BorderRadius.circular(screenWidth * 0.0243 /*10*/),
@@ -605,7 +608,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        EdgeInsets.symmetric(vertical: screenHeight * 0.005 /*5*/, horizontal: screenWidth * 0.0243 /*10*/),
                   ),
                 ),
               ),
@@ -626,16 +629,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     hintText: "Confirm Password",
                     prefixIcon: const Icon(Iconsax.lock),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isVisible = !isVisible;
-                        });
-                      },
-                      child: Icon(
-                        isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
-                      ),
-                    ),
+
                     focusedBorder: OutlineInputBorder(
                       borderRadius:
                           BorderRadius.circular(screenWidth * 0.0243 /*10*/),
@@ -652,7 +646,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ),
                     contentPadding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        EdgeInsets.symmetric(vertical: 5, horizontal: screenWidth * 0.0243 /*10*/),
                   ),
                 ),
               ),
@@ -664,46 +658,23 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               LoginAndSignupButton(
                 onPress: () async {
-                  // debugPrint(nameController.text.toString());
-                  // debugPrint(ageController.text.toString());
-                  // debugPrint(genderDropdownValue.toString());
-                  // debugPrint(userTypeDropdownValue.toString());
-                  // debugPrint(phoneNumberController.text.toString());
-                  // debugPrint(passwordController.text.toString());
-                  // debugPrint(confirmPasswordController.text.toString());
-
                   if (!_formKey.currentState!.validate()) {
-                    snackBar("Missing required field");
+                    snackBar("Missing required field", screenHeight,screenWidth);
                   }
-                  // if (nameController.text.toString().isEmpty) {
-                  //   snackBar("Name can't be empty");
-                  // }
-                  // else if (genderDropdownValue.toString() == genderList.first) {
-                  //   snackBar("Select your gender");
-                  // } else if (userTypeDropdownValue.toString() ==
-                  //     userTypeList.first) {
-                  //   snackBar("Select your user type");
-                  // } else if (phoneNumberController.text.toString().length != 10) {
-                  //   snackBar("Phone Number can't be empty");
-                  // }
-
-                  // else if (passwordController.text.toString().isEmpty) {
-                  //   snackBar("Password field can't be empty");
-                  // } else if (confirmPasswordController.text.toString().isEmpty) {
-                  //   snackBar("Re-Enter your password");
-                  // }
-
                   else if (!(passwordController.text.toString() ==
                       confirmPasswordController.text.toString())) {
-                    snackBar("Password doesn't match");
+                    snackBar("Password doesn't match",screenHeight,screenWidth);
                   } else {
                     if (_formKey.currentState!.validate()) {
-                      var statusCode = await createUser();
+                      var statusCode = await registerUser('+91${phoneNumberController.text}');
 
                       if (statusCode == 200) {
-                        _showModalBottomSheet(screenHeight);
-                      } else {
-                        // snackBar( " Status code: " + statusCode.toString() + "Something went wrong");
+                        _showModalBottomSheet(screenHeight,screenHeight);
+                      }
+                      /* *********** Bad Request code 400 *********** */
+                      else if (statusCode == 400) {
+                        snackBar(
+                          "Oops! This email or phone number is already registered. Please try another",screenHeight,screenWidth);
                       }
                     }
                   }
@@ -721,10 +692,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontSize: screenHeight * 18 / screenHeight,
                         fontFamilyName: "Inter",
                       ),
-                width: 200,
-                // text: "Sign Up",
-                // fontFamily: "Inter",
-                // fontSize: 18,
+                width: screenWidth * 0.4861, //200,
               ),
               SizedBox(
                 height: screenHeight * 0.0224,
@@ -736,7 +704,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  snackBar(String? message) {
+  snackBar(String? message, double screenHeight, double screenWidth) {
     return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message!),
       backgroundColor: Colors.red,
@@ -745,9 +713,9 @@ class _SignUpPageState extends State<SignUpPage> {
       behavior: SnackBarBehavior.floating,
       showCloseIcon: true,
       margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height - 100,
-        left: 10,
-        right: 10,
+        bottom: MediaQuery.of(context).size.height - screenHeight * 0.1123,//100,
+        left: screenWidth * 0.0243,//10,
+        right: screenWidth * 0.0243,//10,
       ),
     ));
   }
@@ -778,7 +746,7 @@ class _SignUpPageState extends State<SignUpPage> {
   /* ***************************** Date Picker for Age ENDS here ***************************** */
 
   /* ***************************** OTP verification BottomSheet STARTS here ***************************** */
-  _showModalBottomSheet(double screenHeight,) {
+  _showModalBottomSheet(double screenHeight, double screenWidth) {
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -787,7 +755,7 @@ class _SignUpPageState extends State<SignUpPage> {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
-              height: 200,
+              height: screenHeight * 0.2245,//200,
               decoration: const BoxDecoration(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -796,13 +764,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Text(
                     "Please Enter OTP sent on ${emailController.text}",
-                    style: const TextStyle(
+                    style: TextStyle(
                         // color: Color(0xff465656ff),
-                        fontSize: 15,
-                        fontFamily: "Inter"),
+                        fontSize: screenHeight * 0.01684,//15,
+                        fontFamily: "Inter",
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 68),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04653/*68*/),
                     child: PinCodeTextField(
                       appContext: context,
                       controller: otpController,
@@ -812,19 +781,15 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   LoginAndSignupButton(
                     onPress: () async {
-                      dynamic statusCode = await otpVerification();
-                      // setState(() {
-                      //   isOtpVerificationLoading = !isOtpVerificationLoading;
-                      //   debugPrint(isOtpVerificationLoading.toString());
-                      // });
+                      String phoneNumber = '+91${phoneNumberController.text}';
+                      String otp = otpController.text;
+                      dynamic statusCode = await otpVerification('91$phoneNumber',otp);
+
                       if (statusCode == 200) {
                         sharedPreference();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainHomeScreen()));
+                        Navigator.pushNamedAndRemoveUntil(context, '/main-home-screen', (route) => false);
                       } else if (statusCode == 400) {
-                        snackBar("Oops! Invalid OTP, try again");
+                        snackBar("Oops! Invalid OTP, try again",screenHeight,screenWidth);
                       }
                     },
                     widget: isOtpVerificationLoading
@@ -840,27 +805,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       fontSize: screenHeight * 18 / screenHeight,
                       fontFamilyName: "Inter",
                     ),
-                    width: 200,
-
-                    //
-                    // final credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: phoneNumberController.text.toString());
-                    // try{
-                    //   await _auth.signInWithCredential(credential);
-                    //   Navigator.pushReplacement(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => const HomeScreen(),
-                    //     ),
-                    //   );
-                    //   // setState(() {
-                    //   //   loading = true;
-                    //   // });
-                    // }catch(e){
-                    //   snackBar(e.toString());
-                    //   setState(() {
-                    //     loading = false;
-                    //   });
-                    // }
+                    width: screenWidth * 0.04861,//200,
                   ),
                 ],
               ),
@@ -890,7 +835,6 @@ class PasswordTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // bool isnew = widget.isVisible;
     return Padding(
       padding: EdgeInsets.only(
         left: screenWidth * 0.0368, //15
@@ -920,7 +864,8 @@ class PasswordTextField extends StatelessWidget {
               ),
             ),
             contentPadding:
-                EdgeInsets.symmetric(vertical: verticalPad, horizontal: 10)),
+                EdgeInsets.symmetric(vertical: verticalPad, horizontal: screenWidth * 0.0243 /*10*/),
+        ),
       ),
     );
   }

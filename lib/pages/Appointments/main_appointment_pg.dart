@@ -2,10 +2,11 @@ import 'package:calma/pages/Appointments/Appointment_Status/upcoming_booking.dar
 import 'package:calma/pages/Appointments/Appointment_Status/cancel_services.dart';
 import 'package:calma/pages/Appointments/Appointment_Status/completed_services.dart';
 import 'package:calma/pages/Profile/account_info.dart';
+import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
 class Appointments extends StatefulWidget {
   const Appointments({super.key});
@@ -37,12 +38,22 @@ class _AppointmentsState extends State<Appointments>
   @override
   Widget build(BuildContext context) {
     /* ******************Starts Removing shadow above the AppBar****************** */
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.transparent,
+    // ));
     /* ******************Ends Removing shadow above the AppBar****************** */
     final screenHeight = MediaQuery.sizeOf(context).height;
     final screenWidth = MediaQuery.sizeOf(context).width;
+
+    print(ModalRoute.of(context)?.settings.arguments);
+
+
+    // final args = ModalRoute.of(context)!.settings.arguments as Map;
+    // final Map<String, String>? args= ModalRoute.of(context)?.settings.arguments as Map<String,String>;
+    //
+    // String? date = args?['date'];
+    // // String? date = args['date'];
+    // String? time = args?['time'];
 
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
@@ -51,7 +62,7 @@ class _AppointmentsState extends State<Appointments>
           /* **************Starts Back Arrow Button************** */
           BackArrowButtonWithPositioned(
             onPress: () {
-              Navigator.pop(context);
+              Navigator.pushNamed(context, MainHomeScreen.route);
             },
           ),
           Positioned(
@@ -88,12 +99,11 @@ class _AppointmentsState extends State<Appointments>
                 ),
               ),
               Expanded(
-                // width: double.maxFinite,
-                // height: 670,
                 child: TabBarView(
                   controller: _tabController,
-                  children: const [
-                    BookedServices(),
+                  children:  const [
+                    UpcomingServices(),
+                    // UpcomingServices(time: time!,date: date!,),
                     CompletedServices(),
                     CancelServices(),
                   ],
@@ -111,7 +121,7 @@ class _AppointmentsState extends State<Appointments>
       text,
       style: TextStyle(
           fontFamily: "Inter",
-          fontSize: screenHeight * 0.0202, //18
+          fontSize: screenHeight * 0.019, //18
           fontWeight: FontWeight.w600),
     );
   }

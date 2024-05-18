@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:calma/pages/home/main_home_screen.dart';
-import 'package:calma/pages/validation/forget_password_screen.dart';
 import 'package:calma/utils/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,6 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:http/http.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:calma/pages/validation/sign_up_screen.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
@@ -24,7 +21,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   sharedPreference() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setBool('isLogin', true);
@@ -32,14 +28,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool isLoading = false;
 
+
+  List loginTokenList = [];
   /* ********************** STARTS Fetching data from the server to validating the user ********************** */
-  loginToYourAccountUsingCredentials() async {
+  loginWithCredentials() async {
     try {
       // This all i have to because api only accepts data in body raw format instead of form-data,
       //If api accepted data in form of form-data then only pass body in Responses
-     setState(() {
-       isLoading = true;
-     });
+      setState(() {
+        isLoading = true;
+      });
       Map<String, String> credentials = {
         'phoneNumber': '+91${phoneNumberController.text}',
         'password': passwordController.text
@@ -48,25 +46,29 @@ class _LoginScreenState extends State<LoginScreen> {
       Map<String, String> header = {"Content-Type": "application/json"};
       var body = jsonEncode(credentials);
       Response response = await http.post(
-          Uri.parse("https://calmarepo-production.up.railway.app/api/login"),
-          // body: {
-          //   "phoneNumber" : phoneNumber,
-          //   "password" : password
-          // },
-          body: body,
-          headers: header,
+        Uri.parse("https://calmarepo-production.up.railway.app/api/login"),
+        // body: {
+        //   "phoneNumber" : phoneNumber,
+        //   "password" : password
+        // },
+        body: body,
+        headers: header,
       );
+      // debugPrint(response.statusCode.toString());
       if(response.statusCode == 200){
-        // var data = jsonDecode(response.body.toString());
-        // debugPrint(data['JWT Token']);
+        var data = jsonDecode(response.body.toString());
+
+        loginTokenList.add(data);
+        // debugPrint(loginTokenList[0].toString());
         return response.statusCode;
       }
+      return response.statusCode;
     } catch (e) {
-      // debugPrint("Md Aftab Alam Calma Application Exception " + e.toString());
+      debugPrint("Md Aftab Alam Calma Application Exception " + e.toString());
     }
+
   }
   /* ********************** ENDS Fetching data from the server to validating the user ********************** */
-
 
   TapGestureRecognizer? _gestureRecognizer;
   bool isVisible = true;
@@ -79,17 +81,17 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _gestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const SignUpPage()));
+        Navigator.pushNamed(context, '/signup-screen');
       };
   }
-@override
+
+  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     phoneNumberController.dispose();
     passwordController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -124,10 +126,11 @@ class _LoginScreenState extends State<LoginScreen> {
             top: screenHeight * 0.034,
             child: BigText(
               text: "CALMA",
-              fontSize: screenWidth * 0.1222 ,//109
+              fontSize: screenWidth * 0.1222, //109
               color: const Color(0xff418F9C),
             ),
           ),
+
           /// Calma Text ENDS here
 
           Positioned(
@@ -135,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
             bottom: 0,
             right: 0,
             // top: 440,
-            top: screenHeight *0.4939, //440
+            top: screenHeight * 0.4939, //440
 
             /// Curved container that is on the images STARTS here
             child: Container(
@@ -242,30 +245,31 @@ class _LoginScreenState extends State<LoginScreen> {
                             size: screenWidth * 0.0583,
                           ),
                           decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            labelStyle:
-                                TextStyle(fontSize: screenWidth * 0.0387),
-                            border: const OutlineInputBorder(
-                              borderSide: BorderSide(),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenWidth * 0.0243),
-                              borderSide: BorderSide(
-                                color: AppColor.buttonBackgroundColor,
-                                width: screenWidth * 0.00486,
+                              labelText: 'Phone Number',
+                              labelStyle:
+                                  TextStyle(fontSize: screenWidth * 0.0387),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(),
                               ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(screenWidth * 0.0243),
-                              borderSide: BorderSide(
-                                color: AppColor.buttonBackgroundColor,
-                                width: screenWidth * 0.00486,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(screenWidth * 0.0243),
+                                borderSide: BorderSide(
+                                  color: AppColor.buttonBackgroundColor,
+                                  width: screenWidth * 0.00486,
+                                ),
                               ),
-                            ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0119/*5*/,vertical: screenHeight *0.01684 /*15*/)
-                          ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(screenWidth * 0.0243),
+                                borderSide: BorderSide(
+                                  color: AppColor.buttonBackgroundColor,
+                                  width: screenWidth * 0.00486,
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.0119 /*5*/,
+                                  vertical: screenHeight * 0.01684 /*15*/)),
                           initialCountryCode: 'IN',
                           // onChanged: (phone) {
                           //   userPhoneNumber = phone.completeNumber;
@@ -286,36 +290,38 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: passwordController,
                         obscureText: isVisible,
                         decoration: InputDecoration(
-                          hintText: "Password",
-                          prefixIcon: const Icon(Iconsax.lock),
-                          suffixIcon: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isVisible = !isVisible;
-                              });
-                            },
-                            child: Icon(
-                              isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
+                            hintText: "Password",
+                            prefixIcon: const Icon(Iconsax.lock),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isVisible = !isVisible;
+                                });
+                              },
+                              child: Icon(
+                                color: AppColor.iconColor,
+                                isVisible ? Iconsax.eye_slash5 : Iconsax.eye,
+                              ),
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                screenWidth * 0.0243 /*10*/),
-                            borderSide: BorderSide(
-                              color: AppColor.buttonBackgroundColor,
-                              width: screenWidth * 0.00486,
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  screenWidth * 0.0243 /*10*/),
+                              borderSide: BorderSide(
+                                color: AppColor.buttonBackgroundColor,
+                                width: screenWidth * 0.00486,
+                              ),
                             ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(screenWidth * 0.0243),
-                            borderSide: BorderSide(
-                              color: AppColor.buttonBackgroundColor,
-                              width: screenWidth * 0.00486,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(screenWidth * 0.0243),
+                              borderSide: BorderSide(
+                                color: AppColor.buttonBackgroundColor,
+                                width: screenWidth * 0.00486,
+                              ),
                             ),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0119/*5*/,vertical: screenHeight *0.01684 /*15*/)
-                        ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.0119 /*5*/,
+                                vertical: screenHeight * 0.01684 /*15*/)),
                       ),
                     ),
 
@@ -325,11 +331,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgetPasswordScreen()));
+                            Navigator.pushNamed(
+                                context, '/forget-password-screen');
                           },
                           child: const Padding(
                             padding:
@@ -338,20 +341,23 @@ class _LoginScreenState extends State<LoginScreen> {
                               text: "Forget Password",
                             ),
                           ),
-                        )),
+                        ),
+                    ),
 
                     LoginAndSignupButton(
-
-                      widget: isLoading ? const CircularProgressIndicator(
-                        strokeWidth: 4,
-                        color: AppColor.mainBackgroundColor,
-                      ):BigText(text: "Login",  textAlignName: TextAlign.center,
-
-                        color: Colors.white,
-                        fontWeightName: FontWeight.bold,
-                        fontSize: screenHeight * 24 /screenHeight,
-                        fontFamilyName: "Inter",
-                      ),
+                      widget: isLoading
+                          ? const CircularProgressIndicator(
+                              strokeWidth: 4,
+                              color: AppColor.mainBackgroundColor,
+                            )
+                          : BigText(
+                              text: "Login",
+                              textAlignName: TextAlign.center,
+                              color: Colors.white,
+                              fontWeightName: FontWeight.bold,
+                              fontSize: screenHeight * 24 / screenHeight,
+                              fontFamilyName: "Inter",
+                            ),
                       onPress: () async {
                         debugPrint(passwordController.text.toString());
                         if (phoneNumberController.text.toString().length !=
@@ -360,39 +366,31 @@ class _LoginScreenState extends State<LoginScreen> {
                         } else if (passwordController.text.toString().isEmpty) {
                           snackBar("Password field can't be empty");
                         } else {
-                         // debugPrint(phoneNumberController.text.toString());
-                          var code = await loginToYourAccountUsingCredentials();
+                          debugPrint('+91 ${phoneNumberController.text.toString()}');
+                          var code = await loginWithCredentials();
+                          debugPrint(code.toString());
                           setState(() {
                             isLoading = !isLoading;
                           });
-                          //debugPrint("Status Code: " + code.toString());
+                          debugPrint("Status Code: " + code.toString());
                           if (code == 200) {
-
-
                             ///This [sharedPreferencesDateStoring] is a class created by me and here for storing ['phoneNumber'] value locally
-                           const SharedPreferencesDataStoring().sharedPreferences('+91${phoneNumberController.text}');
+                            const SharedPreferencesDataStoring()
+                                .sharedPreferences(
+                                    '+91${phoneNumberController.text}');
 
                             ///This [sharedPreferences()] is here for changing and storing ['isLogin'] value locally
                             sharedPreference();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainHomeScreen(),
-                              ),
-                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/main-home-screen', (route) => false);
                           } else {
                             snackBar("Invalid Phone Number or password");
                           }
                         }
                       },
-                      // fontFamily: "Inter",
-                      // fontSize: 24,
                     ),
                     SizedBox(
-                      height: screenHeight * 0.005, // 5,
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.0225,
+                      height: screenHeight * 0.01, // 9,
                     ),
 
                     /// Don't have Account Sign Up text STARTS here
@@ -465,6 +463,8 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.red,
         content: Text(message!),
         duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
       ),
     );
   }
@@ -486,17 +486,17 @@ class _LoginScreenState extends State<LoginScreen> {
 class LoginAndSignupButton extends StatelessWidget {
   final VoidCallback onPress;
   final Widget widget;
-  final double height ,width,radius;
+  final double height, width, radius;
   final Color color;
 
-  const LoginAndSignupButton({super.key,
-    required this.onPress,
-    required this.widget,
-    this.height = 50,
-    this.width = 345,
-    this.color = AppColor.buttonBackgroundColor,
-    this.radius = 8
-  });
+  const LoginAndSignupButton(
+      {super.key,
+      required this.onPress,
+      required this.widget,
+      this.height = 50,
+      this.width = 345,
+      this.color = AppColor.buttonBackgroundColor,
+      this.radius = 8});
 
   @override
   Widget build(BuildContext context) {
@@ -506,20 +506,24 @@ class LoginAndSignupButton extends StatelessWidget {
     return InkWell(
       onTap: onPress,
       child: Container(
-          height:  height == 50 ? screenHeight * 0.0561 : screenHeight * height/screenHeight,
-          width: width == 345 ? screenWidth * 0.8385 : screenWidth * width /screenWidth,
+          height: height == 50
+              ? screenHeight * 0.0561
+              : screenHeight * height / screenHeight,
+          width: width == 345
+              ? screenWidth * 0.8385
+              : screenWidth * width / screenWidth,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(radius == 8 ? screenHeight * 0.009: screenHeight*radius/screenHeight),
+            borderRadius: BorderRadius.circular(radius == 8
+                ? screenHeight * 0.009
+                : screenHeight * radius / screenHeight),
           ),
-        child: Center(
-          child: widget,
-        )
-      ),
+          child: Center(
+            child: widget,
+          )),
     );
   }
 }
-
 
 /// Option for Login with G-mail or Facebook
 /*  Padding(

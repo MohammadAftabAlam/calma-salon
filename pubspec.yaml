@@ -48,7 +48,7 @@ dependencies:
   flutter_polyline_points: ^2.0.0
   geocoding: ^3.0.0
 
-  #firebase Dependencies
+#  firebase Dependencies
   firebase_auth: ^4.17.4
   firebase_core: ^2.25.4
   firebase_messaging: ^14.7.16

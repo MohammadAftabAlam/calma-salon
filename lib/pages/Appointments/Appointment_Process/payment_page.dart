@@ -1,5 +1,7 @@
+import 'dart:async';
+
+import 'package:calma/Data/data.dart';
 import 'package:calma/pages/Profile/account_info.dart';
-import 'package:calma/pages/home/home_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
@@ -10,15 +12,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'main_salon_show_pg.dart';
+import 'salon_detail_pg.dart';
 
 class PaymentScreen extends StatefulWidget {
   final String? date, time, bookingFor;
-  const PaymentScreen(
-      {super.key,
-      required this.time,
-      required this.date,
-      required this.bookingFor});
+  const PaymentScreen({
+    super.key,
+    required this.time,
+    required this.date,
+    required this.bookingFor,
+  });
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -27,13 +30,16 @@ class PaymentScreen extends StatefulWidget {
 enum PaymentType { cash, upi }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  get screenHeight => MediaQuery.of(context).size.height;
+  get screenWidth => MediaQuery.of(context).size.width;
+
   ///This is enum type, providing facility to user to choose from
   ///two options named as cash and upi payment
   PaymentType? _paymentType = PaymentType.upi;
 
   /// [_razorpay] object of Razorpay() to accept the payment using Razorpay platform
   final _razorpay = Razorpay();
-
+  String paymentId = "";
   var options = {
     'key': 'rzp_test_u60Lt49w9oA390',
     'amount': 100,
@@ -48,7 +54,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       'email': 'sunny123456789singh0@gmail.com'
     },
     'external': {
-      'wallets': ['Gpay']
+      'wallets': ['paytm']
     }
   };
 
@@ -59,8 +65,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
     debugPrint(response.data.toString());
-    showAlertDialog(
-        context, "Payment Successful", "Payment Id: ${response.paymentId}");
+    paymentId = response.paymentId!;
+
+    _showBookedStatusDialog(context, screenHeight, screenWidth);
   }
 
   void handleExternalWalletResponse(ExternalWalletResponse response) {
@@ -79,7 +86,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _razorpay.clear();
     super.dispose();
   }
@@ -117,7 +123,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: Card(
                 color: AppColor.cardBackgroundColor,
                 child: Padding(
-                  padding: EdgeInsets.all(11),
+                  padding: const EdgeInsets.all(11),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,7 +251,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: screenHeight * 0.1459, //130,// screenHeight * 0.1794,  160
+                      height: screenHeight *
+                          0.1459, //130,// screenHeight * 0.1794,  160
                       width: screenWidth * 0.986,
                       child: ListView.builder(
                         padding: const EdgeInsets.only(
@@ -270,11 +277,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const MainSalonShowPage()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //             const MainSalonShowPage()));
                         },
                         icon: Row(
                           children: [
@@ -298,7 +305,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ),
                     ),
                     /* *********************** Edit button and icon ENDS here ******************** */
-                    totalServicePriceDetailText("Service Total", 60, screenHeight, screenWidth),
+                    totalServicePriceDetailText(
+                        "Service Total", 60, screenHeight, screenWidth),
                   ],
                 ),
               ),
@@ -316,10 +324,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
               width: screenWidth * 0.986,
               decoration: BoxDecoration(
                 color: AppColor.cardBackgroundColor1,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(screenHeight * 0.0112/*10*/),
-                      topRight: Radius.circular(screenHeight * 0.0112/*10*/),
-                  ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(screenHeight * 0.0112 /*10*/),
+                  topRight: Radius.circular(screenHeight * 0.0112 /*10*/),
+                ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -338,34 +346,34 @@ class _PaymentScreenState extends State<PaymentScreen> {
           /* ******************************** Total Cost Container STARTS here ************************ */
           Positioned(
             top: screenHeight * 0.734,
-            // top: screenHeight * 0.734,
             left: screenWidth * 0.0242,
             right: screenWidth * 0.0232,
             child: Container(
                 height: screenHeight * 0.045,
                 width: screenWidth * 0.986,
                 decoration: const BoxDecoration(
-                    color: Color(0xff648684),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                    ),
+                  color: Color(0xff648684),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0316 /*13*/),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.0316 /*13*/),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       BigText(
                         text: "Total",
                         color: Colors.white,
-                        fontSize: screenHeight * 0.0202,//18,
+                        fontSize: screenHeight * 0.0202, //18,
                         fontFamilyName: "Inter",
                       ),
                       BigText(
                         text: "60",
                         color: Colors.white,
-                        fontSize: screenHeight * 0.0202,//18,
+                        fontSize: screenHeight * 0.0202, //18,
                         fontFamilyName: "Inter",
                       ),
                     ],
@@ -376,14 +384,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
           /* ******************************** Divider Text STARTS here ************************ */
           Positioned(
-            top: screenHeight * 0.7218, //643
-            // top: 643,
-            left: screenWidth * 0.0292, //18
-            right: screenWidth * 0.0122, //11
-            child: const Text(
-              "_  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _   _  _  _  _ ",
-              textAlign: TextAlign.justify,
-              style: TextStyle(color: Colors.white),
+            top: screenHeight * 0.7413, //640
+            // top: 660,
+            left: screenWidth * 0.0392, //18
+            // right: screenWidth * 0.0122, //11
+            // child: const Text(
+            //   "_  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _  _   _  _  _  _ ",
+            //   textAlign: TextAlign.justify,
+            //   style: TextStyle(color: Colors.white),
+            // ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                    width: screenWidth * 0.913,
+                    child: CustomPaint(
+                      painter: DashedLinePainter(),
+                    ),
+                ),
+              ],
             ),
           ),
           /* ******************************** Divider Text ENDS here ************************ */
@@ -405,7 +424,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: screenHeight * 0.0392,//35,
+                      height: screenHeight * 0.0392, //35,
                       // color: Colors.green,
                       child: ListTile(
                         leading: Container(
@@ -413,7 +432,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           width: screenWidth * 0.0964,
                           decoration: BoxDecoration(
                             borderRadius:
-                            BorderRadius.circular(screenHeight * 0.005),
+                                BorderRadius.circular(screenHeight * 0.005),
                             color: Colors.white,
                           ),
                           child: const Image(
@@ -433,7 +452,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: screenHeight * 0.0392,//35,
+                      height: screenHeight * 0.0392, //35,
                       // color: Colors.red,
                       child: ListTile(
                         leading: Container(
@@ -472,8 +491,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
         padding: EdgeInsets.symmetric(
             horizontal: screenWidth * 0.0365, vertical: screenHeight * 0.0135),
         child: Button(
-          onPress: () async {
-            _razorpay.open(options);
+          onPress: () {
+            if (_paymentType == PaymentType.upi) {
+              _razorpay.open(options);
+            } else {
+              Timer(const Duration(seconds: 5), () {
+                _showBookedStatusDialog(context, screenHeight, screenWidth);
+              });
+              showAlertDialog(context, "!!! Payment Pending !!!",
+                  "Your payment is pending");
+            }
           },
           text: "Proceed to pay",
           fontSize: screenHeight * 0.020, //18
@@ -495,7 +522,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         });
   }
 
-  Widget totalServicePriceDetailText( String serviceName, int price, double screenHeight, double screenWidth) {
+  Widget totalServicePriceDetailText(
+      String serviceName, int price, double screenHeight, double screenWidth) {
     return SizedBox(
       height: screenHeight * 0.0225,
       width: screenWidth * 0.986,
@@ -547,7 +575,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   /* ************** Text Container for showing Date Time and Booking for Status ENDS here**************** */
 
   /* ************** Showing text and icon in Row STARTS here**************** */
-  Widget imageWithContentInRow(String picturePath, String text, double screenHeight) {
+  Widget imageWithContentInRow(
+      String picturePath, String text, double screenHeight) {
     return Row(
       children: [
         SvgPicture.asset(
@@ -569,7 +598,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
   /* ************** Showing text and icon in Row ENDS here**************** */
 
-  _showBookedStatusDialog(double screenHeight, double screenWidth) {
+  _showBookedStatusDialog(context, double screenHeight, double screenWidth) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -582,7 +611,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             shape: BoxShape.circle,
           ),
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: EdgeInsets.symmetric(
+                vertical: screenHeight * 0.0224,
+                horizontal: screenWidth * 0.04861 /*20*/),
             child: SvgPicture.asset(
               "asset/icons/shield_tick.svg",
             ),
@@ -607,13 +638,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
             alignment: Alignment.center,
             child: Button(
               onPress: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomeScreen()));
+                Navigator.pushReplacementNamed(context, '/appointments',
+                    arguments: UpcomingBookingData(widget.date!, widget.time!));
               },
               width: screenWidth * 0.277,
-              fontSize: 18,
+              fontSize: screenHeight * 0.0202, //18,
               radius: screenHeight * 0.0202, //18
               fontFamily: "Inter",
               text: "Done",
@@ -623,10 +652,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MainSalonShowPage()));
+                Navigator.pushNamed(context, '/main-salon-page');
               },
               child: const SmallText(
                 text: "Edit your Appointment",
@@ -639,6 +665,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ],
       ),
     );
+  }
+}
+
+class DashedLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    var max = size.width;
+    var dashWidth = 10.0;
+    var dashSpace = 5.0;
+    double startX = 0;
+
+    while (startX < max) {
+      canvas.drawLine(Offset(startX, 0), Offset(startX + dashWidth, 0), paint);
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
 
@@ -688,7 +739,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 //
 //   @override
 //   void dispose() {
-//     // TODO: implement dispose
 //     _razorpay.clear();
 //     super.dispose();
 //   }

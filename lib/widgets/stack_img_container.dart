@@ -7,7 +7,16 @@ import 'small_text.dart';
 
 class ImageContWithStack extends StatelessWidget {
   final AssetImage image;
-  const ImageContWithStack({super.key, required this.image});
+  final String text, gender, location, rating;
+  final double distance;
+  const ImageContWithStack(
+      {super.key,
+      required this.image,
+      required this.text,
+      this.gender = "Male",
+        this.distance = 1.5,
+        this.rating = "4.0",
+      this.location = "New Friends Colony"});
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +57,18 @@ class ImageContWithStack extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.only(
-                  left: screenWidth * 0.036 /*15*/,
-                  top: screenHeight * 0.006 /*5*/,
+                left: screenWidth * 0.036 /*15*/,
+                top: screenHeight * 0.006 /*5*/,
               ),
-              child: IconColumn(screenWidth: screenWidth, screenHeight: screenHeight,),
+              child: IconColumn(
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                text: text,
+                gender: gender,
+                distance: distance,
+                location: location,
+                rating: rating,
+              ),
             ),
           ),
         ),
@@ -67,8 +84,18 @@ class ImageContWithStack extends StatelessWidget {
 }
 
 class IconColumn extends StatelessWidget {
-  final double screenHeight, screenWidth;
-  const IconColumn({super.key, required this.screenHeight, required this.screenWidth});
+  final double screenHeight, screenWidth, distance;
+  final String text, gender, location,rating;
+  const IconColumn(
+      {super.key,
+      required this.screenHeight,
+      required this.screenWidth,
+      required this.text,
+      required this.gender,
+      required this.location,
+        required this.distance,
+        required this.rating,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +107,7 @@ class IconColumn extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             BigText(
-              text: "Varsha Salon",
+              text: text,
               fontWeightName: FontWeight.w600,
               color: AppColor.mainBlackColor,
               fontSize: screenHeight * 0.02 /*18*/,
@@ -95,7 +122,7 @@ class IconColumn extends StatelessWidget {
                   width: 2,
                 ),
                 SmallText(
-                  text: "Male",
+                  text: gender,
                   color: AppColor.mainBlackColor,
                   fontSize: screenHeight * 0.013 /*12*/,
                   fontWeightName: FontWeight.w400,
@@ -103,7 +130,7 @@ class IconColumn extends StatelessWidget {
               ],
             ),
             SmallText(
-              text: "New Friends Colony",
+              text: location,
               color: AppColor.mainBlackColor,
               fontSize: screenHeight * 0.013 /*12*/,
               fontWeightName: FontWeight.w400,
@@ -118,14 +145,15 @@ class IconColumn extends StatelessWidget {
             IconColumnButton(
               screenHeight: screenHeight,
               screenWidth: screenWidth,
-              text: "4.0",
+              text: rating,
               iconData: Icons.star,
               color: const Color(0xffFFC107),
             ),
             IconColumnButton(
-                screenHeight: screenHeight,
-                screenWidth: screenWidth,
-                text: "1.3km", iconData: Icons.location_on_outlined,
+              screenHeight: screenHeight,
+              screenWidth: screenWidth,
+              text: "$distance km",
+              iconData: Icons.location_on_outlined,
             ),
             Padding(padding: EdgeInsets.only(left: screenWidth * 0.0122 /*5*/)),
           ],
@@ -139,16 +167,14 @@ class IconColumnButton extends StatelessWidget {
   final IconData iconData;
   final String text;
   final Color color;
-  final double screenHeight,screenWidth;
+  final double screenHeight, screenWidth;
   const IconColumnButton(
       {super.key,
-        required this.screenHeight,
-        required this.screenWidth,
+      required this.screenHeight,
+      required this.screenWidth,
       required this.text,
       required this.iconData,
-      this.color = AppColor.mainBlackColor
-
-      });
+      this.color = AppColor.mainBlackColor});
 
   @override
   Widget build(BuildContext context) {
@@ -156,14 +182,14 @@ class IconColumnButton extends StatelessWidget {
       height: screenHeight * 0.039 /*35*/,
       width: screenWidth * 0.207 /*85*/,
       margin: EdgeInsets.only(
-          left: screenWidth * 0.024 /*10*/,
-          top: screenHeight * 0.022 /*20*/,
+        left: screenWidth * 0.024 /*10*/,
+        top: screenHeight * 0.022 /*20*/,
       ),
       padding: EdgeInsets.only(left: screenWidth * 0.012 /*5*/),
       decoration: BoxDecoration(
-          color: AppColor.statusButtonColor,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(screenHeight * 0.022 /*20*/),
+        color: AppColor.statusButtonColor,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(screenHeight * 0.022 /*20*/),
       ),
       child: IconAndTextButton(
         text: text,

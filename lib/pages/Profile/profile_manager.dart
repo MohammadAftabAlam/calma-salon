@@ -1,11 +1,6 @@
 import 'package:calma/pages/Appointments/Appointment_Status/upcoming_booking.dart';
-import 'package:calma/pages/Profile/account_info.dart';
-import 'package:calma/pages/Profile/location_screen.dart';
-import 'package:calma/pages/home/main_home_screen.dart';
-import 'package:calma/pages/validation/login_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
-// import 'package:calma/utils/shared_preferences.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +34,7 @@ class _ProfileManagerState extends State<ProfileManager> {
         children: [
           BackArrowButtonWithPositioned(
             onPress: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const MainHomeScreen()));
+              Navigator.pushNamed(context, '/main-home-screen');
             },
           ),
           Column(
@@ -49,20 +43,13 @@ class _ProfileManagerState extends State<ProfileManager> {
             children: [
               ProfileButtons(
                 onPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AccountInfo()));
+                  Navigator.pushNamed(context, '/account-info');
                 },
                 text: " Account Info",
               ),
               ProfileButtons(
                 onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ShowLocationPage()),
-                  );
+                  Navigator.pushNamed(context, '/show-location-page');
                 },
                 text: "Location ",
               ),
@@ -159,10 +146,7 @@ class _ProfileManagerState extends State<ProfileManager> {
                       AppointmentPageButtonAll(
                           onPress: () async {
                             sharedPreference();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
+                            Navigator.pushNamedAndRemoveUntil(context, '/login-screen', (route) => false);
                           },
                           text: "Yes"),
                     ],

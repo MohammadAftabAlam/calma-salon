@@ -1,4 +1,4 @@
-import 'package:calma/pages/Appointments/Appointment_Process/main_salon_show_pg.dart';
+import 'package:calma/Data/salon_details_data.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/small_text.dart';
@@ -16,8 +16,6 @@ class SalonSearchPage extends StatefulWidget {
 class _SalonSearchPageState extends State<SalonSearchPage> {
   TextEditingController searchController = TextEditingController();
 
-  // bool isNearestSelected = false;
-  // bool isPopularSelected = false;
   bool isSelected = false;
   bool isSortSelected = false;
 
@@ -26,76 +24,89 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    final searchServiceName = ModalRoute.of(context)!.settings.arguments;
+    searchController.text = searchServiceName.toString();
+
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
         children: [
           BackArrowButtonWithPositioned(
-            positionedTop: 25,
+            positionedTop: 40, //25,
+            // positionedTop: screenHeight * 0.0281, //25,
             onPress: () {
               Navigator.pop(context);
             },
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 75, right: 10, left: 10),
+            padding: EdgeInsets.only(
+              top: screenHeight * 0.1042 /*75*/,
+              right: screenWidth * 0.0243 /*10*/,
+              left: screenWidth * 0.0243 /*10*/,
+            ),
             child: Column(
               children: [
                 /* *************** Starts Search Bar ********************** */
                 SearchBar(
                   controller: searchController,
-                  hintText: "Haircut",
-                  trailing: const <Widget>[
+                  hintText: "Search your services here",
+                  // textStyle: Widget<TextStyle>(),
+                  trailing: [
                     Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Icon(Icons.mic),
+                      padding:
+                          EdgeInsets.only(right: screenWidth * 0.0243 /*10*/),
+                      child: const Icon(Icons.mic),
                     )
                   ],
-                  // onChanged: (String value) {
-                  //   debugPrint(value);
-                  //   setState(() {
-                  //     searchedValue = value;
-                  //   }
                 ),
                 /* *************** Ends Search Bar ********************** */
 
-
                 /* *************** Starts Nearest Popular & Sort Button ********************* */
                 Padding(
-                  padding: const EdgeInsets.only(top: 19, bottom: 5),
+                  padding: EdgeInsets.only(
+                      top: screenHeight * 0.0224 /*20*/,
+                      bottom: screenHeight * 0.005 /*5*/),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      ButtonSalonSearch(text: "Nearest", isSelected: isSelected,),
-                      ButtonSalonSearch(text: "Popular", isSelected : isSelected),
+                      ButtonSalonSearch(
+                        text: "Nearest",
+                        isSelected: isSelected,
+                      ),
+                      ButtonSalonSearch(
+                          text: "Popular", isSelected: isSelected),
                       Container(
-                        height: 42,
-                        width: 100,
+                        height: screenHeight * 0.0471, //42,
+                        width: screenWidth * 0.2431, //100,
                         decoration: BoxDecoration(
-                          color: isSortSelected? AppColor.buttonBackgroundColor : Colors.transparent,
-                            borderRadius: BorderRadius.circular(9),
-                            border: Border.all(
-                                color: AppColor.buttonBackgroundColor),
+                          color: isSortSelected
+                              ? AppColor.buttonBackgroundColor
+                              : Colors.transparent,
+                          borderRadius:
+                              BorderRadius.circular(screenHeight * 0.0112),
+                          border:
+                              Border.all(color: AppColor.buttonBackgroundColor),
                         ),
                         child: Padding(
-                          padding: EdgeInsets.only(left: /*Dimensions.width5*/5),
-                          child: TextButton(
+                          padding:
+                              EdgeInsets.only(left: screenWidth * 0.0122 /*5*/),
+                          child: TextButton.icon(
                             onPressed: () {
                               setState(() {
                                 isSortSelected = !isSortSelected;
                               });
                             },
-                            child: Row(
-                              children: [
-                                SvgPicture.asset("asset/icons/sortIcon.svg",height: 15,
-                                color:  isSortSelected? Colors.white : Colors.black,
-                                ),
-                                const SizedBox(width: 5,),
-                                SmallText(
-                                  text: "Sort",
-                                  fontWeightName: FontWeight.w600,
-                                  color: isSortSelected? Colors.white : Colors.black,
-                                )
-                              ],
+                            icon: SvgPicture.asset(
+                              "asset/icons/sortIcon.svg",
+                              height: screenHeight * 0.0168, //15,
+                              color:
+                                  isSortSelected ? Colors.white : Colors.black,
+                            ),
+                            label: SmallText(
+                              text: "Sort",
+                              fontWeightName: FontWeight.w600,
+                              color:
+                                  isSortSelected ? Colors.white : Colors.black,
                             ),
                           ),
                         ),
@@ -107,22 +118,48 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
 
                 Expanded(
                   child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 5,
+                    shrinkWrap: true,
+                    itemCount: SalonDetailsData.salonDetailsData.length,
                     padding: EdgeInsets.only(top: screenHeight * 0.0224 /*20*/),
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainSalonShowPage()));
-                          },
-                          child: const Card(
-                            margin: EdgeInsets.only(bottom: 15),
-                            child: ImageContWithStack(
-                                image:
-                                    AssetImage("asset/images/salonRoom.jpg")),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/main-salon-show-page',
+                              arguments: {
+                                'salonName': SalonDetailsData
+                                    .salonDetailsData[index].salonName,
+                                'image': SalonDetailsData
+                                    .salonDetailsData[index].salonImagePath,
+                                'location': SalonDetailsData
+                                    .salonDetailsData[index].salonLocation,
+                                'distance': SalonDetailsData
+                                    .salonDetailsData[index].distance.toString(),
+                                'rating': SalonDetailsData
+                                    .salonDetailsData[index].rating,
+                                'fullAddress': SalonDetailsData.salonDetailsData[index].fullAddress,
+                              });
+                        },
+                        child: Card(
+                          margin: EdgeInsets.only(
+                            bottom: screenHeight * 0.0168, /*15,*/
                           ),
-                        );
-                      },
+                          child: ImageContWithStack(
+                            text: SalonDetailsData
+                                .salonDetailsData[index].salonName,
+                            image: AssetImage(SalonDetailsData
+                                .salonDetailsData[index].salonImagePath),
+                            location: SalonDetailsData
+                                .salonDetailsData[index].salonLocation,
+                            gender: SalonDetailsData
+                                .salonDetailsData[index].genderType,
+                            distance: SalonDetailsData
+                                .salonDetailsData[index].distance,
+                            rating: SalonDetailsData
+                                .salonDetailsData[index].rating,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -146,27 +183,30 @@ class ButtonSalonSearch extends StatefulWidget {
 class _ButtonSalonSearchState extends State<ButtonSalonSearch> {
   @override
   Widget build(BuildContext context) {
-    return  Container(
-      height: 42,
-      width: 100,
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: screenHeight * 0.0471, //42,
+      width: screenWidth * 0.2431, //100,
       decoration: BoxDecoration(
-          color: widget.isSelected? AppColor.buttonBackgroundColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(9),
-          border: Border.all(color: AppColor.buttonBackgroundColor),),
+        color: widget.isSelected
+            ? AppColor.buttonBackgroundColor
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(9),
+        border: Border.all(color: AppColor.buttonBackgroundColor),
+      ),
       child: TextButton(
         onPressed: () {
           setState(() {
-            widget.isSelected = ! widget.isSelected;
+            widget.isSelected = !widget.isSelected;
           });
         },
         child: SmallText(
           text: widget.text,
           fontWeightName: FontWeight.w600,
-          color: widget.isSelected? Colors.white : Colors.black,
+          color: widget.isSelected ? Colors.white : Colors.black,
         ),
       ),
     );
   }
 }
-
-

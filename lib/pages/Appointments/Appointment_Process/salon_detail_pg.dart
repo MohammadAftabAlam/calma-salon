@@ -1,5 +1,4 @@
-import 'package:calma/pages/Appointments/Appointment_Process/booking_service_data_time.dart';
-import 'package:calma/pages/home/main_home_screen.dart';
+import 'package:calma/Data/salon_details_data.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/Icon_and_text_button.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
@@ -11,7 +10,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 class MainSalonShowPage extends StatefulWidget {
-  const MainSalonShowPage({super.key});
+  // final AssetImage image;
+  // final String salonName, rating,location, distance;
+  const MainSalonShowPage({super.key,
+    //required this.image, required this.salonName,required this.location, required this.distance,required this.rating
+  });
 
   @override
   State<MainSalonShowPage> createState() => _MainSalonShowPageState();
@@ -31,10 +34,14 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
   List<bool> selectedStateList = List<bool>.generate(6, (index) => false);
   bool isFavourite = false;
 
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
+
+    final detailSalon = ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
 
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
@@ -51,7 +58,7 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
               children: [
                 BackArrowButton(
                   onPress: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainHomeScreen()));
+                    Navigator.pushNamed(context, '/main-home-screen');
                   },
                 ),
                 Favourites(
@@ -60,10 +67,10 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                 ),
               ],
             ),
-            flexibleSpace: const FlexibleSpaceBar(
+            flexibleSpace: FlexibleSpaceBar(
               background: Image(
-                image: AssetImage("asset/images/varsha_salon.png"),
-                fit: BoxFit.cover,
+                image: AssetImage(detailSalon['image']),
+                fit: BoxFit.fill,
               ),
             ),
             pinned: true,
@@ -80,8 +87,8 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                   color: AppColor.mainBackgroundColor,
                 ),
                 child: ListTile(
-                  title: const BigText(text: "Varsha Salon"),
-                  subtitle: const SmallText(text: "Jogabai Extension"),
+                  title: BigText(text: detailSalon['salonName']),
+                  subtitle:  SmallText(text: detailSalon['location']),
                   trailing: Container(
                     margin: const EdgeInsets.only(right: 20),
                     padding: const EdgeInsets.only(left: 5),
@@ -91,8 +98,8 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                       borderRadius: BorderRadius.circular(screenHeight * 0.026),
                       color: AppColor.statusButtonColor,
                     ),
-                    child: const IconAndTextButton(
-                      text: '4.0',
+                    child: IconAndTextButton(
+                      text: detailSalon['rating'],
                       iconData: Icons.star,
                       iconColor: Colors.yellow,
                     ),
@@ -127,10 +134,10 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                   SizedBox(
                                     width: screenWidth * 0.073,
                                   ),
-                                  const MainSalonShowPageIcon(
+                                  MainSalonShowPageIcon(
                                     pictureLocation: "asset/icons/star.svg",
                                     smallText: "Rating",
-                                    bigText: "4",
+                                    bigText: detailSalon['rating'],
                                   ),
                                   SizedBox(
                                     width: screenWidth * 0.073,
@@ -143,10 +150,10 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                   SizedBox(
                                     width: screenWidth * 0.073,
                                   ),
-                                  const MainSalonShowPageIcon(
+                                  MainSalonShowPageIcon(
                                     pictureLocation: "asset/icons/location-underline.svg",
                                     smallText: "Kilometres",
-                                    bigText: "4.9",
+                                    bigText: detailSalon['distance'].toString(),
                                   ),
                                 ],
                               ),
@@ -193,8 +200,9 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                               ),
                               const BigText(text: "Address",color: AppColor.appointmentTextColor,),
                               const Divider(thickness: 1,color: AppColor.dividerColor,),
-                              const ListTile(leading: Icon(Icons.location_on),
-                                title: SmallText(text: "Community Centre 14, Block-A, New Friends Colony, New Delhi, Delhi -110025"),
+                              ListTile(leading: const Icon(Icons.location_on),
+                                title: SmallText(text: detailSalon['fullAddress'], textAlignName: TextAlign.justify,),
+                                // title: SmallText(text: "Community Centre 14, Block-A, New Friends Colony, New Delhi, Delhi -110025"),
                               ),
                               AppointmentBookAndPriceButton(
                                 onPress: () {
@@ -225,7 +233,7 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
         child: AppointmentBookAndPriceButton(
           onPress: () {
             // _showBookedStatusDialog();
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>const BookingDateAndTime()));
+             Navigator.pushNamed(context, '/booking-date-time');
           },
           text: "Book Appointment",
         ),

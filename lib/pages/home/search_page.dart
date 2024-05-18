@@ -1,4 +1,4 @@
-import 'package:calma/pages/home/salon_search.dart';
+import 'package:calma/pages/home/home_page_body.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
@@ -23,9 +23,9 @@ class _SearchPageState extends State<SearchPage> {
   get screenHeight => MediaQuery.of(context).size.height;
   get screenWidth => MediaQuery.of(context).size.width;
 
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _initStateSpeech();
   }
@@ -58,6 +58,7 @@ class _SearchPageState extends State<SearchPage> {
 
     /// Changing the search bar value with the text [_recognizedText] that is recognized while Listening
     searchController.text = _recognizedText;
+    ImagesAndText imagesAndText = ImagesAndText();
 
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
@@ -83,9 +84,7 @@ class _SearchPageState extends State<SearchPage> {
                         _startListening();
                         _showDialog(_recognizedText);
                       },
-
-                    icon: isListening? SvgPicture.asset("asset/icons/microphone.svg", height: screenHeight * 0.036 /*32*/,): Icon(Icons.mic_off),
-
+                    icon: isListening? SvgPicture.asset("asset/icons/microphone.svg", height: screenHeight * 0.036 /*32*/,): const Icon(Icons.mic_off),
                     tooltip: 'Speech Recognition',
                 ),
                 ),
@@ -97,7 +96,7 @@ class _SearchPageState extends State<SearchPage> {
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: 10,
+                itemCount: imagesAndText.imageAndText[0].length,
                 padding: EdgeInsets.only(top: screenHeight * 0.0224 /*20*/),
                 itemBuilder: (context, index) {
 
@@ -116,9 +115,10 @@ class _SearchPageState extends State<SearchPage> {
                               bottomRight: Radius.circular(screenHeight * 0.0123/*11*/),
                               topRight: Radius.circular(screenHeight * 0.0123/*11*/),
                             ),
-                            image: const DecorationImage(
+                            image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: AssetImage("asset/images/haircut.jpg"),
+                              image: AssetImage(imagesAndText.imageAndText[0][index].toString()),
+                              // image: AssetImage("asset/images/haircut.jpg"),
                             ),
                           ),
                         ),
@@ -148,7 +148,8 @@ class _SearchPageState extends State<SearchPage> {
                                     BigText(
                                       fontWeightName: FontWeight.w600,
                                       color: AppColor.quoteColor,
-                                      text: 'Bride Makeup',
+                                      text: imagesAndText.imageAndText[1][index],
+                                      // text: 'Bride Makeup',
                                       fontSize: screenHeight * 0.020, //18
                                     ),
                                     /* ************************* Service name ENDS here ******************** */
@@ -252,7 +253,7 @@ class ForwardArrowButton extends StatelessWidget {
       child: Center(
         child: IconButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> const SalonSearchPage()));
+            Navigator.pushNamed(context, '/salon-search-page',arguments: "Haircut");
           },
           icon: const Icon(Icons.arrow_forward),
           color: Colors.white,
