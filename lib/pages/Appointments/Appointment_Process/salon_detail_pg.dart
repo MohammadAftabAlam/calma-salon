@@ -1,4 +1,3 @@
-import 'package:calma/Data/salon_details_data.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/Icon_and_text_button.dart';
 import 'package:calma/widgets/back_arrow_button.dart';
@@ -307,9 +306,9 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
             TextButton(
               onPressed: () {
                 // Do something with the selected services
-                print('Selected Services:');
+                // print('Selected Services:');
                 for (Service service in selectedServices) {
-                  print('${service.name} - \$${service.price}');
+                  // print('${service.name} - \$${service.price}');
                 }
                 Navigator.of(context).pop();
               },

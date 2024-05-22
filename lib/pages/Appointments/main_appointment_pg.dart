@@ -45,7 +45,7 @@ class _AppointmentsState extends State<Appointments>
     final screenHeight = MediaQuery.sizeOf(context).height;
     final screenWidth = MediaQuery.sizeOf(context).width;
 
-    print(ModalRoute.of(context)?.settings.arguments);
+    // print(ModalRoute.of(context)?.settings.arguments);
 
 
     // final args = ModalRoute.of(context)!.settings.arguments as Map;

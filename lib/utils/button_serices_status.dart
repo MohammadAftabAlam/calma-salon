@@ -40,7 +40,7 @@ class ButtonServiceStatus extends StatelessWidget {
             children: [
               Icon(iconData,
               color: iconColor,),
-              SizedBox(width: 5,),
+              const SizedBox(width: 5,),
               SmallText(text: text,fontSize: fontSize,
               ),
             ],

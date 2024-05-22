@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       return response.statusCode;
     } catch (e) {
-      debugPrint("Md Aftab Alam Calma Application Exception " + e.toString());
+      // debugPrint("Md Aftab Alam Calma Application Exception " + e.toString());
     }
 
   }
@@ -372,7 +372,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           setState(() {
                             isLoading = !isLoading;
                           });
-                          debugPrint("Status Code: " + code.toString());
+                          // debugPrint("Status Code: " + code.toString());
                           if (code == 200) {
                             ///This [sharedPreferencesDateStoring] is a class created by me and here for storing ['phoneNumber'] value locally
                             const SharedPreferencesDataStoring()

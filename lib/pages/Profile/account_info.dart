@@ -1,5 +1,3 @@
-import 'package:calma/pages/home/Experts/expert_detail_screen.dart';
-import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/button.dart';
@@ -318,7 +316,7 @@ class AccTextFormField extends StatelessWidget {
 
 
 
-/* Widget of Other thng*/
+/* Widget of Other thing*/
 /*Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,

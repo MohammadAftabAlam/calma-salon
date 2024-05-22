@@ -1,4 +1,5 @@
 import 'package:calma/Data/salon_details_data.dart';
+import 'package:calma/Data/salon_expert_data.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/Icon_and_text_button.dart';
 import 'package:calma/widgets/big_text.dart';
@@ -14,38 +15,23 @@ class HomePageBody extends StatefulWidget {
 }
 
 class _HomePageBodyState extends State<HomePageBody> {
-  // List salonImages = [
-  //   "asset/images/salonImage.jpg",
-  //   "asset/images/lookSalon.jpg",
-  //   "asset/images/meenakshiSalon.jpg",
-  //   "asset/images/threadingEyebrow.jpg",
-  //   "asset/images/beardTrimming.jpg",
-  //   "asset/images/shaving.jpg",
-  // ];
-  // List salonName = [
-  //   "Varsha Salon",
-  //   "Look Salon",
-  //   "Bridal Makeup",
-  //   "Threading",
-  //   "Trim & Style",
-  //   "Shaving"
-  // ];
 
   //0.. for Image
   //1.. for Text
 
-  List expertBarberImages = [
-    "asset/images/aftab.jpg",
-    "asset/images/yazdan.jpg",
-    "asset/images/shayan.jpg",
-    "asset/images/azam.jpg",
-    "asset/images/zaid.jpg",
-  ];
+  // List expertBarberImages = [
+  //   "asset/images/aftab.jpg",
+  //   "asset/images/yazdan.jpg",
+  //   "asset/images/azam.jpg",
+  //   "asset/images/shayan.jpg",
+  //   "asset/images/zaid.jpg",
+  // ];
+
   List expertBarberName = [
     "Aftab",
     "Yazdan",
-    "Shayan",
     "Azam",
+    "Shayan",
     "Zaid",
   ];
 
@@ -55,6 +41,7 @@ class _HomePageBodyState extends State<HomePageBody> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     ImagesAndText imagesAndText1 = ImagesAndText();
+    SalonExpertDetailData salonExpertDetailData = SalonExpertDetailData();
     return Padding(
       padding:
           // EdgeInsets.only(right: Dimensions.width10, left: Dimensions.width10),
@@ -73,15 +60,37 @@ class _HomePageBodyState extends State<HomePageBody> {
                       //     left: Dimensions.width5, right: Dimensions.width5),
                       const EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        /*Dimensions.radius20*/ screenHeight * 0.022),
+                    borderRadius: BorderRadius.circular(screenHeight * 0.022),
                     // color: Colors.red,
                     color: const Color(0xff85ABB8),
                     image: const DecorationImage(
-                      alignment: Alignment(1, 0),
+                      alignment: Alignment(1.2, 0),
                       fit: BoxFit.contain,
                       image: AssetImage("asset/images/menPicHomePage.png"),
                     ),
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: screenHeight * 0.02245, //20,
+                        left: screenWidth * 0.03645, //15,
+                        child: const BigText(
+                          text: "Noble Circle \nPromo",
+                          fontSize: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Positioned(
+                        top: screenHeight * 0.12909, //115,
+                        left: screenWidth * 0.03645, //15,
+                        child: const BigText(
+                          text: "Get 50% off for the \nentire friend circle",
+                          fontSize: 18,
+                          fontWeightName: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -110,8 +119,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                 /// Column is used here for showing the images along with services name
                 return InkWell(
                   onTap: () {
-                    debugPrint(
-                        imagesAndText1.imageAndText[1][index].toString());
+                    debugPrint(imagesAndText1.imageAndText[1][index].toString());
+
                     Navigator.pushNamed(context, '/salon-search-page',
                         arguments:
                             imagesAndText1.imageAndText[1][index].toString());
@@ -164,10 +173,12 @@ class _HomePageBodyState extends State<HomePageBody> {
 
           /* ************ Experts around you Image STARTS here ***************** */
           SizedBox(
-            height: screenHeight * 0.17, //151
+            height: screenHeight * 0.19083, //170,
+            // height: screenHeight * 0.17, //151
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: expertBarberImages.length,
+              itemCount: salonExpertDetailData.expertDetailData.length,
+              // itemCount: expertBarberImages.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 /// Column is used here for showing the images along with services name
@@ -178,9 +189,8 @@ class _HomePageBodyState extends State<HomePageBody> {
                   child: Column(
                     children: [
                       Container(
-                        height: screenHeight * 0.123, //110,
+                        height: screenHeight * 0.14593, //130
                         width: screenWidth * 0.275, //113,
-
                         margin: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012 /*5*/,
                             vertical: screenHeight * 0.011 /*10*/),
@@ -189,11 +199,45 @@ class _HomePageBodyState extends State<HomePageBody> {
                           color: AppColor.imageBgColor,
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage("${expertBarberImages[index]}"),
+                            image: AssetImage(salonExpertDetailData.expertDetailData[index].imagePath),
+                            // image: AssetImage("${expertBarberImages[index]}"),
                           ),
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                                top: screenHeight * 0.11225, //100,
+                                left: screenWidth * 0.0851, //35,
+                                child: Container(
+                                  height: screenHeight * 0.0336, //30,
+                                  width: screenWidth * 0.12153, //50,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xff85ABB8),
+                                      borderRadius: BorderRadius.circular(
+                                          screenHeight * 0.01123 /*10*/)),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SmallText(
+                                        text: salonExpertDetailData.expertDetailData[index].rating.toString(),
+                                        fontSize: screenHeight * 0.01123 /*10*/,
+                                        fontWeightName: FontWeight.w600,
+                                      ),
+                                      Icon(
+                                        Icons.star,
+                                        size: screenHeight * 0.01684 /*15*/,
+                                        // size: screenHeight * 0.02245 /*20*/,
+                                        color: const Color(0xffFFC107),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                            ),
+                          ],
                         ),
                       ),
                       SmallText(
+                        // text: salonExpertDetailData.expertDetailData[index].name,
                           text: expertBarberName[index],
                           // text: "Azam",
                           color: AppColor.quoteColor)
@@ -256,6 +300,7 @@ class _HomePageBodyState extends State<HomePageBody> {
           ),
           /* ********************** Ends Popular Button & top salon ************** */
 
+          /* ************************ Nearest Salon List STARTS here ************************** */
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -266,21 +311,21 @@ class _HomePageBodyState extends State<HomePageBody> {
               margin: EdgeInsets.only(bottom: screenHeight * 0.017 /*15*/),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, '/main-salon-show-page',
-                      arguments: {
-                        'salonName':
-                            SalonDetailsData.salonDetailsData[index].salonName,
-                        'image': SalonDetailsData
-                            .salonDetailsData[index].salonImagePath,
-                        'location': SalonDetailsData
-                            .salonDetailsData[index].salonLocation,
-                        'distance': SalonDetailsData
-                            .salonDetailsData[index].distance
-                            .toString(),
-                        'rating':
-                            SalonDetailsData.salonDetailsData[index].rating,
-                        'fullAddress': SalonDetailsData.salonDetailsData[index].fullAddress,
-                      });
+                  Navigator
+                      .pushNamed(context, '/main-salon-show-page', arguments: {
+                    'salonName':
+                        SalonDetailsData.salonDetailsData[index].salonName,
+                    'image':
+                        SalonDetailsData.salonDetailsData[index].salonImagePath,
+                    'location':
+                        SalonDetailsData.salonDetailsData[index].salonLocation,
+                    'distance': SalonDetailsData
+                        .salonDetailsData[index].distance
+                        .toString(),
+                    'rating': SalonDetailsData.salonDetailsData[index].rating,
+                    'fullAddress':
+                        SalonDetailsData.salonDetailsData[index].fullAddress,
+                  });
                 },
                 child: ImageContWithStack(
                   text: SalonDetailsData.salonDetailsData[index].salonName,
@@ -295,41 +340,43 @@ class _HomePageBodyState extends State<HomePageBody> {
               ),
             ),
           ),
+          /* ************************ Nearest Salon List ENDS here ************************** */
         ],
       ),
     );
   }
 
-  Widget expertImages(double screenHeight, double screenWidth, int index) {
-    return Stack(
-      children: [
-        Positioned(
-            top: 20,
-            child: Container(
-              height: screenHeight * 0.123, //110,
-              width: screenWidth * 0.275, //113,
-
-              margin: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.012 /*5*/,
-                  vertical: screenHeight * 0.011 /*10*/),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.imageBgColor,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("${expertBarberImages[index]}"),
-                ),
-              ),
-            )),
-        Positioned(
-            top: 50,
-            child: SmallText(
-                text: expertBarberName[index],
-                // text: "Azam",
-                color: AppColor.quoteColor)),
-      ],
-    );
-  }
+  // Widget expertImages(double screenHeight, double screenWidth, int index) {
+  //   return Stack(
+  //     children: [
+  //       Positioned(
+  //           top: screenHeight * 0.02245 , //20,
+  //           child: Container(
+  //             height: screenHeight * 0.123, //110,
+  //             width: screenWidth * 0.275, //113,
+  //             margin: EdgeInsets.symmetric(
+  //                 horizontal: screenWidth * 0.012 /*5*/,
+  //                 vertical: screenHeight * 0.011 /*10*/),
+  //             decoration: BoxDecoration(
+  //               shape: BoxShape.circle,
+  //               color: AppColor.imageBgColor,
+  //               image: DecorationImage(
+  //                 fit: BoxFit.cover,
+  //                 image: AssetImage("asset/images/aftab.jpg"),
+  //                 // image: AssetImage("${expertBarberImages[index]}"),
+  //               ),
+  //             ),
+  //           ),
+  //       ),
+  //       Positioned(
+  //           top: screenHeight * 0.05612, //50,
+  //           child: SmallText(
+  //               text: expertBarberName[index],
+  //               color: AppColor.quoteColor),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
 
 class ServicesAndExpertText extends StatelessWidget {

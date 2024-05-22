@@ -9,11 +9,11 @@ class SharedPreferencesDataStoring extends StatelessWidget{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool('isLogin', false);
     sharedPreferences.setString('phoneNumber',phoneNumber );
-    debugPrint("Phone Number: " +sharedPreferences.getString('phoneNumber')!);
+    // debugPrint("Phone Number: " +sharedPreferences.getString('phoneNumber')!);
   }
 
   @override
   Widget build(BuildContext context){
-    return Text("");
+    return const Text("");
   }
 }

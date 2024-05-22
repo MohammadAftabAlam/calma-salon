@@ -417,7 +417,7 @@ class _SignUpPageState extends State<SignUpPage> {
 
               /// User [SelectionTextField] ENDS here
 
-              /// Phone Number fields STARTS HERE
+              /* ************************************* Phone Number TextField Starts Here **************************************** */
               Padding(
                 padding: EdgeInsets.only(
                   left: screenWidth * 0.0368, //15
@@ -492,8 +492,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
+              /* ************************************* Phone Number TextField Ends Here ****************************************** */
 
-              /// Phone Number fields ENDS HERE
 
               /* ********************* Email TextField Starts Here************************* */
               Padding(
@@ -565,9 +565,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               /* ********************* Email TextField Ends Here************************* */
 
-              /// Password Fields STARTS HERE
-              ///
-              ///
+              /* ************************************* Confirm Password TextField Starts Here ****************************************** */
               Padding(
                 padding: EdgeInsets.only(
                   left: screenWidth * 0.0368, //15
@@ -612,10 +610,10 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
+              /* ************************************* Password TextField Ends Here ****************************************** */
 
-              /// Password Fields ENDS HERE
 
-              /// Confirm Password Fields STARTS HERE
+              /* ************************************* Confirm Password TextField Starts Here ****************************************** */
               Padding(
                 padding: EdgeInsets.only(
                   left: screenWidth * 0.0368, //15
@@ -625,11 +623,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 child: TextFormField(
                   controller: confirmPasswordController,
-                  obscureText: isVisible,
+                  obscureText: true,
                   decoration: InputDecoration(
                     hintText: "Confirm Password",
                     prefixIcon: const Icon(Iconsax.lock),
-
                     focusedBorder: OutlineInputBorder(
                       borderRadius:
                           BorderRadius.circular(screenWidth * 0.0243 /*10*/),
@@ -651,7 +648,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
 
-              /// Confirm Password Fields ENDS HERE
+              /* ************************************* Confirm Password TextField Ends Here ****************************************** */
 
               SizedBox(
                 height: screenHeight * 0.0112,
@@ -661,10 +658,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   if (!_formKey.currentState!.validate()) {
                     snackBar("Missing required field", screenHeight,screenWidth);
                   }
+                  else if( passwordController.text.isEmpty || confirmPasswordController.text.isEmpty ){
+                    snackBar("Please enter a valid password", screenHeight, screenWidth);
+                  }
                   else if (!(passwordController.text.toString() ==
                       confirmPasswordController.text.toString())) {
                     snackBar("Password doesn't match",screenHeight,screenWidth);
-                  } else {
+                  }
+                  else {
                     if (_formKey.currentState!.validate()) {
                       var statusCode = await registerUser('+91${phoneNumberController.text}');
 
@@ -685,7 +686,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         color: AppColor.mainBackgroundColor,
                       )
                     : BigText(
-                        text: "SignUp",
+                        text: "Sign up",
                         textAlignName: TextAlign.center,
                         color: Colors.white,
                         fontWeightName: FontWeight.bold,
@@ -798,14 +799,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       color: AppColor.mainBackgroundColor,
                     )
                         :  BigText(
-                      text: "SignUp",
+                      text: "Verify Otp",
                       textAlignName: TextAlign.center,
                       color: Colors.white,
                       fontWeightName: FontWeight.bold,
                       fontSize: screenHeight * 18 / screenHeight,
                       fontFamilyName: "Inter",
                     ),
-                    width: screenWidth * 0.04861,//200,
+                    width: screenWidth * 0.19444,//80,
                   ),
                 ],
               ),
@@ -816,7 +817,7 @@ class _SignUpPageState extends State<SignUpPage> {
   /* ***************************** OTP verification BottomSheet ENDS here ***************************** */
 }
 
-/// Password Field
+/* ************************************* Password TextField Starts Here ****************************************** */
 class PasswordTextField extends StatelessWidget {
   final double screenHeight, screenWidth, verticalPad;
   final TextEditingController controller;
@@ -870,8 +871,9 @@ class PasswordTextField extends StatelessWidget {
     );
   }
 }
+/* ************************************* Confirm Password TextField Ends Here ****************************************** */
 
-/// Password TextField
+
 /*  Padding(
         padding: EdgeInsets.only(
           left: screenWidth * 0.0368,  //15

@@ -1,5 +1,5 @@
 import 'package:calma/Routes/routes.dart';
-import 'package:calma/pages/Appointments/Appointment_Process/payment_page.dart';
+// import 'package:calma/pages/Appointments/Appointment_Process/payment_page.dart';
 import 'package:calma/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: "Calma",
       // theme: ThemeData(colorScheme: ColorScheme.fromSwatch(primarySwatch:Colors.pink, backgroundColor: AppColor.mainBackgroundColor)),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: const SplashScreen(),
       // home: const DevelopersImage(),
       // home: PaymentScreen(date: "27/03/2004",time: "5:30AM",bookingFor: "Self",),
       routes: getRoute(),

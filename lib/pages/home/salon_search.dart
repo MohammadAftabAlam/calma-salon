@@ -50,7 +50,6 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                 SearchBar(
                   controller: searchController,
                   hintText: "Search your services here",
-                  // textStyle: Widget<TextStyle>(),
                   trailing: [
                     Padding(
                       padding:
@@ -99,8 +98,7 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                             icon: SvgPicture.asset(
                               "asset/icons/sortIcon.svg",
                               height: screenHeight * 0.0168, //15,
-                              color:
-                                  isSortSelected ? Colors.white : Colors.black,
+                              colorFilter: ColorFilter.mode(isSortSelected ? Colors.white : Colors.black, BlendMode.srcIn),
                             ),
                             label: SmallText(
                               text: "Sort",
@@ -133,10 +131,12 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                                 'location': SalonDetailsData
                                     .salonDetailsData[index].salonLocation,
                                 'distance': SalonDetailsData
-                                    .salonDetailsData[index].distance.toString(),
+                                    .salonDetailsData[index].distance
+                                    .toString(),
                                 'rating': SalonDetailsData
                                     .salonDetailsData[index].rating,
-                                'fullAddress': SalonDetailsData.salonDetailsData[index].fullAddress,
+                                'fullAddress': SalonDetailsData
+                                    .salonDetailsData[index].fullAddress,
                               });
                         },
                         child: Card(
@@ -154,8 +154,8 @@ class _SalonSearchPageState extends State<SalonSearchPage> {
                                 .salonDetailsData[index].genderType,
                             distance: SalonDetailsData
                                 .salonDetailsData[index].distance,
-                            rating: SalonDetailsData
-                                .salonDetailsData[index].rating,
+                            rating:
+                                SalonDetailsData.salonDetailsData[index].rating,
                           ),
                         ),
                       );

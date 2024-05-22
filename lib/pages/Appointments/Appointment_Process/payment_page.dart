@@ -638,8 +638,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
             alignment: Alignment.center,
             child: Button(
               onPress: () {
-                Navigator.pushReplacementNamed(context, '/appointments',
-                    arguments: UpcomingBookingData(widget.date!, widget.time!));
+                // Navigator.pushReplacementNamed(context, '/appointments',
+                //     arguments: UpcomingBookingData(widget.date!, widget.time!));
+
+                Navigator.pushNamedAndRemoveUntil(context, '/appointments',(route) {
+                  arguments: UpcomingBookingData(widget.date!, widget.time!);
+                  return false;
+                   }
+                );
               },
               width: screenWidth * 0.277,
               fontSize: screenHeight * 0.0202, //18,

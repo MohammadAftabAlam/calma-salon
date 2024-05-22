@@ -1,4 +1,3 @@
-import 'package:calma/pages/Appointments/Appointment_Process/salon_detail_pg.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
