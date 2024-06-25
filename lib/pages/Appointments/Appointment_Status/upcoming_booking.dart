@@ -1,3 +1,4 @@
+import 'package:calma/Data/upcoming_appntmnt_data.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/small_text.dart';
@@ -22,24 +23,25 @@ class _UpcomingServicesState extends State<UpcomingServices> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    BookServices bookServices = BookServices();
 
-  // final args = ModalRoute.of(context)!.settings.arguments as UpcomingBookingData;
-  // date1 = args.date;
-  // time1 = args.time;
+  final args = ModalRoute.of(context)!.settings.arguments;
+  // var date;
+  // date1 = args.date!;
+  // time1 = args.time!;
 
-    int upcomingAppointment = 1;
+    // int upcomingAppointment = 1;
 
+    // UpcomingBookingData upcomingBookingData = UpcomingBookingData(date, time);
     return ListView.builder(
       // shrinkWrap: true,
-      itemCount: upcomingAppointment,
+      itemCount: bookServices.bookServicesData.length,
       padding: EdgeInsets.symmetric(
         horizontal: screenWidth * 0.0413,
         vertical: screenHeight * 0.0169,
       ),
       itemBuilder: (context, index) {
-        if(upcomingAppointment == 1){
-          return Center(child: BigText(text: "No upcoming appointments "));
-        }else{
+        if(bookServices.bookServicesData.isNotEmpty){
           return Card(
             color: const Color(0xffF5EDEC),
             child: Padding(
@@ -52,7 +54,8 @@ class _UpcomingServicesState extends State<UpcomingServices> {
                     children: [
                       Text(
                         // "June 14, 2023 - 15.00pm",
-                        "$date1 - $time1",
+                        "${bookServices.bookServicesData[index].date} -${bookServices.bookServicesData[index].time}",
+                        // "$date1 - $time1",
                         // "${widget.date} - ${widget.time}",
                         style: TextStyle(
                           fontFamily: "Inter",
@@ -94,9 +97,10 @@ class _UpcomingServicesState extends State<UpcomingServices> {
                         width: screenWidth * 0.3107,  //128
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(screenHeight * 0.0148),
-                          image: const DecorationImage(
+                          image:  DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage("asset/images/salonRoom.jpg"),
+                            image: AssetImage(bookServices.bookServicesData[index].salonImage),
+                            // image: AssetImage("asset/images/salonRoom.jpg"),
                           ),
                         ),
                       ),
@@ -115,7 +119,8 @@ class _UpcomingServicesState extends State<UpcomingServices> {
                                 BigText(
                                   fontWeightName: FontWeight.w500,
                                   color: AppColor.mainBlackColor,
-                                  text: "Varsha Saloon",
+                                  text: bookServices.bookServicesData[index].name,
+                                  // text: "Varsha Saloon",
                                   fontSize: screenHeight * 0.018,
                                 ),
                                 Row(
@@ -130,7 +135,8 @@ class _UpcomingServicesState extends State<UpcomingServices> {
                                       width: screenWidth * 0.0244,
                                     ),
                                     SmallText(
-                                      text: "Jogabai Extension",
+                                      text: bookServices.bookServicesData[index].location,
+                                      // text: "Jogabai Extension",
                                       fontSize: screenHeight * 0.018, //16
                                       fontWeightName: FontWeight.w400,
                                       fontFamilyName: 'Inter',
@@ -207,6 +213,8 @@ class _UpcomingServicesState extends State<UpcomingServices> {
               ),
             ),
           );
+        }else{
+          return const Center(child: BigText(text: "No upcoming appointments "));
         }
       },
     );
