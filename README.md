@@ -65,9 +65,9 @@ We welcome contributions from the community! If you find a bug or have a feature
 
 ## Contributors 
 
-**Ui/Ux Design**: Yazdan Haider Khan
-**Frontend**: Md Aftab Alam (me)
-**Backend***: Mohd. Azam Khan [https://github.com/azamkhan4233]
+- **Ui/Ux Design**: Yazdan Haider Khan
+- **Frontend**: Md Aftab Alam (me)
+- **Backend***: Mohd. Azam Khan [https://github.com/azamkhan4233]
 
 
 
