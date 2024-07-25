@@ -63,7 +63,7 @@ We welcome contributions from the community! If you find a bug or have a feature
 5. Open a pull request.
 
 
-##Contributers
+## Contributors 
 
 **Ui/Ux Design**: Yazdan Haider Khan
 **Frontend**: Md Aftab Alam (me)
