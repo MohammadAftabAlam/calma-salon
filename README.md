@@ -52,6 +52,53 @@ Calma is an Android-based salon appointment booking system that provides a perso
 8. In case of an emergency, reschedule the appointment from the dashboard.
 9. To cancel an appointment, provide an appropriate reason and proceed.
 
+## Application Snapshots 
+
+1. **Signup Screen**
+   ![Signup Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Sign%20up%20screen_.jpg)
+   
+2. **Login Screen**
+   ![Login Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Login%20screen_.jpg)
+
+3. **Forget Password Screen**
+   ![Forget Password Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Forget%20password%20screen.jpg)
+   
+4. **Home Screen**
+   ![Home Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Home-screen.jpg)
+   
+5. **Service Search Screen**
+   ![Service Search Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Search-page.jpg)
+
+6. **Salon Search Screen**
+   ![Salon Search Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Salon%20page.jpg)
+
+7. **Account Setting Screen**
+   ![Account Setting Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Account-setting.jpg)
+   
+8. **Salon Detail Screen**
+   ![Salon Detail Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/Salon%20information%20page.jpg)
+
+9. **Choose Date & Time**
+    ![Choose Date & Time](https://github.com/MohammadAftabAlam/calma-salon/blob/8b89e8cb881d78151abef5aa8d86d7ceca526b03/Snapshots/scheduling.jpg)
+
+10. **Payment Screen**
+    ![Payment Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/payment-screen.jpg)
+
+11. **Payment Gateway**
+    ![Payment Gateway](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/payment-gateway.jpg)
+
+12. **Booking Confirmation Alert**
+    ![Booking Confirmation Alert](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/Booking%20confirmation%20alert.jpg)
+
+13. **Upcoming, Completed and Cancelled Booking detail Screen**
+    ![Booking Detail Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/booking-detail.jpg)
+
+14. **Expert List Screen**
+    ![Expert List Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/expert-list.jpg)
+    
+15. **Logout Screen**
+    ![Logout Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/Logout%20screen.jpg)
+
 ## Contributing
 
 We welcome contributions from the community! If you find a bug or have a feature request, please open an issue. To contribute code, follow these steps:
@@ -67,11 +114,8 @@ We welcome contributions from the community! If you find a bug or have a feature
 
 - **Ui/Ux Design**: Yazdan Haider Khan
 - **Frontend**: Md Aftab Alam (me)
-- **Backend***: Mohd. Azam Khan [https://github.com/azamkhan4233]
-
-
+- **Backend**: Mohd. Azam Khan [https://github.com/azamkhan4233]
 
 ## Contact
 
 For any queries or support, please contact us at mohammadaftab1062@gmail.com.
-
