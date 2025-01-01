@@ -67,7 +67,7 @@ We welcome contributions from the community! If you find a bug or have a feature
 ## Application Snapshots 
 
 1. **Login Screen**
-   ![Login Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/a300f222e23aa0f688ede6b9afbc012bee4c5d6d/Snapshots/Login%20screen_.jpg)
+   ![Login Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/a300f222e23aa0f688ede6b9afbc012bee4c5d6d/Snapshots/Login%20screen_.jpg){width=200px, height = 300px} 
 
  
 2. **Signup Screen**
