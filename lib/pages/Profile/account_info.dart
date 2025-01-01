@@ -20,7 +20,163 @@ class _AccountInfoState extends State<AccountInfo> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+      ),
+      body: Card(
+        color: Colors.white,
+        margin: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.0559 /*23*/,
+            vertical: screenHeight * 0.0216 /*13*/),
+        shape: RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.circular(40 /*18*/),
+          side: const BorderSide(color: Color(0xffD5D4DF)),
+        ),
+
+        borderOnForeground: true,
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  top: screenHeight * 0.0303 /*27*/,
+                  left: screenWidth * 0.0438 /*18*/),
+              child: SmallText(
+                text: "Edit Profile",
+                fontSize: screenHeight * 0.0269, //24,
+                fontWeightName: FontWeight.w700,
+              ),
+            ),
+            SmallText(text: "Name", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            TextFormField(decoration:  InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Color(0xffD3CECD)),
+                borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Color(0xffD3CECD)),
+                borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
+              ),
+              contentPadding:
+              EdgeInsets.symmetric(vertical: screenHeight* 0.0112/*10*/, horizontal: screenWidth * 0.0365 /*15*/),
+            ),
+              style: TextStyle(
+                fontSize: screenHeight * 0.020,
+              ),),
+            SmallText(text: "Email", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            DetailsFormField(value: "value"),
+            SmallText(text: "Phone Number", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            DetailsFormField(value: "value"),
+            SmallText(text: "Gender", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            DetailsFormField(value: "value"),
+            SmallText(text: "Password", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            DetailsFormField(value: "value"),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/* **************************** Account Info Text Widget Starts here ************************** */
+class TitleText extends StatelessWidget {
+  final String text;
+  final double fSize;
+  const TitleText({
+    super.key,
+    required this.text,
+    this.fSize = 24,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+      return Text(
+      text,
+      style: TextStyle(
+          color: const Color(0xff374151),
+          fontSize: screenHeight * 0.0269,
+          fontFamily: "Inter",
+          fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+}
+/* **************************** Account Info Text Widget Ends here ************************** */
+
+/* **************************** Personal Container Text Widget Starts here ************************** */
+class PersonalInfoContainerText extends StatelessWidget {
+  final String text;
+  final Color color;
+  const PersonalInfoContainerText(
+      {super.key, required this.text, this.color = const Color(0xff797979)});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    return Padding(
+      padding: EdgeInsets.only(top: screenHeight * 0.0112 /*10*/, left: 15),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: color,
+          fontSize: screenHeight * 0.020, // 18
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+/* **************************** Personal Container Text Widget Ends here ************************** */
+
+/* **************************** TextFormField without suffix icon Widget Starts here ************************** */
+class DetailsFormField extends StatelessWidget {
+  final String value;
+  const DetailsFormField({super.key, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.sizeOf(context).height;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    return Padding(
+      padding: const EdgeInsets.only(left: 15,right: 24, top: 30),
+      child: SizedBox(
+        height: 45,
+        child: TextFormField(
+          /// for showing the user password change here
+          initialValue: value,
+          readOnly: true,
+          decoration: InputDecoration(
+            // filled: true,
+            // fillColor: AppColor.textFormFieldColor,
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xffD3CECD)),
+              borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Color(0xffD3CECD)),
+              borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
+            ),
+            contentPadding:
+                EdgeInsets.symmetric(vertical: screenHeight* 0.0112/*10*/, horizontal: screenWidth * 0.0365 /*15*/),
+          ),
+          style: TextStyle(
+            fontSize: screenHeight * 0.020,
+          ),
+        ),
+      ),
+    );
+  }
+}
+/* **************************** TextFormField without suffix icon Widget Starts here ************************** */
+
+
+
+/// Previous working code
+/*Scaffold(
+      // backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
         children: [
           /* *************************** Back Arrow Button Starts Here *************************** */
@@ -212,323 +368,9 @@ class _AccountInfoState extends State<AccountInfo> {
           onPress: () {},
           text: "Update Information",
           height: screenHeight * 0.0716,
-          fontFamily: "Inter",
-          fontSize: screenWidth * 0.0366,
-          radius: screenHeight * 0.0283,
+          // fontFamily: "Inter",
+          // fontSize: screenWidth * 0.0366,
+          // radius: screenHeight * 0.0283,
         ),
       ),
-    );
-  }
-}
-
-/* **************************** Account Info Text Widget Starts here ************************** */
-class TitleText extends StatelessWidget {
-  final String text;
-  final double fSize;
-  const TitleText({
-    super.key,
-    required this.text,
-    this.fSize = 24,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
-      return Text(
-      text,
-      style: TextStyle(
-          color: const Color(0xff374151),
-          fontSize: screenHeight * 0.0269,
-          fontFamily: "Inter",
-          fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-}
-/* **************************** Account Info Text Widget Ends here ************************** */
-
-/* **************************** Personal Container Text Widget Starts here ************************** */
-class PersonalInfoContainerText extends StatelessWidget {
-  final String text;
-  final Color color;
-  const PersonalInfoContainerText(
-      {super.key, required this.text, this.color = const Color(0xff797979)});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
-    return Padding(
-      padding: EdgeInsets.only(top: screenHeight * 0.0112 /*10*/, left: 15),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: color,
-          fontSize: screenHeight * 0.020, // 18
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-}
-/* **************************** Personal Container Text Widget Ends here ************************** */
-
-/* **************************** TextFormField without suffix icon Widget Starts here ************************** */
-class AccTextFormField extends StatelessWidget {
-  final String value;
-  const AccTextFormField({super.key, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.0067/*6*/, horizontal: screenWidth * 0.0219/*9*/),
-      child: SizedBox(
-        height: screenHeight * 0.0561,//50 ,//35,
-        child: TextFormField(
-          /// for showing the user password change here
-          initialValue: value,
-          readOnly: true,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColor.textFormFieldColor,
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Color(0xffD3CECD)),
-              borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: Color(0xffD3CECD)),
-              borderRadius: BorderRadius.circular(screenHeight * 0.0112/*10*/),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(vertical: screenHeight* 0.0112/*10*/, horizontal: screenWidth * 0.0365 /*15*/),
-          ),
-          style: TextStyle(
-            fontSize: screenHeight * 0.020,
-          ),
-        ),
-      ),
-    );
-  }
-}
-/* **************************** TextFormField without suffix icon Widget Starts here ************************** */
-
-
-
-
-/* Widget of Other thing*/
-/*Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
-      body: Stack(
-        children: [
-          /* *************************** Back Arrow Button Starts Here *************************** */
-          BackArrowButtonWithPositioned(
-            positionedTop: 39.5,
-            onPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileManager()));
-            },
-          ),
-          /* *************************** Back Arrow Button Ends Here *************************** */
-
-          /* *************************** Account Info Text Starts Here *************************** */
-          const Positioned(
-            top: 42,
-            left: 144,
-            child: TitleText(text: "Account Info"),
-          ),
-          /* *************************** Account Info Text Ends Here *************************** */
-
-          /* *************************** Personal Info Text Starts Here *************************** */
-          const Positioned(
-            left: 32,
-            top: 115,
-            child: TitleText(
-              text: "Personal Information",
-              fSize: 20,
-            ),
-          ),
-          /* *************************** Personal Info Text Ends Here *************************** */
-
-          /* *************************** Personal Info Container Starts Here *************************** */
-          Positioned(
-            top: 154,
-            left: 25,
-            child: Container(
-              width: 360,
-              height: 403,
-              decoration: BoxDecoration(
-                color: const Color(0xffFFFBFB),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child:const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Name And their TextField starts here
-                  PersonalInfoContainerText(text: "Name"),
-                  AccTextFormField(
-                    value: "Aftab Alam",
-                  ),
-
-                  /// Phone Number and their TextField Starts here
-                  PersonalInfoContainerText(text: "Phone"),
-                  AccTextFormField(value: "8092846469"),
-
-                  /// Age and their TextField Starts here
-                  PersonalInfoContainerText(text: "Age"),
-                  AccTextFormField(
-                    value: "20",
-                  ),
-
-                  /// Gender and their TextField Starts here
-                  PersonalInfoContainerText(text: "Gender"),
-                  AccTextFormField(
-                    value: "Male",
-                  ),
-                ],
-              ),
-            ),
-          ),
-          /* *************************** Personal Info Container Ends Here *************************** */
-
-          /* *************************** Password Manager Text Starts Here *************************** */
-          const Positioned(
-            left: 32,
-            top: 568,
-            child: TitleText(
-              text: "Password Manager",
-              fSize: 20,
-            ),
-          ),
-          /* *************************** Password Manager Text Ends Here *************************** */
-
-          /* *************************** Password Manager Container Starts Here *************************** */
-          Positioned(
-            left: 25,
-            top: 609,
-            child: Container(
-                width: 360,
-                height: 143,
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFFBFB),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const PersonalInfoContainerText(
-                      text: "Current Password",
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 9),
-                      child: TextFormField(
-                        /// for showing the user password change here
-                        initialValue: "Aftab@123",
-                        readOnly: true,
-                        obscureText: _passwordVisible,
-                        // obscuringCharacter: "*",
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: AppColor.textFormFieldColor,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              _passwordVisible = !_passwordVisible;
-                              setState(() {});
-                            },
-                            icon: Icon(
-                              _passwordVisible == true
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: AppColor.iconColor,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Color(0xffD3CECD)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Color(0xffD3CECD)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 15),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          ),
-          /* *************************** Password Manager Container Ends Here *************************** */
-
-          /* *************************** Update Button Starts Here *************************** */
-          Positioned(
-            top: 800,
-            left: 30,
-            child: Button(
-              onPress: () {},
-              text: "Update Account",
-              height: 64,
-              width: 360,
-              fontFamily: "Inter",
-              fontSize: 15,
-              radius: 25,
-            ),
-          ),
-          /* *************************** Update Button Ends Here *************************** */
-        ],
-      ),
-    );
-  }*/
-
-/*Padding(
-          padding:
-              const EdgeInsets.symmetric(vertical: 6, horizontal: 9),
-          child: TextFormField(
-            /// for showing the user password change here
-            initialValue: "8092846469",
-            readOnly: true,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColor.textFormFieldColor,
-
-              /// This is used to show password change page starts here
-              suffix: InkWell(
-                onTap: () {},
-                child: const BigText(
-                  text: "Change",
-                  fontFamilyName: "Inter",
-                  fontSize: 18,
-                  color: Color(0xff177888),
-                  fontWeightName: FontWeight.w600,
-                ),
-              ),
-              /// This is used to show password change page Ends here
-
-              focusedBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Color(0xffD3CECD)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide:
-                    const BorderSide(color: Color(0xffD3CECD)),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                  vertical: 5, horizontal: 15),
-            ),
-            style: const TextStyle(
-              fontSize: 18,
-            ),
-          ),
-        ),
-*/
+    );*/

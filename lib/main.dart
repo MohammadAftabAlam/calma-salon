@@ -1,16 +1,19 @@
 import 'package:calma/Routes/routes.dart';
-// import 'package:calma/pages/Appointments/Appointment_Process/payment_page.dart';
-import 'package:calma/splash_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:calma/pages/Appointments/Appointment_Process/payment_page.dart';
+// import 'package:calma/splash_screen.dart';
+// import 'package:calma/utils/colors.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_app_check/firebase_app_check.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate();
-  runApp(const MyApp());
+void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  // await FirebaseAppCheck.instance.activate();
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 // ****************************************************************************************************************************************************
@@ -22,20 +25,44 @@ class MyApp extends StatelessWidget {
     debugPrint(MediaQuery.sizeOf(context).height.toString());
     debugPrint(MediaQuery.sizeOf(context).width.toString());
 
+    var kColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xff177888),
+    );
+
     // This code is written for removing the black color of system
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
     );
-    return  MaterialApp(
+    return MaterialApp(
       title: "Calma",
-      // theme: ThemeData(colorScheme: ColorScheme.fromSwatch(primarySwatch:Colors.pink, backgroundColor: AppColor.mainBackgroundColor)),
+      theme: ThemeData().copyWith(
+        colorScheme: kColorScheme,
+        scaffoldBackgroundColor: const Color(0xffFAFCFD),
+        cardTheme: const CardTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
+            ),
+          ),
+        ),
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xffFAFCFD),
+          titleTextStyle: TextStyle(
+            color: Color(0xff374151),
+            fontSize: 22,
+            fontFamily: "Inter",
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      home: const MainHomeScreen(),
+      // home: const SplashScreen(),
       // home: const DevelopersImage(),
       // home: PaymentScreen(date: "27/03/2004",time: "5:30AM",bookingFor: "Self",),
-      routes: getRoute(),
+      routes: getRoute(context),
     );
   }
 }

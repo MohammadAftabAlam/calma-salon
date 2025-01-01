@@ -13,15 +13,15 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const String kGOOGLE_MAPS_API_KEY =
-      "PLACE_YOUR_GOOGLE_MAP_APIp_KEY_HERE";
+  static const String kGOOGLE_MAPS_API_KEY = "AIzaSyD5VUW7T722RL_xMmR9MkvjrRgMLKF9nkA";
+      // "PLACE_YOUR_GOOGLE_MAP_APIp_KEY_HERE";
 
   //Location is used to access the actual location of the user
   Location locationController = Location();
   LatLng? _currentPos = null;
 
   static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
-  static const LatLng _pRewariLoc = LatLng(37.3346, -122.0090);
+  static const PointLatLng _pRewariLoc = PointLatLng(37.3346, -122.0090);
   static const LatLng jamiaMillia = LatLng(28.561657, 77.281258);
 
   Map<PolylineId, Polyline> polyLines = {};
@@ -56,7 +56,7 @@ class _MapPageState extends State<MapPage> {
               onMapCreated: ((GoogleMapController controller) =>
                   _mapController.complete(controller)),
               initialCameraPosition:
-                  CameraPosition(target: jamiaMillia!, zoom: 13),
+                 CameraPosition(target: jamiaMillia, zoom: 13),
               markers: {
                 Marker(
                   markerId: const MarkerId("_currentLocation"),
@@ -130,11 +130,12 @@ class _MapPageState extends State<MapPage> {
     List<LatLng> polyLineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      kGOOGLE_MAPS_API_KEY,
+      request: PolylineRequest(destination: PointLatLng(_pRewariLoc.latitude, _pRewariLoc.longitude), origin:  PointLatLng(_currentPos!.latitude, _currentPos!.longitude), mode: TravelMode.driving,),
+
       // PointLatLng(_currentPos!.latitude, _currentPos!.longitude),
-      PointLatLng(_pGooglePlex.latitude, _pGooglePlex.longitude),
-      PointLatLng(_pRewariLoc.latitude, _pRewariLoc.longitude),
-      travelMode: TravelMode.driving,
+      // PointLatLng(_pGooglePlex.latitude, _pGooglePlex.longitude),
+      // PointLatLng(_pRewariLoc.latitude, _pRewariLoc.longitude),
+      //
     );
 
     if (result.points.isNotEmpty) {

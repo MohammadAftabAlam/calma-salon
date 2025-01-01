@@ -1,26 +1,30 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'package:calma/Data/data.dart';
+import 'package:calma/Data/booking_services_data.dart';
+import 'package:calma/Model/booking_services_model.dart';
 import 'package:calma/pages/Profile/account_info.dart';
 import 'package:calma/utils/back_arrow_but_with_positioned.dart';
 import 'package:calma/utils/colors.dart';
 import 'package:calma/widgets/big_text.dart';
 import 'package:calma/widgets/button.dart';
 import 'package:calma/widgets/small_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
 
-import 'salon_detail_pg.dart';
+// import 'salon_detail_pg.dart';
 
 class PaymentScreen extends StatefulWidget {
-  final String? date, time, bookingFor;
+  final String? date, time, bookingFor, salonName, salonLocation, salonImage;
   const PaymentScreen({
     super.key,
     required this.time,
     required this.date,
     required this.bookingFor,
+    required this.salonName,
+    required this.salonLocation,
+    required this.salonImage,
   });
 
   @override
@@ -40,6 +44,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   /// [_razorpay] object of Razorpay() to accept the payment using Razorpay platform
   final _razorpay = Razorpay();
   String paymentId = "";
+
   var options = {
     'key': 'rzp_test_u60Lt49w9oA390',
     'amount': 100,
@@ -67,6 +72,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     debugPrint(response.data.toString());
     paymentId = response.paymentId!;
 
+    // BookServices bookServices = BookServices();
+    // bookServices.bookServicesData.add(UpcomingAppointment(widget.salonName!, widget.salonLocation!, widget.date.toString() , widget.time.toString()  ,widget.salonImage!, "bookingId", true));
+    upcomingServiceData.add(MyBookingServicesModel(salonName: widget.salonName!, salonLocation: widget.salonLocation!, salonImage: widget.salonImage!, date: widget.date!, time: widget.time!));
     _showBookedStatusDialog(context, screenHeight, screenWidth);
   }
 
@@ -95,7 +103,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    int itemCount = 5;
+    int itemCount = 2;
     return Scaffold(
       backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
@@ -157,10 +165,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const BigText(
+                                  BigText(
                                     fontWeightName: FontWeight.w700,
                                     color: AppColor.mainBlackColor,
-                                    text: "Varsha Saloon",
+                                    text: widget.salonName!,
+                                    // text : "VarshaSalon"
                                   ),
                                   SizedBox(
                                     height: screenHeight * 0.0056,
@@ -503,9 +512,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
             }
           },
           text: "Proceed to pay",
-          fontSize: screenHeight * 0.020, //18
-          fontFamily: "Inter",
-          radius: screenHeight * 0.056, //50
+          // fontSize: screenHeight * 0.020, //18
+          // fontFamily: "Inter",
+          // radius: screenHeight * 0.056, //50
         ),
       ),
     );
@@ -641,16 +650,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 // Navigator.pushReplacementNamed(context, '/appointments',
                 //     arguments: UpcomingBookingData(widget.date!, widget.time!));
 
-                Navigator.pushNamedAndRemoveUntil(context, '/appointments',(route) {
-                  arguments: UpcomingBookingData(widget.date!, widget.time!);
+                Navigator.pushNamedAndRemoveUntil(context, '/appointments',
+                  arguments : {
+                    'date' : widget.date!,
+                    'time' : widget.time!
+                  },
+                      (route) {
+                  // UpcomingBookingData(widget.date!, widget.time!);
+
                   return false;
-                   }
+                   },
                 );
               },
               width: screenWidth * 0.277,
-              fontSize: screenHeight * 0.0202, //18,
-              radius: screenHeight * 0.0202, //18
-              fontFamily: "Inter",
+              // fontSize: screenHeight * 0.0202, //18,
+              // radius: screenHeight * 0.0202, //18
+              // fontFamily: "Inter",
               text: "Done",
             ),
           ),

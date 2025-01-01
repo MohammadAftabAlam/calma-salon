@@ -183,7 +183,7 @@ class _AllExpertsNearUserState extends State<AllExpertsNearUser> {
                                         color: AppColor.iconColor,
                                       ),
                                       SmallText(
-                                          text: salonExpertDetailData.expertDetailData[index].salonLocation),
+                                          text: salonExpertDetailData.expertDetailData[index].workingInSalon),
                                     ],
                                   ),
                                   /* *************************** Expert salon details ENDS here ************************* */
@@ -230,6 +230,7 @@ class _AllExpertsNearUserState extends State<AllExpertsNearUser> {
                                       onPressed: () {
                                         Navigator.pushNamed(context, 'salon-expert-detail-page');
                                       },
+                                      iconAlignment : IconAlignment.end,
                                       icon: SvgPicture.asset("asset/icons/forward_arrow_square.svg"),
                                       label: const SmallText(
                                         text: "Book Now",

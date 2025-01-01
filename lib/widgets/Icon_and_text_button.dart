@@ -36,13 +36,11 @@ class IconAndTextButton extends StatelessWidget {
           size: iconSize == 24 ? screenHeight * 0.027 /*24*/ : iconSize,
           color: iconColor,
         ),
-        Padding(
-          padding: EdgeInsets.only(left: spaceBetween),
-          child: SmallText(
-            text: text,
-            color: textColor,
-            fontWeightName: fontWeight,
-          ),
+        // SizedBox(width: 3,),
+        SmallText(
+          text: text,
+          color: textColor,
+          fontWeightName: fontWeight,
         ),
       ],
     );

@@ -7,7 +7,7 @@ class SharedPreferencesDataStoring extends StatelessWidget{
 
   sharedPreferences(String phoneNumber) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool('isLogin', false);
+    sharedPreferences.setBool('isLogin', true);
     sharedPreferences.setString('phoneNumber',phoneNumber );
     // debugPrint("Phone Number: " +sharedPreferences.getString('phoneNumber')!);
   }

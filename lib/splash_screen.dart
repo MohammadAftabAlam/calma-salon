@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/validation/login_screen.dart';
-import 'package:calma/utils/colors.dart';
 import 'package:calma/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation<Offset> _offsetAnimation;
   late Animation<Offset> animation;
-  late Animation<double> _opacityAnimation;
-  late Animation<Color?> _colorAnimation;
+  late Animation<double> opacityAnimation;
+  late Animation<Color?> colorAnimation;
 
 
   // SharedPreferencesDataStoring sharedPreferencesDataStoring = new SharedPreferencesDataStoring();
@@ -48,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Define the animation controller
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 10),
     );
 
     // Define the animation
@@ -62,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen>
       end: const Offset(8.9, 0),
     ).animate(_animationController);
 
-    _opacityAnimation = Tween<double>(
+    opacityAnimation = Tween<double>(
       begin: 1.0,
       end: 0.0,
     ).animate(CurvedAnimation(
@@ -70,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
       curve: const Interval(0.75, 1.0), // Fade out at the end
     ));
 
-    _colorAnimation = ColorTween(
+    colorAnimation = ColorTween(
       begin: Colors.transparent,
       end: Colors.pink,
     ).animate(CurvedAnimation(
@@ -84,8 +83,8 @@ class _SplashScreenState extends State<SplashScreen>
       if (_animationController.isCompleted) {
         switchScreen();
 
-        // Navigator.push(context,
-        //     MaterialPageRoute(builder: (context) =>const DevelopersImage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) =>const DevelopersImage()));
 
         Timer(const Duration(seconds: 2), () {
 
@@ -115,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
+      // backgroundColor: AppColor.mainBackgroundColor,
       body: activeScreen == "scissor-screen"? Stack(
         children: [
           // Background image
@@ -137,18 +136,37 @@ class _SplashScreenState extends State<SplashScreen>
             left: 20, // Initial left position of the circle
             top: MediaQuery.of(context).size.height / 2 -
                 20, // Center vertically
+
             child: SlideTransition(
               position: animation,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.pink,
-                ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.pink,
+                    ),
+                  ),
+                  SizedBox(width: 5,),
+                  Container(
+                    width: 80,
+                    height: 60,
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('asset/images/scissor.png'),
+                          fit: BoxFit.fill,
+                        ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
+
+          /* Not changed anything here*/
+          /*
           Positioned(
             left: 40, // Initial left position of the circle
             top: MediaQuery.of(context).size.height / 2, // Center vertically
@@ -165,6 +183,10 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ),
           ),
+
+           */
+          /* Not changed anything here*/
+
         ],
       ) : const DevelopersImage()
     );

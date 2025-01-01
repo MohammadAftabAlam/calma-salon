@@ -1,9 +1,19 @@
 class SalonExperts {
-  SalonExperts(this.name, this.imagePath, this.expertise,
-      this.yearOfExperience, this.salonLocation, this.rating);
+  const SalonExperts({
+    required this.id,
+    required this.name,
+    required this.imagePath,
+    required this.expertise,
+    required this.yearOfExperience,
+    required this.workingInSalon,
+    required this.rating
+});
 
   final int yearOfExperience;
   final double rating;
-  final String name, imagePath, salonLocation;
+  final String id;
+  final String name;
+  final String imagePath;
+  final String workingInSalon;
   final List<String> expertise;
 }

@@ -22,7 +22,7 @@ class _ShowLocationPage extends State<ShowLocationPage> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
+      // backgroundColor: AppColor.mainBackgroundColor,
       body: Stack(
         children: [
           BackArrowButtonWithPositioned(

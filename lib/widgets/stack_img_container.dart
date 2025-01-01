@@ -27,7 +27,7 @@ class ImageContWithStack extends StatelessWidget {
       children: [
         Container(
           height: screenHeight * 0.202 /*180,*/,
-          width: double.maxFinite,
+          width: double.infinity,
           decoration: BoxDecoration(
             color: AppColor.imageBgColor,
             borderRadius: BorderRadius.only(
@@ -137,9 +137,9 @@ class IconColumn extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
-          width: screenWidth * 0.049, //20,
-        ),
+        // SizedBox(
+        //   width: screenWidth * 0.049, //20,
+        // ),
         Row(
           children: [
             IconColumnButton(

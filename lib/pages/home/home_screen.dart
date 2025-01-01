@@ -1,18 +1,20 @@
 import 'dart:convert';
-
-import 'package:calma/pages/Appointments/main_appointment_pg.dart';
-import 'package:calma/pages/Profile/location_screen.dart';
-import 'package:calma/pages/Profile/profile_manager.dart';
-import 'package:calma/pages/home/home_page_body.dart';
-import 'package:calma/pages/home/search_page.dart';
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart' as loc;
 import 'package:http/http.dart' as http;
+
+
+import 'package:calma/pages/Appointments/main_appointment_pg.dart';
+import 'package:calma/pages/Profile/location_screen.dart';
+import 'package:calma/pages/Profile/profile_manager.dart';
+import 'package:calma/pages/home/home_page_body.dart';
+import 'package:calma/pages/home/notifications.dart';
+import 'package:calma/pages/home/search_screen.dart';
+import 'package:calma/utils/colors.dart';
+import 'package:calma/widgets/big_text.dart';
+import 'package:calma/widgets/small_text.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _checkLocationPermission();
+    // scrollController.addListener(_scrollListener);
   }
   /*Asking user current location STARTS here*/
 
@@ -108,14 +111,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    debugPrint(_areaName);
+    // debugPrint(_areaName);
     return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           /* ***************** Starts Location and Notification ************ */
           Container(
+            width: screenWidth,
             margin: EdgeInsets.only(
               top: screenHeight * 0.04 /*35.6*/,
               bottom: screenHeight * 0.005, /*5*/
@@ -128,62 +132,98 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    /* ********************* Starts User Location Accessing ***************** */
-                    Container(
-                      // height: screenHeight * 0.053, //40
-                      // width: screenHeight * 0.053, //40
-                      height: 35,
-                      width: 35,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColor.iconColor,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ShowLocationPage()),
-                          ); // There is another page which is dedicated for map
-                        },
-                        icon: SvgPicture.asset(
-                          "asset/icons/location.svg",
-                          // color: Colors.black,
-                          theme: const SvgTheme(currentColor: Colors.black),
-                          height: 20,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    /* ********************* Ends User Location Accessing ***************** */
-
+      
+                    /// Formatted Address, Navigation to Address Screen
                     Padding(
-                      padding:
-                          EdgeInsets.only(left: screenWidth * 0.036 /*15*/),
+                      padding: EdgeInsets.only(left: screenWidth * 0.036 /*15*/),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          /// Home Text and Downward Icon
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ShowLocationPage(),
+                                ),
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const BigText(
+                                  text: "Home",
+                                  fontSize: 16,
+                                  fontFamilyName: "Inter",
+                                  fontWeightName: FontWeight.w900,
+                                ),
+      
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5, left: 10),
+                                  child: SvgPicture.asset(
+                                    "asset/icons/arrow_downward.svg",
+                                    height: 8,
+                                    width: 8,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+      
+                          /* ************ Getting User location and showing on the screen STARTS here ********* */
+                          /* ****** If user location is null show progress indicator ***** */
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const BigText(
-                                text: "HOME",
-                                // fontSize: screenHeight * 0.027, //24
-                                fontWeightName: FontWeight.w900,
-                              ),
                               SvgPicture.asset(
-                                  "asset/icons/arrow_downward.svg"),
+                                "asset/icons/Vector.svg",
+                                // alignment: Alignment.bottomLeft,
+                                // color: Colors.black,
+                                theme: const SvgTheme(currentColor: Colors.black),
+                                height: 11,
+                                width: 7,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+      
+                              /// Showing Formatted Address
+                              _areaName!.isEmpty
+                                  ? const Row(
+                                      children: [
+                                        SmallText(
+                                          text: "Fetching Location...",
+                                          fontSize: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                          height: 10,
+                                          child: CircularProgressIndicator(
+                                            color: AppColor.quoteColor,
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      width: 260,
+                                      child: Text(
+                                        _areaName!,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.mainBlackColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
                             ],
                           ),
-                          SmallText(
-                            text: _areaName!,
-                            // text: _areaName!.isEmpty ?  "Khushi My Love" : _areaName!,
-                            // text: "Batla House, New Delhi",
-                            fontSize: 6, //16,
-                            // fontSize: screenHeight * 0.0178, //16,
-                            fontWeightName: FontWeight.w500,
-                            color: AppColor.mainBlackColor,
-                          ),
+                          /* ************ Getting User location and showing on the screen ENDS here ********* */
                         ],
                       ),
                     ),
@@ -191,11 +231,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 IconButton(
                   alignment: Alignment.bottomCenter,
-                  onPressed: () {},
-                  // icon: Icon(Icons.notifications,
-                  //     size: screenHeight * 0.043,  //38,
-                  //     color: const Color(0xff648684),
-                  // ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => const NotificationScreen(),
+                        ),
+                    );
+                  },
                   icon: SvgPicture.asset(
                     "asset/icons/bell.svg",
                     height: 26,
@@ -205,10 +248,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           /* ***************** Ends Location and Notification ************ */
-
+      
           /* *********** Starts Body of Home Page ****************** */
           const Expanded(child: SingleChildScrollView(child: HomePageBody())),
-
+      
           // Expanded(child: SingleChildScrollView(child: _currentWidget.elementAt(_selectedIndex))),
           /* *********** Ends Body of Home Page ******************* */
         ],
@@ -231,107 +274,94 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class BottomNavigationBarContent extends StatelessWidget {
-  final double screenHeight;
-  const BottomNavigationBarContent({super.key, required this.screenHeight});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      // height: screenHeight * 0.079, //70,
-      height: 55,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(screenHeight * 0.0337 /*30*/),
-          topLeft: Radius.circular(screenHeight * 0.0337 /*30*/),
-        ),
-        color: const Color(0xffEFDDDB),
-        // color: Colors.red
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          BottomNavigationIcon(
-            onPress: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
-            },
-            pic: SvgPicture.asset("asset/icons/home-icon.svg"),
-            text: "Home",
-          ),
-          BottomNavigationIcon(
-            onPress: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()));
-            },
-            pic: SvgPicture.asset("asset/icons/search-icon.svg"),
-            text: "Search",
-          ),
-          BottomNavigationIcon(
-            onPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Appointments()));
-            },
-            pic: SvgPicture.asset("asset/icons/appointment-icon.svg"),
-            text: "Appointments",
-          ),
-          BottomNavigationIcon(
-            onPress: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProfileManager()));
-            },
-            pic: SvgPicture.asset(
-              "asset/icons/userAvatar.svg",
-              height: 30,
-              width: 24,
-            ),
-            text: "Profile",
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class BottomNavigationBarContent extends StatelessWidget {
+//   final double screenHeight;
+//   const BottomNavigationBarContent({super.key, required this.screenHeight});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         BottomNavigationIcon(
+//           onPress: () {
+//             Navigator.push(context,
+//                 MaterialPageRoute(builder: (context) => const HomeScreen()));
+//           },
+//           pic: SvgPicture.asset("asset/icons/home-icon.svg"),
+//           text: "Home",
+//         ),
+//         BottomNavigationIcon(
+//           onPress: () {
+//             Navigator.push(context,
+//                 MaterialPageRoute(builder: (context) => const SearchPage()));
+//           },
+//           pic: SvgPicture.asset("asset/icons/search-icon.svg"),
+//           text: "Search",
+//         ),
+//         BottomNavigationIcon(
+//           onPress: () {
+//             Navigator.push(context,
+//                 MaterialPageRoute(builder: (context) => const Appointments()));
+//           },
+//           pic: SvgPicture.asset("asset/icons/appointment-icon.svg"),
+//           text: "Appointments",
+//         ),
+//         BottomNavigationIcon(
+//           onPress: () {
+//             Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                     builder: (context) => const ProfileManager()));
+//           },
+//           pic: SvgPicture.asset(
+//             "asset/icons/userAvatar.svg",
+//             height: 30,
+//             width: 24,
+//           ),
+//           text: "Profile",
+//         ),
+//       ],
+//       // ),
+//     );
+//   }
+// }
 
 /* ****************************Starts BottomNavigationIcon Widget Creation ************************************ */
-class BottomNavigationIcon extends StatelessWidget {
-  // final IconData iconData;
-  final SvgPicture pic;
-  final VoidCallback onPress;
-  final String text;
-  const BottomNavigationIcon({
-    super.key,
-    required this.onPress,
-    required this.pic,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPress,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          // IconButton(
-          //   onPressed: onPress,
-          //   iconSize: 20, //30,
-          //   // icon: Icon(iconData),
-          //   icon: pic,
-          //   hoverColor: Colors.teal,
-          // ),
-          pic,
-          SmallText(text: text)
-          // Text(text)
-        ],
-      ),
-    );
-  }
-}
+// class BottomNavigationIcon extends StatelessWidget {
+//   // final IconData iconData;
+//   final SvgPicture pic;
+//   final VoidCallback onPress;
+//   final String text;
+//   const BottomNavigationIcon({
+//     super.key,
+//     required this.onPress,
+//     required this.pic,
+//     required this.text,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return InkWell(
+//       onTap: onPress,
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.end,
+//         children: [
+//           // IconButton(
+//           //   onPressed: onPress,
+//           //   iconSize: 20, //30,
+//           //   // icon: Icon(iconData),
+//           //   icon: pic,
+//           //   hoverColor: Colors.teal,
+//           // ),
+//           pic,
+//           SmallText(text: text)
+//           // Text(text)
+//         ],
+//       ),
+//     );
+//   }
+// }
 /* ****************************Ends BottomNavigationIcon Widget Creation ************************************ */
 
 /*BottomNavigationBar(
@@ -370,4 +400,201 @@ class BottomNavigationIcon extends StatelessWidget {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
+*/
+
+//Working scaffold
+/*return Scaffold(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          /* ***************** Starts Location and Notification ************ */
+          Container(
+            width: screenWidth,
+            margin: EdgeInsets.only(
+              top: screenHeight * 0.04 /*35.6*/,
+              bottom: screenHeight * 0.005, /*5*/
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.036, //15
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    /* ********************* Starts User Location Accessing ***************** */
+                    // Container(
+                    //   // height: screenHeight * 0.053, //40
+                    //   // width: screenHeight * 0.053, //40
+                    //   height: 35,
+                    //   width: 35,
+                    //   decoration: const BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     color: AppColor.iconColor,
+                    //   ),
+                    //   child: IconButton(
+                    //     onPressed: () {
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => const ShowLocationPage()),
+                    //       ); // There is another page which is dedicated for map
+                    //     },
+                    //     icon: SvgPicture.asset(
+                    //       "asset/icons/location.svg",
+                    //       // color: Colors.black,
+                    //       theme: const SvgTheme(currentColor: Colors.black),
+                    //       height: 20,
+                    //       width: 20,
+                    //     ),
+                    //   ),
+                    // ),
+                    /* ********************* Ends User Location Accessing ***************** */
+
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: screenWidth * 0.036 /*15*/),
+                      child: SizedBox(
+                        width: 260,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const BigText(
+                                  text: "HOME",
+                                  fontSize: 16,
+                                  fontFamilyName: "Inter",
+                                  fontWeightName: FontWeight.w900,
+                                ),
+                            InkWell(
+                              onTap: (){
+                                showModalBottomSheet(context: context, builder: (ctx)=>Container(child: Center(child: Text("show modal bottom"),),));
+                              },
+                              child: SvgPicture.asset(
+                                        "asset/icons/arrow_downward.svg",
+                                    ),
+                            ),
+                                // ),
+                              ],
+                            ),
+
+                            /* ************ Getting User location and showing on the screen STARTS here ********* */
+                            /* ****** If user location is null show progress indicator ***** */
+                            Row(
+                              children: [
+                                SvgPicture.asset(
+                                    "asset/icons/Vector.svg",
+                                    // alignment: Alignment.bottomLeft,
+                                    // color: Colors.black,
+                                    theme: const SvgTheme(currentColor: Colors.black),
+                                    height: 11,
+                                    width: 7,
+                                  ),
+                                const SizedBox(width: 10,),
+                                _areaName!.isEmpty
+                                    ? const Row(
+                                        children: [
+                                          SmallText(
+                                            text: "Fetching Location...",
+                                            fontSize: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                            height: 10,
+                                            child: CircularProgressIndicator(
+                                              color: AppColor.quoteColor,
+                                              strokeWidth: 2,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Text(
+                                        _areaName!,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColor.mainBlackColor,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                              ],
+                            ),
+                            /* ************ Getting User location and showing on the screen ENDS here ********* */
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                IconButton(
+                  alignment: Alignment.bottomCenter,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => const NotificationScreen()));
+                  },
+                  icon: SvgPicture.asset(
+                    "asset/icons/bell.svg",
+                    height: 26,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          /* ***************** Ends Location and Notification ************ */
+
+          /* *********** Starts Body of Home Page ****************** */
+          const Expanded(
+            child: SingleChildScrollView(
+              // controller: ,
+              child: HomePageBody(),
+            ),
+          ),
+
+          // Expanded(child: SingleChildScrollView(child: _currentWidget.elementAt(_selectedIndex))),
+          /* *********** Ends Body of Home Page ******************* */
+        ],
+      ),
+    );
+*/
+
+// Previous Location icon and Formatted Address
+/*
+/* ********************* Starts User Location Accessing ***************** */
+
+          // Container(
+          //   // height: screenHeight * 0.053, //40
+          //   // width: screenHeight * 0.053, //40
+          //   height: 35,
+          //   width: 35,
+          //   decoration: const BoxDecoration(
+          //     shape: BoxShape.circle,
+          //     color: AppColor.iconColor,
+          //   ),
+          //   child: IconButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => const ShowLocationPage()),
+          //       ); // There is another page which is dedicated for map
+          //     },
+          //     icon: SvgPicture.asset(
+          //       "asset/icons/location.svg",
+          //       // color: Colors.black,
+          //       theme: const SvgTheme(currentColor: Colors.black),
+          //       height: 20,
+          //       width: 20,
+          //     ),
+          //   ),
+          // ),
+    /* ********************* Ends User Location Accessing ***************** */
 */

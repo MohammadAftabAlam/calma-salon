@@ -1,14 +1,15 @@
-import 'package:calma/pages/Profile/account_info.dart';
-import 'package:calma/utils/back_arrow_but_with_positioned.dart';
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'package:calma/pages/Profile/account_info.dart';
+import 'package:calma/utils/back_arrow_but_with_positioned.dart';
+import 'package:calma/utils/colors.dart';
+import 'package:calma/widgets/big_text.dart';
+import 'package:calma/widgets/button.dart';
+import 'package:calma/widgets/small_text.dart';
+
 import 'booking_user_details.dart';
-import 'salon_detail_pg.dart';
 
 String selectedText = "";
 
@@ -47,6 +48,10 @@ class _BookingDateAndTimeState extends State<BookingDateAndTime> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    //Extracting salon information
+    final salonInformation =  ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
+    // print(salonInformation['location']);
 
     String datePassing = "${_selectedDay!.day} ${monthName[_selectedDay!.month]} ${_selectedDay!.year}";
     final isPreviousDaySelected = DateTime.now().difference(DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)).inDays;
@@ -327,7 +332,7 @@ class _BookingDateAndTimeState extends State<BookingDateAndTime> {
       /* ************************** Confirm Appointment Button STARTS here ******************************* */
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0416, vertical: screenHeight * 0.0124),
-        child: AppointmentBookAndPriceButton(
+        child: Button(
           onPress: () {
             if (selectedText.isEmpty) {
               snackBar("Please select your appropriate time for appointment");
@@ -350,12 +355,16 @@ class _BookingDateAndTimeState extends State<BookingDateAndTime> {
                   builder: (context) => BookDetailsUser(
                     date: datePassing,
                     time: selectedText,
+                    salonLocation: salonInformation['salonLocation'],
+                    salonName: salonInformation['salonName'],
+                    salonImage: salonInformation['salonImage'],
                   ),
                 ),
               );
             }
           },
           text: "Confirm Appointment",
+          height: 63,
         ),
       ),
       /* ************************** Confirm Appointment Button STARTS here ******************************* */

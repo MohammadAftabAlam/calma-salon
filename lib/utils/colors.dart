@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColor{
   static const Color textColor = Color(0xff648684);
+  static const Color darkTealColor = Color(0xff1C2A3A);
+  static const Color grayColor500 = Color(0xff6B7280);
+  static const Color grayColor600 = Color(0xff4B5563);
   static const Color cancelReasonTextColor = Color(0xff464A4F);
   static const Color quoteColor = Color(0xff906906);
   static const Color textColor2 =  Color(0xff177888);

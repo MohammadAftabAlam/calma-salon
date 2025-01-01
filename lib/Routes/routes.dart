@@ -11,13 +11,15 @@ import 'package:calma/pages/Profile/profile_manager.dart';
 import 'package:calma/pages/home/Experts/expert_detail_screen.dart';
 import 'package:calma/pages/home/main_home_screen.dart';
 import 'package:calma/pages/home/salon_search.dart';
-import 'package:calma/pages/home/search_page.dart';
+import 'package:calma/pages/home/search_screen.dart';
 
 import 'package:calma/pages/Appointments/Appointment_Process/booking_calendar.dart';
 import 'package:calma/pages/Appointments/Appointment_Process/salon_detail_pg.dart';
 import 'package:calma/pages/Appointments/ButtonFunctions/cancel_button_pg.dart';
+import 'package:flutter/cupertino.dart';
 
-getRoute() {
+getRoute(BuildContext context) {
+  // final args = ModalRoute.of(context)!.settings.arguments.;
   return {
     //Validation
     '/login-screen': (context) => const LoginScreen(),
@@ -26,7 +28,7 @@ getRoute() {
 
     //Home Screen
     '/main-home-screen': (context) => const MainHomeScreen(),
-    '/search-page': (context) => const SearchPage(),
+    '/search-page': (context) => const SearchPage(isUsingNavigator: true,),
     '/salon-search-page': (context) => const SalonSearchPage(),
     '/main-salon-show-page': (context) =>const MainSalonShowPage(),
 

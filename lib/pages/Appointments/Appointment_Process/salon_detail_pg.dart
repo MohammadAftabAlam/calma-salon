@@ -1,17 +1,18 @@
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/Icon_and_text_button.dart';
-import 'package:calma/widgets/back_arrow_button.dart';
-import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/favourites.dart';
-import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:calma/utils/colors.dart';
+import 'package:calma/widgets/back_arrow_button.dart';
+import 'package:calma/widgets/big_text.dart';
+import 'package:calma/widgets/button.dart';
+import 'package:calma/widgets/favourites.dart';
+import 'package:calma/widgets/small_text.dart';
 
 class MainSalonShowPage extends StatefulWidget {
   // final AssetImage image;
   // final String salonName, rating,location, distance;
-  const MainSalonShowPage({super.key,
+  const MainSalonShowPage({
+    super.key,
     //required this.image, required this.salonName,required this.location, required this.distance,required this.rating
   });
 
@@ -33,17 +34,17 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
   List<bool> selectedStateList = List<bool>.generate(6, (index) => false);
   bool isFavourite = false;
 
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-
-    final detailSalon = ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
+// coming information from Homepage and then from salon search page
+    final detailSalon =
+        ModalRoute.of(context)!.settings.arguments as Map<dynamic, dynamic>;
 
     return Scaffold(
-      backgroundColor: AppColor.mainBackgroundColor,
+      // backgroundColor: AppColor.mainBackgroundColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -66,6 +67,8 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                 ),
               ],
             ),
+
+            /// Providing Background Image
             flexibleSpace: FlexibleSpaceBar(
               background: Image(
                 image: AssetImage(detailSalon['image']),
@@ -83,25 +86,18 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                     topRight: Radius.circular(screenHeight * 0.022),
                     topLeft: Radius.circular(screenHeight * 0.022),
                   ),
-                  color: AppColor.mainBackgroundColor,
+                  // color: AppColor.mainBackgroundColor,
+                  color: Colors.white,
                 ),
                 child: ListTile(
                   title: BigText(text: detailSalon['salonName']),
-                  subtitle:  SmallText(text: detailSalon['location']),
-                  trailing: Container(
-                    margin: const EdgeInsets.only(right: 20),
-                    padding: const EdgeInsets.only(left: 5),
-                    height: screenHeight * 0.045,
-                    width: screenWidth * 0.195,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(screenHeight * 0.026),
-                      color: AppColor.statusButtonColor,
-                    ),
-                    child: IconAndTextButton(
-                      text: detailSalon['rating'],
-                      iconData: Icons.star,
-                      iconColor: Colors.yellow,
-                    ),
+                  subtitle: SmallText(text: detailSalon['location']),
+                  trailing: Button(
+                    onPress: () {
+                      _showServiceSelection(context, screenHeight, screenWidth);
+                    },
+                    text: "Price List",
+                    width: 100,
                   ),
                 ),
               ),
@@ -109,12 +105,15 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              childCount: 1,
+              (context, index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: screenWidth * 0.036, right: screenWidth * 0.024),
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.036,
+                          right: screenWidth * 0.024),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +125,8 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                               Row(
                                 children: [
                                   const MainSalonShowPageIcon(
-                                    pictureLocation: "asset/icons/experience-icon.svg",
+                                    pictureLocation:
+                                        "asset/icons/experience-icon.svg",
                                     smallText: "Years",
                                     bigText: "3+",
                                   ),
@@ -150,7 +150,8 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                     width: screenWidth * 0.073,
                                   ),
                                   MainSalonShowPageIcon(
-                                    pictureLocation: "asset/icons/location-underline.svg",
+                                    pictureLocation:
+                                        "asset/icons/location-underline.svg",
                                     smallText: "Kilometres",
                                     bigText: detailSalon['distance'].toString(),
                                   ),
@@ -168,48 +169,81 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                                 width: screenWidth * 0.897,
                                 child: const SmallText(
                                   text:
-                                  "Varsha is handled by two its salon artists Vivek and Arif. It is a famouly known salon in jogabai extension for its best services at",
+                                      "Varsha is handled by two its salon artists Vivek and Arif. It is a famously known salon in jogabai extension for its best services at",
                                 ),
                               ),
                               const BigText(
                                 text: "Working Time",
                                 color: AppColor.appointmentTextColor,
                               ),
-                              const SmallText(text: "Monday-Friday, 8:00 AM to 10:00 PM"),
-                              const BigText(text: "Reviews",color: AppColor.appointmentTextColor,),
-                              const Divider(thickness: 1,color: AppColor.dividerColor,),
+                              const SmallText(
+                                  text: "Monday-Friday, 8:00 AM to 10:00 PM"),
+                              const SizedBox(
+                                height: 5,
+                              ),
+
+                              /// Reviews Text
+                              const BigText(
+                                text: "Reviews",
+                                color: AppColor.appointmentTextColor,
+                              ),
+                              const Divider(
+                                thickness: 1,
+                                color: AppColor.dividerColor,
+                              ),
+
+                              /// Review Section
                               Column(
                                 children: [
+                                  /// Showing Reviewer Detail
                                   ListTile(
                                     leading: const CircleAvatar(
-                                      backgroundImage: AssetImage("asset/images/aftab.jpg"),
+                                      backgroundImage:
+                                          AssetImage("asset/images/aftab.jpg"),
                                     ),
-                                    title: const SmallText(text: "Md Aftab Alam",),
+                                    title: const SmallText(
+                                      text: "Md Aftab Alam",
+                                    ),
                                     subtitle: Wrap(
-                                      children: List.generate(5, (index) => Icon(Icons.star, size: screenHeight * 0.013,color: Colors.yellowAccent,)),
+                                      children: List.generate(
+                                          5,
+                                          (index) => Icon(
+                                                Icons.star,
+                                                size: screenHeight * 0.013,
+                                                color: Colors.yellowAccent,
+                                              ),
+                                      ),
                                     ),
                                   ),
+
+                                  /// About Section of Salon
                                   SizedBox(
                                     height: screenHeight * 0.09,
                                     width: screenWidth * 0.897,
-                                    child: const Text("Varsha is handled by two its salon artists Vivek and Arif. It is a famouly known salon in jogabai extension for its best services at",
+                                    child: const Text(
+                                      "Varsha is handled by two its salon artists Vivek and Arif. It is a famouly known salon in jogabai extension for its best services at",
                                     ),
                                   ),
                                 ],
                               ),
-                              const BigText(text: "Address",color: AppColor.appointmentTextColor,),
-                              const Divider(thickness: 1,color: AppColor.dividerColor,),
-                              ListTile(leading: const Icon(Icons.location_on),
-                                title: SmallText(text: detailSalon['fullAddress'], textAlignName: TextAlign.justify,),
-                                // title: SmallText(text: "Community Centre 14, Block-A, New Friends Colony, New Delhi, Delhi -110025"),
+
+                              /// Address Text
+                              const BigText(
+                                text: "Address",
+                                color: AppColor.appointmentTextColor,
                               ),
-                              AppointmentBookAndPriceButton(
-                                onPress: () {
-                                  _showServiceSelection(context,screenHeight,screenWidth);
-                                },
-                                text: "See price List",
-                                color: Colors.white,
-                                textColor: AppColor.iconColor,
+                              const Divider(
+                                thickness: 1,
+                                color: AppColor.dividerColor,
+                              ),
+
+                              /// Showing Address
+                              ListTile(
+                                leading: const Icon(Icons.location_on),
+                                title: SmallText(
+                                  text: detailSalon['fullAddress'],
+                                  textAlignName: TextAlign.justify,
+                                ),
                               ),
                               SizedBox(
                                 height: screenHeight * 0.011,
@@ -222,38 +256,44 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                   ],
                 );
               },
-              childCount: 1,
             ),
           ),
         ],
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(screenWidth * 0.019),
-        child: AppointmentBookAndPriceButton(
+        child: Button(
           onPress: () {
             // _showBookedStatusDialog();
-             Navigator.pushNamed(context, '/booking-date-time');
+            Navigator.pushNamed(context, '/booking-date-time', arguments: {
+              'salonName': detailSalon['salonName'],
+              'salonLocation': detailSalon['location'],
+              'salonImage': detailSalon['image'],
+            });
           },
           text: "Book Appointment",
+          height: 63,
         ),
       ),
     );
   }
 
-  void _showServiceSelection(BuildContext context,double screenHeight, double screenWidth) async {
+  void _showServiceSelection(
+      BuildContext context, double screenHeight, double screenWidth) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Center(
               child: SmallText(
-                text: "Price List",
-              )),
+            text: "Price List",
+          )),
           content: Container(
             width: screenWidth * 0.897,
             height: screenHeight * 0.449,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(screenHeight * 0.025), color: Colors.teal),
+                borderRadius: BorderRadius.circular(screenHeight * 0.025),
+                color: Colors.teal),
             child: ListView.builder(
               itemCount: services.length,
               itemBuilder: (context, index) {
@@ -281,15 +321,16 @@ class _MainSalonShowPageState extends State<MainSalonShowPage> {
                       height: screenHeight * 0.029,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(screenHeight * 0.004),
+                        borderRadius:
+                            BorderRadius.circular(screenHeight * 0.004),
                       ),
                       child: selectedStateList[index] == false
                           ? null
                           : Icon(
-                        Icons.check,
-                        color: Colors.black,
-                        size: screenHeight * 0.020,
-                      ),
+                              Icons.check,
+                              color: Colors.black,
+                              size: screenHeight * 0.020,
+                            ),
                     ),
                   ),
                 );
@@ -326,11 +367,12 @@ class MainSalonShowPageIcon extends StatelessWidget {
   final String smallText;
   final String bigText;
 
-  const MainSalonShowPageIcon(
-      {super.key,
-        required this.pictureLocation,
-        required this.smallText,
-        required this.bigText,});
+  const MainSalonShowPageIcon({
+    super.key,
+    required this.pictureLocation,
+    required this.smallText,
+    required this.bigText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -340,17 +382,20 @@ class MainSalonShowPageIcon extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: screenHeight * 0.079,
-          width: screenWidth * 0.175,   //72
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xffF5F5FF),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0413,vertical: screenHeight * 0.0191),  //17
-            child: SvgPicture.asset(pictureLocation,),
-          )
-        ),
+            height: screenHeight * 0.079,
+            width: screenWidth * 0.175, //72
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xffF5F5FF),
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.0413,
+                  vertical: screenHeight * 0.0191), //17
+              child: SvgPicture.asset(
+                pictureLocation,
+              ),
+            )),
         SizedBox(
           height: screenHeight * 0.023,
         ),
@@ -370,51 +415,6 @@ class MainSalonShowPageIcon extends StatelessWidget {
   }
 }
 
-/* ****************** Starts Two Buttons of the Page************************ */
-class AppointmentBookAndPriceButton extends StatelessWidget {
-  final VoidCallback onPress;
-  final String text;
-  final Color color;
-  final Color textColor;
-  final double fontSize;
-
-  const AppointmentBookAndPriceButton({
-    super.key,
-    required this.onPress,
-    required this.text,
-    this.color = AppColor.buttonBackgroundColor,
-    this.fontSize = 15,
-    this.textColor = Colors.white,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.sizeOf(context).height;
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    return InkWell(
-      onTap: onPress,
-      child: Container(
-        height: screenHeight *0.0707 ,//63,
-        width: screenWidth * 0.899,//370,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(screenHeight * 0.0281/*25*/),
-        ),
-        child: Center(
-          child: SmallText(
-            textAlignName: TextAlign.center,
-            text: text,
-            color: textColor,
-            fontWeightName: FontWeight.bold,
-            fontSize: screenHeight *0.0168,//15,
-          ),
-        ),
-      ),
-    );
-  }
-}
-/* ****************** Ends Two Buttons of the Page************************ */
-
 class Service {
   final String name;
   final int price;
@@ -424,14 +424,35 @@ class Service {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Service &&
-              runtimeType == other.runtimeType &&
-              name == other.name &&
-              price == other.price;
+      other is Service &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          price == other.price;
 
   @override
   int get hashCode => name.hashCode ^ price.hashCode;
 }
+
+///Rating
+/*
+Container(
+        margin: const EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.only(left: 5),
+        height: screenHeight * 0.045,
+        width: screenWidth * 0.195,
+        decoration: BoxDecoration(
+          // border: Border.all(color: Colors.red),
+          borderRadius: BorderRadius.circular(screenHeight * 0.026),
+          color: AppColor.statusButtonColor,
+        ),
+
+        child: IconAndTextButton(
+          text: detailSalon['rating'],
+          iconData: Icons.star,
+          iconColor: Colors.yellow,
+        ),
+      ),
+*/
 
 // class _MainSalonShowPageState extends State<MainSalonShowPage> {
 //   List<Service> services = [
@@ -810,25 +831,6 @@ class Service {
 // /* ****************** Ends 4 Icons ************************ */
 //
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*onChanged: (bool? value) {
                   setState(() {
                     if (value) {
@@ -838,136 +840,3 @@ class Service {
                     }
                   });
                 },*/
-
-
-
-/*Stack(
-                children: [
-                  // Positioned(
-                  //   left: 0,
-                  //   right: 0,
-                  //   // top: 20,
-                  //   // bottom: 20,
-                  //   child: Container(
-                  //     width: double.maxFinite,
-                  //     height: /*Dimensions.height350*/ 350,
-                  //     decoration: const BoxDecoration(
-                  //       image: DecorationImage(
-                  //         image: AssetImage("asset/images/varsha_salon.png"),
-                  //         fit: BoxFit.cover,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  BackArrowButton(onPress: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const HomeScreen()));
-                  }),
-                  Positioned(
-                    top: 330,
-                    child: Container(
-                      // margin: EdgeInsets.only(left: 25),
-                      padding: EdgeInsets.only(left: 15, right: 10),
-                      // height: 50,
-                      width: 415,
-                      decoration: const BoxDecoration(
-                          color: AppColor.mainBackgroundColor,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          )),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const BigText(text: "Varsha Saloon"),
-                              Container(
-                                  margin: const EdgeInsets.only(top: 10, right: 20),
-                                  padding: const EdgeInsets.only(left: 5),
-                                  height: 40,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(23),
-                                    color: AppColor.statusButtonColor,
-                                  ),
-                                  child: const IconAndTextButton(
-                                    text: '4.0',
-                                    iconData: Icons.star,
-                                    iconColor: Colors.yellow,
-                                  ))
-                            ],
-                          ),
-                          const SmallText(text: "Jogabai Extension"),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Row(
-                                children: [
-                                  MainSalonShowPageIcon(
-                                    iconData: Icons.task_outlined,
-                                    smallText: "Years",
-                                    bigText: "3+",
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  MainSalonShowPageIcon(
-                                    iconData: Icons.star,
-                                    iconColor: Colors.yellow,
-                                    smallText: "Rating",
-                                    bigText: "4",
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  MainSalonShowPageIcon(
-                                    iconData: Icons.message,
-                                    smallText: "Reviews",
-                                    bigText: "90+",
-                                  ),
-                                  SizedBox(
-                                    width: 30,
-                                  ),
-                                  MainSalonShowPageIcon(
-                                    iconData: Icons.location_on_outlined,
-                                    smallText: "Kilometres",
-                                    bigText: "4.9",
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              const BigText(text: "About"),
-                              Container(
-                                height: 90,
-                                width: 370,
-                                child: SmallText(
-                                  text:
-                                  "Varsha is handled by two its salon artists Vivek and Arif. It is a famouly known salon in jogabai extension for its best services at",
-                                ),
-                              ),
-                              PriceButton(
-                                onPress: () {
-                                  _showServiceSelection(context);
-                                },
-                                text: "See price List",
-                                color: const Color(0xffFFFFFF),
-                                textColor: AppColor.iconColor,
-                              ),
-                              const SizedBox(
-                                height: 22,
-                              ),
-                              PriceButton(onPress: () {}, text: "Book Appointment"),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),*/

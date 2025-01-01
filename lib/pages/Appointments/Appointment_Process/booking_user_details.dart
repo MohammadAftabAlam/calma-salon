@@ -8,7 +8,8 @@ import 'package:iconsax/iconsax.dart';
 class BookDetailsUser extends StatefulWidget {
   final String? date;
   final String? time;
-  const BookDetailsUser({super.key, required this.date, required this.time});
+  final String salonName, salonLocation, salonImage;
+  const BookDetailsUser({super.key, required this.date, required this.time, required this.salonName, required this.salonLocation, required this.salonImage});
 
   @override
   State<BookDetailsUser> createState() => _BookDetailsUserState();
@@ -258,12 +259,12 @@ class _BookDetailsUserState extends State<BookDetailsUser> {
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0737, vertical: screenHeight * 0.0337 /*30*/),
         child: Button(
           onPress: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> PaymentScreen(time: widget.time, date: widget.date,bookingFor: nameController.text,)));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=> PaymentScreen(time: widget.time, date: widget.date,bookingFor: nameController.text,salonName: widget.salonName,salonLocation: widget.salonLocation,salonImage: widget.salonImage,)));
           },
           text: "Confirm Appointment",
-          fontSize: screenHeight * 0.020, //18
-          fontFamily: "Inter",
-          radius: screenHeight * 0.056, //50
+          // fontSize: screenHeight * 0.020, //18
+          // fontFamily: "Inter",
+          // radius: screenHeight * 0.056, //50
         ),
       ),
     );

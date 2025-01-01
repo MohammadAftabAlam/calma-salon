@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:calma/utils/shared_preferences.dart';
+// import 'package:calma/utils/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -77,7 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _gestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
@@ -373,19 +372,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading = !isLoading;
                           });
                           // debugPrint("Status Code: " + code.toString());
-                          if (code == 200) {
+                          // if (code == 200) {
                             ///This [sharedPreferencesDateStoring] is a class created by me and here for storing ['phoneNumber'] value locally
-                            const SharedPreferencesDataStoring()
-                                .sharedPreferences(
-                                    '+91${phoneNumberController.text}');
+                            // const SharedPreferencesDataStoring()
+                            //     .sharedPreferences(
+                            //         '+91${phoneNumberController.text}');
 
                             ///This [sharedPreferences()] is here for changing and storing ['isLogin'] value locally
                             sharedPreference();
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/main-home-screen', (route) => false);
-                          } else {
-                            snackBar("Invalid Phone Number or password");
-                          }
+                          // } else {
+                          //   snackBar("Invalid Phone Number or password");
+                          // }
                         }
                       },
                     ),

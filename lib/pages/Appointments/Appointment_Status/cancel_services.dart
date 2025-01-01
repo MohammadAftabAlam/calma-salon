@@ -1,25 +1,46 @@
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/button.dart';
-import 'package:calma/widgets/small_text.dart';
+import 'package:calma/Model/booking_services_model.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
-class CancelServices extends StatefulWidget {
-  const CancelServices({super.key});
+import 'package:calma/Data/booking_services_data.dart';
+import 'package:calma/widgets/tab_services_trait.dart';
+
+class CancelServicesScreen extends StatefulWidget {
+  const CancelServicesScreen({super.key});
 
   @override
-  State<CancelServices> createState() => _CancelServicesState();
+  State<CancelServicesScreen> createState() => _CancelServicesScreenState();
 }
 
-class _CancelServicesState extends State<CancelServices> {
+class _CancelServicesScreenState extends State<CancelServicesScreen> {
   bool isFavourite = false;
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    List<MyBookingServicesModel> cancelData = cancelledServicesData;
+
     return ListView.builder(
+        // shrinkWrap: true,
+        itemCount: cancelData.length,
+        padding:  EdgeInsets.symmetric( horizontal: screenWidth * 0.0413, //17
+          vertical: screenHeight * 0.0169, //24
+        ),
+        itemBuilder: (context, index) {
+          return TabServicesTrait(
+            // serviceDate: cancelledServicesData[index].date,
+            // serviceTime: cancelledServicesData[index].time,
+            // salonImageLoc: cancelledServicesData[index].salonImage,
+            // salonName: cancelledServicesData[index].salonName,
+            // salonLocation: cancelledServicesData[index].salonLocation,
+            servicesModel: cancelData[index],
+          );
+        });
+  }
+}
+
+/// Previous Working Code
+/*ListView.builder(
         // shrinkWrap: true,
         itemCount: 1,
         padding:  EdgeInsets.symmetric( horizontal: screenWidth * 0.0413, //17
@@ -77,7 +98,7 @@ class _CancelServicesState extends State<CancelServices> {
                     children: [
                       Container(
                         height: screenHeight * 0.1481,
-                        width: screenWidth * 0.3107,  //128
+                        width: screenWidth * 0.3,  //125
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(screenHeight * 0.0148),
                           image: const DecorationImage(
@@ -180,13 +201,4 @@ class _CancelServicesState extends State<CancelServices> {
               ),
             ),
           );
-        });
-  }
-
-  divider() {
-    return const Divider(
-      thickness: 1,
-      color: Color(0xffD3CECD),
-    );
-  }
-}
+        });*/

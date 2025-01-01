@@ -8,6 +8,7 @@ class SmallText extends StatelessWidget {
   final TextAlign textAlignName;
   final Color color;
   final double fontSize;
+  final bool softWrap;
   const SmallText(
       {super.key,
       required this.text,
@@ -17,6 +18,7 @@ class SmallText extends StatelessWidget {
       this.textAlignName = TextAlign.start,
       this.color = AppColor.mainBlackColor,
         this.fontSize = 14,
+        this.softWrap = false,
       });
 
   @override
@@ -24,6 +26,7 @@ class SmallText extends StatelessWidget {
     double screenHeight = MediaQuery.sizeOf(context).height;
     return Text(
       text,
+      softWrap: softWrap,
       textAlign: textAlignName,
       style: TextStyle(
         color: color,

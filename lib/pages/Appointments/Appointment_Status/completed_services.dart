@@ -1,22 +1,236 @@
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/big_text.dart';
-import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
-import 'upcoming_booking.dart';
+import 'package:calma/Data/booking_services_data.dart';
+import 'package:calma/Model/booking_services_model.dart';
+import 'package:calma/widgets/tab_services_trait.dart';
 
-class CompletedServices extends StatefulWidget {
-  const CompletedServices({super.key});
+class CompletedServicesScreen extends StatefulWidget {
+  const CompletedServicesScreen({super.key});
 
   @override
-  State<CompletedServices> createState() => _CompletedServicesState();
+  State<CompletedServicesScreen> createState() =>
+      _CompletedServicesScreenState();
 }
 
-class _CompletedServicesState extends State<CompletedServices> {
+class _CompletedServicesScreenState extends State<CompletedServicesScreen> {
   bool isFavourite = false;
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+    List<MyBookingServicesModel> completedServices = completedServicesData;
+
+    return ListView.builder(
+        itemCount: completedServices.length,
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.0413, //17
+          vertical: screenHeight * 0.0169, //24
+        ),
+        itemBuilder: (context, index) {
+          return TabServicesTrait(
+            isCancelTab: true,
+            servicesModel: completedServices[index],
+          );
+        });
+  }
+}
+
+/// Listview for Card Widget
+/*ListView.builder(
+        itemCount: completedServices.length,
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.0413, //17
+          vertical: screenHeight * 0.0169, //24
+        ),
+        itemBuilder: (context, index) {
+          return Card(
+            color: const Color(0xffF5EDEN),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.0295,
+                  vertical: screenHeight * 0.0056), //12, //5
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// Date & Time
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${completedServices[index].date} - ${completedServices[index].time}",
+                        style: TextStyle(
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenHeight * 0.0202, //18
+                        ),
+                      ),
+                      Container(
+                        height: screenHeight * 0.0382, //34
+                        width: screenWidth * 0.08263, //34
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isFavourite = !isFavourite;
+                            });
+                          },
+                          child: Icon(
+                            isFavourite ? Iconsax.heart5 : Iconsax.heart,
+                            color: isFavourite ? Colors.red : Colors.black,
+                            size: screenHeight * 0.0269, //24
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  divider(),
+
+                  /* ****************************** Container for showing salon image name and booking id STARTS here  ************************************* */
+                  Row(
+                    children: [
+                      /// Salon Image
+                      Container(
+                        height: screenHeight * 0.1404, //125,
+                        width: screenWidth * 0.304, //125,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(screenHeight * 0.0148),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image:
+                                AssetImage(completedServices[index].salonImage),
+                          ),
+                        ),
+                      ),
+
+                      //Expanded Widget is used here for acquiring the rest width of the Row in Container
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /// Salon Name
+                              BigText(
+                                fontWeightName: FontWeight.w500,
+                                color: AppColor.mainBlackColor,
+                                text: completedServices[index].salonName,
+                                fontSize: screenHeight * 0.018,
+                              ),
+                              /// Location
+                              Row(
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  /// Location Icon
+                                  Icon(
+                                    Iconsax.location5,
+                                    color: AppColor.iconColor,
+                                    size: screenHeight * 0.0202,
+                                  ),
+
+                                  SizedBox(
+                                    width: screenWidth * 0.0244,
+                                  ),
+
+                                  /// Location Text
+                                  SmallText(
+                                    text: completedServices[index].salonLocation,
+                                    fontSize: screenHeight * 0.018, //16
+                                    fontWeightName: FontWeight.w400,
+                                    fontFamilyName: 'Inter',
+                                  )
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.0056,), //5
+                              /// Booking Id
+                              Row(
+                                children: [
+                                  /// Booking Id Icon
+                                  Icon(
+                                    Iconsax.check5,
+                                    color: AppColor.iconColor,
+                                    size: screenHeight * 0.0202,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * 0.0244,
+                                  ),
+                                  /// Booking Id
+                                  RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: "Booking Id  ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: screenHeight * 0.018, //16
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: "#AFAY63259",
+                                        style: TextStyle(
+                                          color: AppColor.textColor,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: screenHeight * 0.018, //16
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: screenHeight * 0.0056,), //5
+
+                              /// Direction Button
+                              ElevatedButton.icon(
+                                onPressed: () {},
+                                label: const Text("\t\t Direction", style: TextStyle(fontFamily: "Poppins",fontWeight: FontWeight.w500,fontSize: 14, ),),
+                                icon: const Icon(
+                                  Iconsax.route_square5,
+                                  color: AppColor.textColor2,
+                                ),
+                                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffE5E7EB),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11),),),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  /* ****************************** Container for showing salon image name and booking id ENDS here  ************************************* */
+
+                  divider(),
+                  /* ****************************** Rebook & Add Review STARTS here  ************************************* */
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AppointmentPageButtonAll(
+                        onPress: () {
+                          Navigator.pushNamed(context, '/salon-search-page');
+                        },
+                        text: "Rebook",
+                        textColor: const Color(0xff1C2A3A),
+                        buttonColor: const Color(0xffE5E7EB),
+                      ),
+                      SizedBox(
+                        width: screenWidth * 0.0486,
+                      ),
+                      AppointmentPageButtonAll(
+                        onPress: () {},
+                        text: "Add Review",
+                      ),
+                    ],
+                  ),
+                  /* ****************************** Rebook & Add Review ENDS here  ************************************* */
+                ],
+              ),
+            ),
+          );
+        });*/
+
+/// Previous working code
+/* Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -28,7 +242,7 @@ class _CompletedServicesState extends State<CompletedServices> {
         ),
         itemBuilder: (context, index) {
           return Card(
-            color: const Color(0xffF5EDEC),
+            color: const Color(0xffF5EDEN),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth *0.0295,vertical: screenHeight * 0.0135),   //12
               child: Column(
@@ -76,7 +290,7 @@ class _CompletedServicesState extends State<CompletedServices> {
                     children: [
                       Container(
                         height: screenHeight * 0.1481,
-                        width: screenWidth * 0.3107,  //128
+                        width: screenWidth * 0.3,  //125
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(screenHeight * 0.0148),
                           image: const DecorationImage(
@@ -191,11 +405,4 @@ class _CompletedServicesState extends State<CompletedServices> {
             ),
           );
         });
-  }
-  divider() {
-    return const Divider(
-      thickness: 1,
-      color: Color(0xffD3CECD),
-    );
-  }
-}
+  }*/
