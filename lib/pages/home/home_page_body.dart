@@ -183,11 +183,11 @@ class _HomePageBodyState extends ConsumerState<HomePageBody> {
               itemCount: nearestSalonsExpert.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                /// Column is used here for showing the images along with services name
                 return InkWell(
                   onTap: () {
                     Navigator.pushNamed(context, 'salon-expert-detail-page');
                   },
+                  /// Column is used here for showing the images along with services name
                   child: Column(
                     children: [
                       Container(

@@ -1,8 +1,9 @@
-import 'package:calma/utils/back_arrow_but_with_positioned.dart';
-import 'package:calma/utils/colors.dart';
-import 'package:calma/widgets/button.dart';
 import 'package:calma/widgets/small_text.dart';
 import 'package:flutter/material.dart';
+
+// import 'package:calma/utils/back_arrow_but_with_positioned.dart';
+// import 'package:calma/utils/colors.dart';
+// import 'package:calma/widgets/button.dart';
 
 class AccountInfo extends StatefulWidget {
   const AccountInfo({super.key});
@@ -49,7 +50,7 @@ class _AccountInfoState extends State<AccountInfo> {
                 fontWeightName: FontWeight.w700,
               ),
             ),
-            SmallText(text: "Name", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            const SmallText(text: "Name", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
             TextFormField(decoration:  InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(color: Color(0xffD3CECD)),
@@ -65,14 +66,14 @@ class _AccountInfoState extends State<AccountInfo> {
               style: TextStyle(
                 fontSize: screenHeight * 0.020,
               ),),
-            SmallText(text: "Email", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
-            DetailsFormField(value: "value"),
-            SmallText(text: "Phone Number", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
-            DetailsFormField(value: "value"),
-            SmallText(text: "Gender", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
-            DetailsFormField(value: "value"),
-            SmallText(text: "Password", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
-            DetailsFormField(value: "value"),
+            const SmallText(text: "Email", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            const DetailsFormField(value: "value"),
+            const SmallText(text: "Phone Number", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            const DetailsFormField(value: "value"),
+            const SmallText(text: "Gender", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            const DetailsFormField(value: "value"),
+            const SmallText(text: "Password", fontSize: 12, color: Color.fromRGBO(0, 0, 0, 0.5),),
+            const DetailsFormField(value: "value"),
           ],
         ),
       ),
