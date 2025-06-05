@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:calma/pages/home/main_home_screen.dart';
-import 'package:calma/pages/validation/login_screen.dart';
+import 'package:calma/screens/home/main_home_screen.dart';
+import 'package:calma/screens/validation/login_screen.dart';
 import 'package:calma/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

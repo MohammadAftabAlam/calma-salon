@@ -1,9 +1,9 @@
 import 'package:calma/Routes/routes.dart';
-import 'package:calma/pages/home/main_home_screen.dart';
+import 'package:calma/screens/home/main_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:calma/pages/Appointments/Appointment_Process/payment_page.dart';
+// import 'package:calma/screens/appointments/Appointment_Process/payment_page.dart';
 // import 'package:calma/splash_screen.dart';
 // import 'package:calma/utils/colors.dart';
 // import 'package:firebase_core/firebase_core.dart';
