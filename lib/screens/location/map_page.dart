@@ -13,7 +13,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const String kGOOGLE_MAPS_API_KEY = "AIzaSyD5VUW7T722RL_xMmR9MkvjrRgMLKF9nkA";
+  static const String kGOOGLE_MAPS_API_KEY = 
       // "PLACE_YOUR_GOOGLE_MAP_APIp_KEY_HERE";
 
   //location is used to access the actual location of the user
