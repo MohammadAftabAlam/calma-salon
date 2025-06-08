@@ -63,7 +63,7 @@ We welcome contributions from the community! If you find a bug or have a feature
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request.
 
-
+<!--
 ## Application Snapshots 
 
 1. **Login Screen**
@@ -125,7 +125,7 @@ We welcome contributions from the community! If you find a bug or have a feature
 15. **Logout Screen**
     ![Logout Screen](https://github.com/MohammadAftabAlam/calma-salon/blob/b2a740130bc930232b721c28af4313560cf5a1c2/Snapshots/Logout%20screen.jpg)
 
-
+-->
 ## Contributors 
 
 - **Ui/Ux Design**: Yazdan Haider Khan
