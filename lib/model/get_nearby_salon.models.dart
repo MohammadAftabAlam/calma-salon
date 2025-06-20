@@ -50,6 +50,7 @@ class NearbySalon {
   String yearOfExperience;
   DateTime openingTime;
   DateTime closingTime;
+  String fullAddress;
 
   NearbySalon({
     required this.location,
@@ -62,6 +63,7 @@ class NearbySalon {
     required this.yearOfExperience,
     required this.openingTime,
     required this.closingTime,
+    required this.fullAddress
   });
 
 }

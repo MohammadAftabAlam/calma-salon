@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class ServicesModel{
+class ServicesModel {
   const ServicesModel({required this.serviceName, required this.imageLocation});
 
   final String serviceName;

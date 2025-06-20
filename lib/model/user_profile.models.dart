@@ -33,6 +33,7 @@ class Data {
   bool isDefaultAvatarImage;
   DateTime createdAt;
   DateTime updatedAt;
+  String fullAddress;
   int v;
 
   Data({
@@ -47,6 +48,7 @@ class Data {
     required this.isDefaultAvatarImage,
     required this.createdAt,
     required this.updatedAt,
+    required this.fullAddress,
     required this.v,
   });
 
@@ -63,6 +65,7 @@ class Data {
       isDefaultAvatarImage: json['isDefaultAvatarImage'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
+      fullAddress: json['fullAddress'],
       v: json['__v'],
     );
   }
