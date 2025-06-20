@@ -13,8 +13,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  static const String kGOOGLE_MAPS_API_KEY = "AIzaSyD5VUW7T722RL_xMmR9MkvjrRgMLKF9nkA";
-      // "PLACE_YOUR_GOOGLE_MAP_APIp_KEY_HERE";
+  static const String kGOOGLE_MAPS_API_KEY = "";
+  // "PLACE_YOUR_GOOGLE_MAP_APIp_KEY_HERE";
 
   //location is used to access the actual location of the user
   Location locationController = Location();
@@ -56,7 +56,7 @@ class _MapPageState extends State<MapPage> {
               onMapCreated: ((GoogleMapController controller) =>
                   _mapController.complete(controller)),
               initialCameraPosition:
-                 CameraPosition(target: jamiaMillia, zoom: 13),
+                  CameraPosition(target: jamiaMillia, zoom: 13),
               markers: {
                 Marker(
                   markerId: const MarkerId("_currentLocation"),
@@ -130,7 +130,11 @@ class _MapPageState extends State<MapPage> {
     List<LatLng> polyLineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      request: PolylineRequest(destination: PointLatLng(_pRewariLoc.latitude, _pRewariLoc.longitude), origin:  PointLatLng(_currentPos!.latitude, _currentPos!.longitude), mode: TravelMode.driving,),
+      request: PolylineRequest(
+        destination: PointLatLng(_pRewariLoc.latitude, _pRewariLoc.longitude),
+        origin: PointLatLng(_currentPos!.latitude, _currentPos!.longitude),
+        mode: TravelMode.driving,
+      ),
 
       // PointLatLng(_currentPos!.latitude, _currentPos!.longitude),
       // PointLatLng(_pGooglePlex.latitude, _pGooglePlex.longitude),
