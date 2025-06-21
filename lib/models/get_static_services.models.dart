@@ -42,20 +42,20 @@ class StaticService {
   String serviceImageUrl;
   String serviceName;
   int priority;
+  String gender;
   DateTime createdAt;
   DateTime updatedAt;
   int v;
-  String gender;
 
   StaticService({
     required this.id,
     required this.serviceImageUrl,
     required this.serviceName,
     required this.priority,
+    required this.gender,
     required this.createdAt,
     required this.updatedAt,
     required this.v,
-    required this.gender,
   });
 
   factory StaticService.fromJson(Map<String, dynamic> json) {

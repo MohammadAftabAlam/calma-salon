@@ -1,18 +1,18 @@
-class UserLogin {
+class User {
   int statusCode;
   Data data;
   String message;
   bool success;
 
-  UserLogin({
+  User({
     required this.statusCode,
     required this.data,
     required this.message,
     required this.success,
   });
 
-  factory UserLogin.fromJson(Map<String, dynamic> json) {
-    return UserLogin(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       statusCode: json['statusCode'],
       data: Data.fromJson(json['data']),
       message: json['message'],
@@ -22,26 +22,6 @@ class UserLogin {
 }
 
 class Data {
-  User user;
-  String refreshToken;
-  String accessToken;
-
-  Data({
-    required this.user,
-    required this.refreshToken,
-    required this.accessToken,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
-      user: User.fromJson(json['user']),
-      refreshToken: json['refreshToken'],
-      accessToken: json['accessToken'],
-    );
-  }
-}
-
-class User {
   Location location;
   String id;
   String name;
@@ -53,9 +33,10 @@ class User {
   bool isDefaultAvatarImage;
   DateTime createdAt;
   DateTime updatedAt;
+  String fullAddress;
   int v;
 
-  User({
+  Data({
     required this.location,
     required this.id,
     required this.name,
@@ -67,11 +48,12 @@ class User {
     required this.isDefaultAvatarImage,
     required this.createdAt,
     required this.updatedAt,
+    required this.fullAddress,
     required this.v,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
       location: Location.fromJson(json['location']),
       id: json['_id'],
       name: json['name'],
@@ -83,6 +65,7 @@ class User {
       isDefaultAvatarImage: json['isDefaultAvatarImage'],
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
+      fullAddress: json['fullAddress'],
       v: json['__v'],
     );
   }
@@ -100,7 +83,8 @@ class Location {
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       type: json['type'],
-      coordinates: List<double>.from(json['coordinates'].map((e) => e.toDouble())),
+      coordinates:
+          List<double>.from(json['coordinates'].map((e) => e.toDouble())),
     );
   }
 }
