@@ -10,6 +10,9 @@
 .svn/
 migrate_working_dir/
 
+# Api keys and sensitive information
+/lib/constant.dart
+
 # IntelliJ related
 *.iml
 *.ipr

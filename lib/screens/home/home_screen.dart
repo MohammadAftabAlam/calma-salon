@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   /*Asking user current location STARTS here*/
 
-  final apiKey = 'AIzaSyDp3BbyiluHMmyDqmlrnUXRTCy4b4JhAQI';
+  final apiKey = '----PLACE YOUR API KEY HERE----'; // Replace with your Google Maps Geocoding API key
   loc.Location location = loc.Location();
   bool _serviceEnabled = false;
   loc.LocationData? _currentLocation;
